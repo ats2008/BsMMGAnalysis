@@ -1552,9 +1552,10 @@ void BsToMuMuGammaNTuplizer::fillPhotons(const edm::Event& e, const edm::EventSe
  
   edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> recHitsEE;
   e.getByToken(eeRechitToken_, recHitsEE);
-
-  EcalClusterLazyTools       lazyTool    (e, es, ebRechitToken_, eeRechitToken_);
-  noZS::EcalClusterLazyTools lazyToolnoZS(e, es, ebRechitToken_, eeRechitToken_);
+  
+  EcalClusterLazyTools::ESGetTokens ecalClusterToolsESGetTokens_(consumesCollector());
+  EcalClusterLazyTools       lazyTool    (e,ecalClusterToolsESGetTokens_.get(es), ebRechitToken_, eeRechitToken_);
+  noZS::EcalClusterLazyTools lazyToolnoZS(e,ecalClusterToolsESGetTokens_.get(es), ebRechitToken_, eeRechitToken_);
 
   // loop over photons
   for (auto pho = gedPhotonsHandle->begin(); pho != gedPhotonsHandle->end(); ++pho) {
@@ -1609,22 +1610,13 @@ void BsToMuMuGammaNTuplizer::fillPhotons(const edm::Event& e, const edm::EventSe
     ///////////////////////////////SATURATED/UNSATURATED ///from ggFlash////
     DetId seed = (pho->superCluster()->seed()->hitsAndFractions())[0].first;
     bool isBarrel = seed.subdetId() == EcalBarrel;
-    const EcalRecHitCollection * rechits = (isBarrel?lazyTool.getEcalEBRecHitCollection():lazyTool.getEcalEERecHitCollection());
     
-    EcalRecHitCollection::const_iterator theSeedHit = rechits->find(seed);
-    if (theSeedHit != rechits->end()) {
-      //std::cout<<"(*theSeedHit).time()"<<(*theSeedHit).time()<<"seed energy: "<<(*theSeedHit).energy()<<std::endl;  
-      
-      phoSeedTime_  .push_back((*theSeedHit).time());
-      phoSeedEnergy_.push_back((*theSeedHit).energy());
-
-      
+    if (isBarrel) {
+      phoSeedTime_  .push_back(lazyTool.SuperClusterSeedTime(*((*pho).superCluster())));
     } else{
-      phoSeedTime_  .push_back(-99.);
-      phoSeedEnergy_.push_back(-99.);
-      
+      phoSeedTime_  .push_back(lazyToolnoZS.SuperClusterSeedTime(*((*pho).superCluster())));
     }
-    
+    phoSeedEnergy_.push_back(((*pho).superCluster()->seed())->energy());
     nPho_++;
   } // photons loop
 }

@@ -11,7 +11,8 @@ $ scram b -j 2
 $ cd HLTrigger/test
 
 ```
-## Helper Scripts
+## HLT Menu Development
+### Helper Scripts
 bs2mmgParts.py  bsmmg_getHltMenu1130Data.sh  bsmmg_getHltMenu1130.sh  customizeForBs2MMG.py  customizeForPath.py  GetMenus  menudev  putCustIntoFiles.py
   * bsmmg_getHltMenu1130Data.sh , bsmmg_getHltMenu1130.sh
     * use these to obtain configs from confDB
@@ -24,7 +25,20 @@ bs2mmgParts.py  bsmmg_getHltMenu1130Data.sh  bsmmg_getHltMenu1130.sh  customizeF
       $ ./putCustIntoFiles.py <pathToConfigFile>
       ```
   * customizeForBs2MMG.py
-    * contains various eduts required for the running of the path
+    * contains various edits required for the running of the path
+    * has the customizer function for production of reduced edmTree for hlt Ntuplizing step
 
   * customizeForPath.py
     * produses a customizer file that has prescribed parameter set
+
+## Rate Measurement
+
+```
+$ cd test/RateAndEfficiency
+```
+* Make the header and shared objects corresponding to the HLTNTuple tree, and edit `rate_production.cc` and `efficiency_production.cc` appropriately
+* Use rate_production.cc for making the rate/eficiency measurements  .. configuration file required (rateConfig.cfg)
+* Use efficiency_production.cc for producing root file with efficiency/distribution histograms  [ for variables  of interest ] 
+* Use helper functions in parameterSetup.py to setup condor jobs using HLTNTuples
+    * see jobFileMaker_efficMeasureFullWindow.py
+

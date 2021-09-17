@@ -63,5 +63,3 @@ process.hltDisplacedmumuFilterDoubleMu4BsToMMG = cms.EDFilter( "HLTDisplacedmumu
 
 process.HLT_DoubleMu4_3_BsToMMG_v0 = cms.Path( process.HLTBeginSequence + process.hltL1sDoubleMu0er1p5SQOSdRMax1p4IorDoubleMu0er1p4SQOSdRMax1p4 + process.hltPreDoubleMu43BsToMMG + process.hltL1fL1sL1DoubleMu0er1p5SQOSdR1p4L1Filtered0 + process.HLTL2muonrecoSequence + cms.ignore(process.hltL2fL1sL1DoubleMu0er1p5SQOSdR1p4L1f0L2PreFiltered0) + process.HLTL3muonrecoSequence + cms.ignore(process.hltL1fForIterL3L1fL1sL1DoubleMu0er1p5SQOSdR1p4L1Filtered0) + process.hltDoubleMu4BsToMMGL3Filtered + process.hltDisplacedmumuVtxProducerDoubleMu4BsToMMG + process.hltDisplacedmumuFilterDoubleMu4BsToMMG + process.HLTEndSequence )
 
-
-

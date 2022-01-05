@@ -86,8 +86,9 @@ class BMMGAnalysis
     Int_t* photonSelectionCheck;
     
     // Histograms to Store
-    
     std::map<TString,TH1F*> th1fStore;
+    // Trees to store
+    std::map<TString,TTree*> treeStore;
 
     // OutPut Tree vars
     Int_t nDiMuCandidates;
@@ -147,7 +148,9 @@ class BMMGAnalysis
     void SaveFile();
     void SetupAnalysis(bool makeTreeCopy=false);
     void setupOutPuts(bool makeTreeCopy=false);
+    void setupOutputSCTree();
     Int_t getMuonMatch(Double_t muEta,Double_t muPhi);
+    
     // Histogram Related Functions
     void bookHistograms();
     Double_t getDCAGammaToDimuVertex(Int_t mumuIdx,Int_t phoId);
@@ -159,7 +162,8 @@ class BMMGAnalysis
     void fill_dimuonEnvironmentHists(Int_t mumuIdx);
     void fill_bmmgHists(TLorentzVector &bmmgLV,Int_t mumuIdx, Int_t phoSCIdx);
     void fill_globalEventHists();
-
+    void fillSCVariablesToOutTree(Int_t scIDX);
+    void TreeFill();
     // Analysis Functions
     void doPhotonMVAScores();
     void setUpPhotonMVA();
@@ -321,6 +325,7 @@ void BMMGAnalysis::SaveFile()
 
     if(outTree)
         outTree->Write();
+
        
     for (std::map<TString,TH1F *>::iterator it=th1fStore.begin() ; it!=th1fStore.end(); ++it)
     {
@@ -329,12 +334,23 @@ void BMMGAnalysis::SaveFile()
         auto &ahist = *(it->second); 
         ahist.Write();
     }
-
+       
+    for (std::map<TString,TTree *>::iterator it=treeStore.begin() ; it!=treeStore.end(); ++it)
+    {
+        
+        //std::cout<<"Writing "<<it->first<<" to file ! \n";
+        auto &atree = *(it->second); 
+        atree.Write();
+    }
 
     outputFile->Write();
     outputFile->Purge();
     outputFile->Close();
 
+}
+void BMMGAnalysis::TreeFill()
+{
+    if(outTree) outTree->Fill();
 }
 
 void BMMGAnalysis::readParameters(string fname)

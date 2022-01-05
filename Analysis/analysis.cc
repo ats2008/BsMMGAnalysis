@@ -34,6 +34,7 @@ int  main(int argc,char *argv[])
     analyzer2018.Init(cfgFile);
     
     analyzer2018.SetupAnalysis();
+    analyzer2018.setupOutputSCTree();
     if(val==0) {
         std::cout<<" Doing GEN Analysis "<<"\n";
         analyzer2018.GenAnalyze();

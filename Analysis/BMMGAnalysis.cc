@@ -223,7 +223,7 @@ void BMMGAnalysis::Analyze()
        
        fill_globalEventHists();
 
-     if(outTree)  outTree->Fill();
+     TreeFill();
     }
     std::cout<<"\n\n"
             <<"  Number of Events with trigger = "<<EventCount<<"\n"
@@ -472,6 +472,7 @@ void BMMGAnalysis::GenAnalyze()
         
         scMatchCount++;
 		fill_scHists(phoRecoMatchIdx);
+        fillSCVariablesToOutTree(phoRecoMatchIdx);
         if(doPhotonSelection(phoRecoMatchIdx) ==0)
         {   
             phoMatchCount++;
@@ -1773,4 +1774,159 @@ Double_t BMMGAnalysis::getDCAGammaToDimuVertex(Int_t mumuIdx,Int_t phoId)
     return  getDCALineAndPoint( x1 , x2 , p );
 }
 
+void BMMGAnalysis::setupOutputSCTree()
+{
 
+    candidateMapDouble["SCTreeStorage"]   = storageIdxFilledDouble ;
+    storageIdxFilledDouble+=100;
+
+    
+    auto outSC_Tree = new TTree("scVars","variables for the PhotonID from SC");
+
+    Int_t idx(0), offset(candidateMapDouble["SCTreeStorage"]);
+    outSC_Tree->Branch("nSC"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("e"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("et"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("rawE"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("eta"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("phi"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("x"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("y"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("z"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("EtaWidth"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PhiWidth"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("RawEt"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("MinDrWithGsfElectornSC_",&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("FoundGsfMatch_"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("E5x5"		            ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("E2x2Ratio"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("E3x3Ratio"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("EMaxRatio"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("E2ndRatio"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("ETopRatio"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("ERightRatio"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("EBottomRatio"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("ELeftRatio"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("e2x5_MaxRatio"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("E2x5TopRatio"		    ,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("E2x5RightRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("E2x5BottomRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("E2x5LeftRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("SwissCross"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("R9"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("sigmaIetaIeta"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("sigmaIetaIphi"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("sigmaIphiIphi"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_e5x5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_e2x2Ratio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_e3x3Ratio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_eMaxRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_e2ndRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_eTopRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_eRightRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_eBottomRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_eLeftRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_e2x5MaxRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_e2x5TopRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_e2x5RightRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_e2x5BottomRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_e2x5LeftRatio"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_swissCross"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_r9"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_sigmaIetaIeta"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_sigmaIetaIphi"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("full5x5_sigmaIphiIphi"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFChIso1"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFChIso2"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFChIso"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFChIso4"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFChIso5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFPhoIso1"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFPhoIso2"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFPhoIso"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFPhoIso4"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFPhoIso5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFNeuIso1"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFNeuIso2"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFNeuIso"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFNeuIso4"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("PFNeuIso5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+
+    treeStore["SCVars"]=outSC_Tree;
+}
+
+void BMMGAnalysis::fillSCVariablesToOutTree(Int_t scIDX)
+{
+    Int_t idx(0) , offset(candidateMapDouble["SCTreeStorage"]);
+    
+
+    storageArrayDouble[idx + offset ] =ntupleRawTree.bG_nSC		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scE[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scEt[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scRawE[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scEta[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPhi[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scX[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scY[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scZ[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scEtaWidth[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPhiWidth[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scRawEt[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scMinDrWithGsfElectornSC_[scIDX]  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFoundGsfMatch_[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scE5x5[scIDX]		              ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scE2x2Ratio[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scE3x3Ratio[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scEMaxRatio[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scE2ndRatio[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scETopRatio[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scERightRatio[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scEBottomRatio[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scELeftRatio[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scE2x5MaxRatio[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scE2x5TopRatio[scIDX]		      ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scE2x5RightRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scE2x5BottomRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scE2x5LeftRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scSwissCross[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scR9[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scSigmaIetaIeta[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scSigmaIetaIphi[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scSigmaIphiIphi[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_e5x5[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_e2x2Ratio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_e3x3Ratio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_eMaxRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_e2ndRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_eTopRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_eRightRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_eBottomRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_eLeftRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_e2x5MaxRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_e2x5TopRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_e2x5RightRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_e2x5BottomRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_e2x5LeftRatio[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_swissCross[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_r9[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_sigmaIetaIeta[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_sigmaIetaIphi[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scFull5x5_sigmaIphiIphi[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFChIso1[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFChIso2[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFChIso3[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFChIso4[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFChIso5[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFPhoIso1[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFPhoIso2[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFPhoIso3[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFPhoIso4[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFPhoIso5[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFNeuIso1[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFNeuIso2[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFNeuIso3[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFNeuIso4[scIDX]		  ;idx+=1 ;
+	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFNeuIso5[scIDX]		  ;idx+=1 ;
+    
+    treeStore["SCVars"]->Fill();
+}

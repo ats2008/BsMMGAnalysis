@@ -18,6 +18,7 @@ class TreeMaker
     Double_t scAbsEtaMax,scAbsEtaMin;
     Int_t genParticlePDGID;
     Double_t drGenMatchMin;
+    Double_t genParticlePtMin;
     Double_t eventGenMultiplicity;
     Bool_t genParticleIsStable;   
     // Storage Vars
@@ -46,7 +47,7 @@ class TreeMaker
     bool initDone;
     std::vector<TTree*> treesToStore;
     Long64_t nentries, maxEvents ;
- 
+    Int_t reportEvery;
                     // Member functions 
     // Constructor
     TreeMaker();
@@ -94,11 +95,12 @@ void TreeMaker::Init(string cfgFileName)
     isMC=false;
     doGenMatching=false;
     drGenMatchMin=0.1;
-    
+    reportEvery=10000;
     scAbsEtaMin=-1e2;
     scAbsEtaMax=1e9;
     genParticlePDGID=22;
     genParticleIsStable=true;
+    genParticlePtMin=3.0;
 
     readParameters(cfgFileName);
     AllocateMemory();
@@ -242,7 +244,12 @@ void TreeMaker::readParameters(string fname)
                  treeName=field;
                  cout<<" setting treeName  = "<<prefix<<"\n";
             }
-            if(field.compare("MaxEvents")==0){
+            if(field.compare("ReportEvery")==0){
+                 getline(strStream, field);
+                 reportEvery=std::atoi(field.c_str());
+                 cout<<" setting reportEvery  = "<<reportEvery<<"\n";
+            }
+             if(field.compare("MaxEvents")==0){
                  getline(strStream, field);
                  maxEvents=std::atoi(field.c_str());
                  cout<<" setting maxEvents  = "<<maxEvents<<"\n";
@@ -257,7 +264,12 @@ void TreeMaker::readParameters(string fname)
                  scAbsEtaMax=std::atof(field.c_str());
                  cout<<" setting scAbsEtaMax  = "<<scAbsEtaMax<<"\n";
             }
-            if(field.compare("SCAbsEtaMin")==0){
+            if(field.compare("GenParticlePtMin")==0){
+                 getline(strStream, field);
+                 genParticlePtMin=std::atof(field.c_str());
+                 cout<<" setting genParticlePtMin  = "<<genParticlePtMin<<"\n";
+            }
+             if(field.compare("SCAbsEtaMin")==0){
                  getline(strStream, field);
                  scAbsEtaMin=std::atof(field.c_str());
                  cout<<" setting scAbsEtaMin  = "<<scAbsEtaMin<<"\n";

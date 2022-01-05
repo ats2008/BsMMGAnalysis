@@ -10,7 +10,7 @@ void TreeMaker::Pi0ParticleSCMaker()
     
     std::cout<<"\nBegining Pi0 Analysis Script !";
     if (maxEvents >0 ) maxEvents = nentries > maxEvents ? maxEvents : nentries;
-    cout<<"\nProcessing total "<<maxEvents<<" events \n\n";
+    cout<<"\nProcessing total "<<maxEvents<<" events , reporting every "<<reportEvery<<" events\n\n";
    
     Long64_t EventCount=0;
     Long64_t EventCountWithCand=0;
@@ -42,7 +42,7 @@ void TreeMaker::Pi0ParticleSCMaker()
        if (ientry_evt < 0) break;
        nb = ntupleRawTree.fChain->GetEntry(jentry);   nbytes += nb;
        
-       if(jentry%10000 == 0 )
+       if(jentry%reportEvery == 0 )
        {
              t_end = std::chrono::high_resolution_clock::now();
              std::cout<<"Processing Entry in event loop : "<<jentry<<" / "<<maxEvents<<"  [ "<<100.0*jentry/maxEvents<<"  % ]  "
@@ -58,8 +58,9 @@ void TreeMaker::Pi0ParticleSCMaker()
        if(isMC)
        for(int i=0;i < ntupleRawTree.nMC ; i++)
        {
-           // std::cout<<"\tpdg id : "<<(ntupleRawTree.mcPID)->at(i)<<" pt : "<<(ntupleRawTree.mcPt)->at(i)<<" eta : "<<(ntupleRawTree.mcEta)->at(i)<<" phi : "<<ntupleRawTree.mcPhi->at(i)<<"\n";
+ //          std::cout<<"\t"<<i<<"/"<<ntupleRawTree.nMC<<"pdg id : "<<(ntupleRawTree.mcPID)->at(i)<<" pt : "<<(ntupleRawTree.mcPt)->at(i)<<" eta : "<<(ntupleRawTree.mcEta)->at(i)<<" phi : "<<ntupleRawTree.mcPhi->at(i)<<"\n";
             if(ntupleRawTree.mcPID->at(i) != genParticlePDGID ) continue;
+            if(ntupleRawTree.mcPt->at(i)  < genParticlePtMin ) continue;
             if(genParticleIsStable) if( ntupleRawTree.mcStatus->at(i) != 1 ) continue;
                 
             pi0.SetPtEtaPhiM(ntupleRawTree.mcPt->at(i) , ntupleRawTree.mcEta->at(i) , ntupleRawTree.mcPhi->at(i) , ntupleRawTree.mcMass->at(i) );
@@ -243,6 +244,7 @@ void TreeMaker::Pi0ParticleSCMaker()
             {
                  if( ntupleRawTree.mcPID->at(i) != genParticlePDGID ) continue;
                  if(genParticleIsStable) if( ntupleRawTree.mcStatus->at(i) != 1 ) continue;
+                 if(ntupleRawTree.mcPt->at(i)  < genParticlePtMin ) continue;
                  dr=getDR(ntupleRawTree.mcEta->at(i),ntupleRawTree.mcPhi->at(i), ntupleRawTree.scEta->at(j),ntupleRawTree.scPhi->at(j));
                  if(dr<drMin)
                  {
@@ -557,6 +559,7 @@ void TreeMaker::bookHistograms()
      }
      
      th1fStore["sc_Multiplicity"            ]  = new TH1F("scMultiplicity" ,"Multiplicity", 200 , -0.5  , 199.5  );
+     th1fStore["pv_Multiplicity"            ]  = new TH1F("pvMultiplicity" ,"Multiplicity", 200 , -0.5  , 199.5  );
 }
 
 void TreeMaker::AddSCHistos(TString tag)
@@ -569,7 +572,7 @@ void TreeMaker::AddSCHistos(TString tag)
      const float etamin(-3.5);
      const float etamax(3.5);
 
-     const int   deltaRNBins=30;
+     const int   deltaRNBins=300;
      const float deltaRMin(0.0);
      const float deltaRMax(3.0);
 
@@ -649,13 +652,14 @@ void TreeMaker::fill_genHists(Int_t idx)
         th1fStore[tag+"Pt"    ]->Fill(ntupleRawTree.mcPt->at(idx));   
         th1fStore[tag+"Eta"   ]->Fill(ntupleRawTree.mcEta->at(idx));  
         th1fStore[tag+"phi"   ]->Fill(ntupleRawTree.mcPhi->at(idx));  
-        th1fStore[tag+"E"	  ]->Fill(ntupleRawTree.mcPhi->at(idx));  
+        th1fStore[tag+"E"	  ]->Fill(ntupleRawTree.mcE->at(idx));  
 }
 
 void TreeMaker::fill_eventHists()
 {
         th1fStore["gen_Multiplicity"    ]->Fill(eventGenMultiplicity);   
         th1fStore["sc_Multiplicity"    ]->Fill(ntupleRawTree.nSC);   
+        th1fStore["pv_Multiplicity"    ]->Fill(ntupleRawTree.nPrimaryVertex);   
 }
 
 void TreeMaker::fill_scHists(Int_t scIDX,TString tag,Double_t dr)

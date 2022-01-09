@@ -25,6 +25,8 @@ void BMMGAnalysis::Analyze()
     Int_t prevRun(-1),prevLumi(-1);
     bool goodRunLumi = false;
 
+    
+    AddSCHistos("allSC_");
 
     for (Long64_t jentry=0; jentry<maxEvents; jentry++)
     {   
@@ -95,25 +97,15 @@ void BMMGAnalysis::Analyze()
        fill_muonHists();
        fill_scHists();
        fill_photonHists();
+       for(int phoSCIdx=0;phoSCIdx < ntupleRawTree.bG_nSC ; phoSCIdx++)
+       {
+            if(abs(ntupleRawTree.bG_scEta[phoSCIdx]) > maxAbsSCEta) continue;
+            fill_scHists(phoSCIdx,"allSC_",phoSCIdx);
+       }    
+
        nDiMuNoVertexCandidates=0;
-       /*std::cout<<"nMM = "<<ntupleRawTree.b5_nmm<<" , nmu : "<< ntupleRawTree.b5_nMuon<<"\n";
-      
-    for(UInt_t idx =0; idx < ntupleRawTree.b5_nMuon ; idx++)
-    {
-            std::cout<<"Muon : "<<idx<<" : "<<ntupleRawTree.b5_Muon_eta[idx]<<" , "<<ntupleRawTree.b5_Muon_phi[idx]<<" \n";
-    }*/
        for(UInt_t mumuIdx=0; mumuIdx < ntupleRawTree.b5_nmm;mumuIdx++)
        {    
-           //std::cout<<"\tmumuIdx : "<<mumuIdx<<" : m1,m2 : "<<ntupleRawTree.b5_mm_mu1_index[mumuIdx]<<", "<<ntupleRawTree.b5_mm_mu2_index[mumuIdx]<<"\n";
-           //std::cout<<"\tmumuIdx : "<<mumuIdx<<" : m1pt,m2pt : "<<ntupleRawTree.b5_mm_mu1_pt[mumuIdx]<<", "<<ntupleRawTree.b5_mm_mu2_pt[mumuIdx]<<"\n";
-           //std::cout<<"\tmumuIdx : "<<mumuIdx<<" : m1eta,m1phi : "<<ntupleRawTree.b5_mm_mu1_eta[mumuIdx]<<", "<<ntupleRawTree.b5_mm_mu1_phi[mumuIdx]<<"\n";
-           //std::cout<<"\tmumuIdx : "<<mumuIdx<<" : m2eta,m2eta : "<<ntupleRawTree.b5_mm_mu2_eta[mumuIdx]<<", "<<ntupleRawTree.b5_mm_mu2_phi[mumuIdx]<<"\n";
-           //std::cout<<"\tmumuIdx : "<<mumuIdx<<" : m1,m2 [recal] : \n"
-           //                         <<"\t Idx  : "<<getMuonMatch(ntupleRawTree.b5_mm_mu1_eta[mumuIdx],ntupleRawTree.b5_mm_mu1_phi[mumuIdx])
-           //                         <<"\n"
-           //                         <<"\tIdx : "<<getMuonMatch(ntupleRawTree.b5_mm_mu2_eta[mumuIdx],ntupleRawTree.b5_mm_mu2_phi[mumuIdx])
-           //                         <<"\n";
-           //std::cout<<"\tmumu    : "<<mumuIdx<<" : MASS : "<<ntupleRawTree.b5_mm_mass[mumuIdx]<<"\n";
            if(ntupleRawTree.b5_mm_mu1_index[mumuIdx] < 0 or ntupleRawTree.b5_mm_mu2_index[mumuIdx] <0 ) continue;  
            if(ntupleRawTree.b5_mm_mu1_index[mumuIdx] >= ntupleRawTree.b5_nMuon ) continue;
            if(ntupleRawTree.b5_mm_mu2_index[mumuIdx] >= ntupleRawTree.b5_nMuon ) continue;
@@ -156,6 +148,7 @@ void BMMGAnalysis::Analyze()
            for(int phoSCIdx=0;phoSCIdx < ntupleRawTree.bG_nSC ; phoSCIdx++)
            {
                // photon selection
+               if(abs(ntupleRawTree.bG_scEta[phoSCIdx]) > maxAbsSCEta) continue;
                if(photonSelectionCheck[phoSCIdx] < 0)
                {
                     photonSelectionCheck[phoSCIdx]=doPhotonSelection(phoSCIdx );
@@ -224,6 +217,16 @@ void BMMGAnalysis::Analyze()
        fill_globalEventHists();
 
      TreeFill();
+    if(makeSCTree)
+    {
+           for(int phoSCIdx=0;phoSCIdx < ntupleRawTree.bG_nSC ; phoSCIdx++)
+           {
+                if(abs(ntupleRawTree.bG_scEta[phoSCIdx]) > maxAbsSCEta) continue;
+                fillSCVariablesToOutTree(phoSCIdx);
+           }
+        
+    }
+    
     }
     std::cout<<"\n\n"
             <<"  Number of Events with trigger = "<<EventCount<<"\n"
@@ -271,10 +274,12 @@ void BMMGAnalysis::GenAnalyze()
     Int_t prevRun(-1),prevLumi(-1);
     bool goodRunLumi = false;
 
+    AddSCHistos("genMatchedSC_");
 
     for (Long64_t jentry=0; jentry<maxEvents; jentry++)
     {   
 
+       EventCount++;
        nDiMuCandidates=0;
        isTriggerd=false;
 	
@@ -305,7 +310,9 @@ void BMMGAnalysis::GenAnalyze()
        if( ntupleRawTree.b5_HLT_DoubleMu4_3_Jpsi ) isTriggerd=true;
        if( ntupleRawTree.b5_HLT_Dimuon0_Jpsi_NoVertexing ) isTriggerd=true;
        if( ntupleRawTree.b5_HLT_Dimuon0_Jpsi_NoVertexing_L1_4R_0er1p5R ) isTriggerd=true;
-       //if(not isTriggerd) continue;
+       
+       if( doTriggerFiltering and (not isTriggerd) )continue;
+
        if( isTriggerd ) EventCountWithTrigger++;
       for(Int_t i=0;i<NSTORAGE_ARRAY_MAX;i++)
             storageArrayDouble[i]=0;
@@ -436,8 +443,10 @@ void BMMGAnalysis::GenAnalyze()
         
        for(int i=0;i<ntupleRawTree.bG_nSC ; i++)
        {
+                if(abs(ntupleRawTree.bG_scEta[i]) > maxAbsSCEta) continue;
+
                 dr= getDR(ntupleRawTree.bG_scEta[i], ntupleRawTree.bG_scPhi[i], 
-                 photonLV.Eta() ,photonLV.Phi() );
+                photonLV.Eta() ,photonLV.Phi() );
                 if( dr < phoRecoMatchDr) 
                 {
                     phoRecoMatchDr=dr;
@@ -473,10 +482,12 @@ void BMMGAnalysis::GenAnalyze()
         scMatchCount++;
 		fill_scHists(phoRecoMatchIdx);
         fillSCVariablesToOutTree(phoRecoMatchIdx);
+        fill_scHists(phoRecoMatchIdx,"genMatchedSC_",phoRecoMatchIdx);
         if(doPhotonSelection(phoRecoMatchIdx) ==0)
         {   
             phoMatchCount++;
         }
+        
 
 		fill_photonHists(phoRecoMatchIdx);
      }
@@ -583,7 +594,6 @@ void BMMGAnalysis::GenAnalyze()
        }
        
     
-       EventCount++;
        if(nDiMuNoVertexCandidates > 0)
        {
             EventCountWithDimuCand++;
@@ -1776,7 +1786,7 @@ Double_t BMMGAnalysis::getDCAGammaToDimuVertex(Int_t mumuIdx,Int_t phoId)
 
 void BMMGAnalysis::setupOutputSCTree()
 {
-
+    makeSCTree=true;
     candidateMapDouble["SCTreeStorage"]   = storageIdxFilledDouble ;
     storageIdxFilledDouble+=100;
 
@@ -1929,4 +1939,158 @@ void BMMGAnalysis::fillSCVariablesToOutTree(Int_t scIDX)
 	storageArrayDouble[idx + offset ] =ntupleRawTree.bG_scPFNeuIso5[scIDX]		  ;idx+=1 ;
     
     treeStore["SCVars"]->Fill();
+}
+
+void BMMGAnalysis::AddSCHistos(TString tag)
+{ 
+     const int   pTBins=50;
+     const float pTmin(0.0);
+     const float pTmax(50.0);
+
+     const int   etaBins=70;
+     const float etamin(-3.5);
+     const float etamax(3.5);
+
+     const int   deltaRNBins=30;
+     const float deltaRMin(0.0);
+     const float deltaRMax(3.0);
+
+        th1fStore[tag+"deltaR"                  ]  = new TH1F(tag + "deltaR","deltaR of sc Candidate", deltaRNBins , deltaRMin  , deltaRMax  );
+        th1fStore[tag+"Eta"                     ]  = new TH1F(tag + "Eta","Eta of sc Candidate", etaBins , etamin  , etamax  );
+        th1fStore[tag+"phi"                     ]  = new TH1F(tag + "phi","Phi of sc Candidate", 64 , -3.20  , 3.20  );
+        th1fStore[tag+"E"		                ] = new TH1F(tag + "E"		                ,   "E"		         , 600 , 0.0 ,150.0 ) ;                  
+	    th1fStore[tag+"Et"		                ] = new TH1F(tag + "Et"		                ,   "Et"		     , 250 , 0.0 ,50.0) ;
+	    th1fStore[tag+"RawE"		            ] = new TH1F(tag + "RawE"		                ,   "RawE"		     , 600 , 0.0 ,150.0) ; 
+	    th1fStore[tag+"X"		                ] = new TH1F(tag + "X"		                ,   "X"		    , 640 , -160.0,160.0) ;
+	    th1fStore[tag+"Y"		                ] = new TH1F(tag + "Y"		                ,   "Y"		    , 640 , -160.0,160.0);   
+	    th1fStore[tag+"Z"		                ] = new TH1F(tag + "Z"		                ,   "Z"		    , 800 , -400.0 ,400.0);
+	    th1fStore[tag+"EtaWidth"		        ] = new TH1F(tag + "EtaWidth"		            ,   "EtaWidth"	, 180 , 0.0 ,0.045);	
+	    th1fStore[tag+"PhiWidth"		        ] = new TH1F(tag + "PhiWidth"		            ,   "PhiWidth"	, 100 , 0.0 ,0.25);	
+	    th1fStore[tag+"RawEt"		            ] = new TH1F(tag + "RawEt"		            ,   "RawEt"		, 250.0 , 0.0, 50.0);
+	    th1fStore[tag+"MinDrWithGsfElectornSC_" ] = new TH1F(tag + "MinDrWithGsfElectornSC_"  ,   "MinDrWithGsfElectornSC_",2,0.0,1.0);
+	    th1fStore[tag+"FoundGsfMatch_"		    ] = new TH1F(tag + "FoundGsfMatch_"		    ,   "FoundGsfMatch_",2,-0.5,1.5);		
+	    th1fStore[tag+"E5x5"		            ] = new TH1F(tag + "E5x5"		                ,   "E5x5"		    ,480,0.0,120.0);       
+	    th1fStore[tag+"E2x2Ratio"		        ] = new TH1F(tag + "E2x2Ratio"		        ,   "E2x2Ratio"		,120 ,-0.1,1.1) ;    
+	    th1fStore[tag+"E3x3Ratio"		        ] = new TH1F(tag + "E3x3Ratio"		        ,   "E3x3Ratio"		,120 ,-0.1,1.1) ;      
+	    th1fStore[tag+"EMaxRatio"		        ] = new TH1F(tag + "EMaxRatio"		        ,   "EMaxRatio"		,120 ,-0.1,1.1) ;    
+	    th1fStore[tag+"E2ndRatio"		        ] = new TH1F(tag + "E2ndRatio"		        ,   "E2ndRatio"		,120 ,-0.1,1.1) ;    
+	    th1fStore[tag+"ETopRatio"		        ] = new TH1F(tag + "ETopRatio"		        ,   "ETopRatio"		,120 ,-0.1,1.1) ;    
+	    th1fStore[tag+"ERightRatio"		        ] = new TH1F(tag + "ERightRatio"		        ,   "ERightRatio"	,120 ,-0.1,1.1) ;	    
+	    th1fStore[tag+"EBottomRatio"		    ] = new TH1F(tag + "EBottomRatio"		        ,   "EBottomRatio"	,120 ,-0.1,1.1) ;	    
+	    th1fStore[tag+"ELeftRatio"		        ] = new TH1F(tag + "ELeftRatio"		        ,   "ELeftRatio"	,120 ,-0.1,1.1) ;	    
+	    th1fStore[tag+"e2x5_MaxRatio"		    ] = new TH1F(tag + "e2x5_MaxRatio"		    ,   "e2x5_MaxRatio"	,120 ,-0.1,1.1) ;	    
+	    th1fStore[tag+"E2x5TopRatio"		    ] = new TH1F(tag + "E2x5TopRatio"		        ,   "E2x5TopRatio"	,120 ,-0.1,1.1) ;	    
+	    th1fStore[tag+"E2x5RightRatio"		    ] = new TH1F(tag + "E2x5RightRatio"		    ,   "E2x5RightRatio",120 ,-0.1,1.1) ;		
+	    th1fStore[tag+"E2x5BottomRatio"		    ] = new TH1F(tag + "E2x5BottomRatio"		    ,   "E2x5BottomRatio",120 ,-0.1,1.1) ;		
+	    th1fStore[tag+"E2x5LeftRatio"		    ] = new TH1F(tag + "E2x5LeftRatio"		    ,   "E2x5LeftRatio"	,120 ,-0.1,1.1) ;	
+	    th1fStore[tag+"SwissCross"		        ] = new TH1F(tag + "SwissCross"		        ,   "SwissCross"	,120 ,-0.1,1.1) ;	
+	    th1fStore[tag+"R9"		                ] = new TH1F(tag + "R9"		                ,   "R9"		, 420 ,-0.2,4.0) ;
+	    th1fStore[tag+"sigmaIetaIeta"		    ] = new TH1F(tag + "sigmaIetaIeta"		    ,   "sigmaIetaIeta", 184 ,-0.001,0.045);  		
+	    th1fStore[tag+"sigmaIetaIphi"		    ] = new TH1F(tag + "sigmaIetaIphi"		    ,   "sigmaIetaIphi", 800 , -0.0008, 0.0008);		
+	    th1fStore[tag+"sigmaIphiIphi"		    ] = new TH1F(tag + "sigmaIphiIphi"		    ,   "sigmaIphiIphi", 142 ,-0.01 , 0.07 );		
+	    th1fStore[tag+"Full5x5_e5x5"		    ] = new TH1F(tag + "Full5x5_e5x5"		        ,   "Full5x5_e5x5" , 600 , 0.0 , 150.0);		
+	    th1fStore[tag+"Full5x5_e2x2Ratio"		] = new TH1F(tag + "Full5x5_e2x2Ratio"		,   "Full5x5_e2x2Ratio"		,120 ,-0.1,1.1) ;    
+	    th1fStore[tag+"Full5x5_e3x3Ratio"		] = new TH1F(tag + "Full5x5_e3x3Ratio"		,   "Full5x5_e3x3Ratio"		,120 ,-0.1,1.1) ;
+	    th1fStore[tag+"Full5x5_eMaxRatio"		] = new TH1F(tag + "Full5x5_eMaxRatio"		,   "Full5x5_eMaxRatio"		,120 ,-0.1,1.1) ;
+	    th1fStore[tag+"Full5x5_e2ndRatio"		] = new TH1F(tag + "Full5x5_e2ndRatio"		,   "Full5x5_e2ndRatio"		,120 ,-0.1,1.1) ;
+	    th1fStore[tag+"Full5x5_eTopRatio"		] = new TH1F(tag + "Full5x5_eTopRatio"		,   "Full5x5_eTopRatio"		,120 ,-0.1,1.1) ;
+	    th1fStore[tag+"Full5x5_eRightRatio"	    ] = new TH1F(tag + "Full5x5_eRightRatio"		,   "Full5x5_eRightRatio"	,120 ,-0.1,1.1) ;	     	
+	    th1fStore[tag+"Full5x5_eBottomRatio"	] = new TH1F(tag + "Full5x5_eBottomRatio"		,   "Full5x5_eBottomRatio"	,120 ,-0.1,1.1) ;	   	
+	    th1fStore[tag+"Full5x5_eLeftRatio"		] = new TH1F(tag + "Full5x5_eLeftRatio"		,   "Full5x5_eLeftRatio"	,120 ,-0.1,1.1) ;	
+	    th1fStore[tag+"Full5x5_e2x5MaxRatio"	] = new TH1F(tag + "Full5x5_e2x5MaxRatio"		,   "Full5x5_e2x5MaxRatio"	,120 ,-0.1,1.1) ;	   	
+	    th1fStore[tag+"Full5x5_e2x5TopRatio"	] = new TH1F(tag + "Full5x5_e2x5TopRatio"		,   "Full5x5_e2x5TopRatio"	,120 ,-0.1,1.1) ;	   	
+	    th1fStore[tag+"Full5x5_e2x5RightRatio"	] = new TH1F(tag + "Full5x5_e2x5RightRatio"	,   "Full5x5_e2x5RightRatio",120 ,-0.1,1.1) ;		   	
+	    th1fStore[tag+"Full5x5_e2x5BottomRatio" ] = new TH1F(tag + "Full5x5_e2x5BottomRatio"	,   "Full5x5_e2x5BottomRatio",120 ,-0.1,1.1) ;		 		
+	    th1fStore[tag+"Full5x5_e2x5LeftRatio"	] = new TH1F(tag + "Full5x5_e2x5LeftRatio"	,   "Full5x5_e2x5LeftRatio"	,120 ,-0.1,1.1) ;	     	
+	    th1fStore[tag+"Full5x5_swissCross"		] = new TH1F(tag + "Full5x5_swissCross"		,   "Full5x5_swissCross"	,120 ,-0.1,1.1) ;	
+	    th1fStore[tag+"Full5x5_r9"		        ] = new TH1F(tag + "Full5x5_r9"		        ,   "Full5x5_r9"		    , 420 , -0.2 , 4.0);
+	    th1fStore[tag+"Full5x5_sigmaIetaIeta"	] = new TH1F(tag + "Full5x5_sigmaIetaIeta"	,   "Full5x5_sigmaIetaIeta" , 184 ,-0.001,0.045);  		  		     	
+	    th1fStore[tag+"Full5x5_sigmaIetaIphi"	] = new TH1F(tag + "Full5x5_sigmaIetaIphi"	,   "Full5x5_sigmaIetaIphi"	, 800 , -0.0008, 0.0008);			     	
+	    th1fStore[tag+"Full5x5_sigmaIphiIphi"	] = new TH1F(tag + "Full5x5_sigmaIphiIphi"	,   "Full5x5_sigmaIphiIphi"	, 142 ,-0.01 , 0.07 );		   	     	
+	    th1fStore[tag+"PFChIso1"		        ] = new TH1F(tag + "PFChIso1"		            ,   "PFChIso1"	, 1000 , 0.0 , 0.20 ) ; 
+	    th1fStore[tag+"PFChIso2"		        ] = new TH1F(tag + "PFChIso2"		            ,   "PFChIso2"	, 1000 , 0.0 , 0.20 ) ;	
+	    th1fStore[tag+"PFChIso"		            ] = new TH1F(tag + "PFChIso3"		            ,   "PFChIso"	, 1000 , 0.0 , 0.20 ) ;	
+	    th1fStore[tag+"PFChIso4"		        ] = new TH1F(tag + "PFChIso4"		            ,   "PFChIso4"	, 1000 , 0.0 , 0.20 ) ;	
+	    th1fStore[tag+"PFChIso5"		        ] = new TH1F(tag + "PFChIso5"		            ,   "PFChIso5"	, 1000 , 0.0 , 0.20 ) ;	
+	    th1fStore[tag+"PFPhoIso1"		        ] = new TH1F(tag + "PFPhoIso1"		        ,   "PFPhoIso1"	, 1000 , 0.0 , 20.0 ) ;	
+	    th1fStore[tag+"PFPhoIso2"		        ] = new TH1F(tag + "PFPhoIso2"		        ,   "PFPhoIso2" , 1000 , 0.0 , 20.0 ) ;		
+	    th1fStore[tag+"PFPhoIso"		        ] = new TH1F(tag + "PFPhoIso3"	            ,   "PFPhoIso"  , 1000 , 0.0 , 20.0 ) ; 	
+	    th1fStore[tag+"PFPhoIso4"		        ] = new TH1F(tag + "PFPhoIso4"		        ,   "PFPhoIso4" , 1000 , 0.0 , 20.0 ) ;		
+	    th1fStore[tag+"PFPhoIso5"		        ] = new TH1F(tag + "PFPhoIso5"		        ,   "PFPhoIso5" , 1000 , 0.0 , 20.0 ) ;		
+	    th1fStore[tag+"PFNeuIso1"		        ] = new TH1F(tag + "PFNeuIso1"		        ,   "PFNeuIso1" , 1000 , 0.0 , 20.0 ) ;		
+	    th1fStore[tag+"PFNeuIso2"		        ] = new TH1F(tag + "PFNeuIso2"		        ,   "PFNeuIso2" , 1000 , 0.0 , 20.0 ) ;		
+	    th1fStore[tag+"PFNeuIso"		        ] = new TH1F(tag + "PFNeuIso3"	            ,   "PFNeuIso3" , 1000 , 0.0 , 20.0 ) ;		
+	    th1fStore[tag+"PFNeuIso4"		        ] = new TH1F(tag + "PFNeuIso4"		        ,   "PFNeuIso4" , 1000 , 0.0 , 20.0 ) ;		
+	    th1fStore[tag+"PFNeuIso5"		        ] = new TH1F(tag + "PFNeuIso5"		        ,   "PFNeuIso5" , 1000 , 0.0 , 20.0 ) ;		
+}
+
+void BMMGAnalysis::fill_scHists(Int_t scIDX,TString tag,Double_t dr)
+{
+        th1fStore[tag+"deltaR"                  ]->Fill( dr );
+        th1fStore[tag+"Eta"                     ]->Fill(ntupleRawTree.bG_scEta[scIDX]		      );
+        th1fStore[tag+"phi"                     ]->Fill(ntupleRawTree.bG_scPhi[scIDX]		      );
+        th1fStore[tag+"E"		                ]->Fill(ntupleRawTree.bG_scE[scIDX]		      );
+	    th1fStore[tag+"Et"		                ]->Fill(ntupleRawTree.bG_scEt[scIDX]		      );
+	    th1fStore[tag+"RawE"		            ]->Fill(ntupleRawTree.bG_scRawE[scIDX]		  );
+	    th1fStore[tag+"X"		                ]->Fill(ntupleRawTree.bG_scX[scIDX]		      );
+	    th1fStore[tag+"Y"		                ]->Fill(ntupleRawTree.bG_scY[scIDX]		      );
+	    th1fStore[tag+"Z"		                ]->Fill(ntupleRawTree.bG_scZ[scIDX]		      );
+	    th1fStore[tag+"EtaWidth"		        ]->Fill(ntupleRawTree.bG_scEtaWidth[scIDX]		  );
+	    th1fStore[tag+"PhiWidth"		        ]->Fill(ntupleRawTree.bG_scPhiWidth[scIDX]		  );
+	    th1fStore[tag+"RawEt"		            ]->Fill(ntupleRawTree.bG_scRawEt[scIDX]		  );
+	    th1fStore[tag+"MinDrWithGsfElectornSC_" ]->Fill(ntupleRawTree.bG_scMinDrWithGsfElectornSC_[scIDX]  );
+	    th1fStore[tag+"FoundGsfMatch_"		    ]->Fill(ntupleRawTree.bG_scFoundGsfMatch_[scIDX]		  );
+	    th1fStore[tag+"E5x5"		            ]->Fill(ntupleRawTree.bG_scE5x5[scIDX]		              );
+	    th1fStore[tag+"E2x2Ratio"		        ]->Fill(ntupleRawTree.bG_scE2x2Ratio[scIDX]		      );
+	    th1fStore[tag+"E3x3Ratio"		        ]->Fill(ntupleRawTree.bG_scE3x3Ratio[scIDX]		      );
+	    th1fStore[tag+"EMaxRatio"		        ]->Fill(ntupleRawTree.bG_scEMaxRatio[scIDX]		      );
+	    th1fStore[tag+"E2ndRatio"		        ]->Fill(ntupleRawTree.bG_scE2ndRatio[scIDX]		      );
+	    th1fStore[tag+"ETopRatio"		        ]->Fill(ntupleRawTree.bG_scETopRatio[scIDX]		      );
+	    th1fStore[tag+"ERightRatio"		        ]->Fill(ntupleRawTree.bG_scERightRatio[scIDX]		      );
+	    th1fStore[tag+"EBottomRatio"		    ]->Fill(ntupleRawTree.bG_scEBottomRatio[scIDX]		      );
+	    th1fStore[tag+"ELeftRatio"		        ]->Fill(ntupleRawTree.bG_scELeftRatio[scIDX]		      );
+	    th1fStore[tag+"e2x5_MaxRatio"		    ]->Fill(ntupleRawTree.bG_scE2x5MaxRatio[scIDX]		      );
+	    th1fStore[tag+"E2x5TopRatio"		    ]->Fill(ntupleRawTree.bG_scE2x5TopRatio[scIDX]		      );
+	    th1fStore[tag+"E2x5RightRatio"		    ]->Fill(ntupleRawTree.bG_scE2x5RightRatio[scIDX]		  );
+	    th1fStore[tag+"E2x5BottomRatio"		    ]->Fill(ntupleRawTree.bG_scE2x5BottomRatio[scIDX]		  );
+	    th1fStore[tag+"E2x5LeftRatio"		    ]->Fill(ntupleRawTree.bG_scE2x5LeftRatio[scIDX]		  );
+	    th1fStore[tag+"SwissCross"		        ]->Fill(ntupleRawTree.bG_scSwissCross[scIDX]		  );
+	    th1fStore[tag+"R9"		                ]->Fill(ntupleRawTree.bG_scR9[scIDX]		  );
+	    th1fStore[tag+"sigmaIetaIeta"		    ]->Fill(ntupleRawTree.bG_scSigmaIetaIeta[scIDX]		  );
+	    th1fStore[tag+"sigmaIetaIphi"		    ]->Fill(ntupleRawTree.bG_scSigmaIetaIphi[scIDX]		  );
+	    th1fStore[tag+"sigmaIphiIphi"		    ]->Fill(ntupleRawTree.bG_scSigmaIphiIphi[scIDX]		  );
+	    th1fStore[tag+"Full5x5_e5x5"		    ]->Fill(ntupleRawTree.bG_scFull5x5_e5x5[scIDX]		  );
+	    th1fStore[tag+"Full5x5_e2x2Ratio"		]->Fill(ntupleRawTree.bG_scFull5x5_e2x2Ratio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_e3x3Ratio"		]->Fill(ntupleRawTree.bG_scFull5x5_e3x3Ratio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_eMaxRatio"		]->Fill(ntupleRawTree.bG_scFull5x5_eMaxRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_e2ndRatio"		]->Fill(ntupleRawTree.bG_scFull5x5_e2ndRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_eTopRatio"		]->Fill(ntupleRawTree.bG_scFull5x5_eTopRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_eRightRatio"	    ]->Fill(ntupleRawTree.bG_scFull5x5_eRightRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_eBottomRatio"	]->Fill(ntupleRawTree.bG_scFull5x5_eBottomRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_eLeftRatio"		]->Fill(ntupleRawTree.bG_scFull5x5_eLeftRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_e2x5MaxRatio"	]->Fill(ntupleRawTree.bG_scFull5x5_e2x5MaxRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_e2x5TopRatio"	]->Fill(ntupleRawTree.bG_scFull5x5_e2x5TopRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_e2x5RightRatio"	]->Fill(ntupleRawTree.bG_scFull5x5_e2x5RightRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_e2x5BottomRatio" ]->Fill(ntupleRawTree.bG_scFull5x5_e2x5BottomRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_e2x5LeftRatio"	]->Fill(ntupleRawTree.bG_scFull5x5_e2x5LeftRatio[scIDX]		  );
+	    th1fStore[tag+"Full5x5_swissCross"		]->Fill(ntupleRawTree.bG_scFull5x5_swissCross[scIDX]		  );
+	    th1fStore[tag+"Full5x5_r9"		        ]->Fill(ntupleRawTree.bG_scFull5x5_r9[scIDX]		  );
+	    th1fStore[tag+"Full5x5_sigmaIetaIeta"	]->Fill(ntupleRawTree.bG_scFull5x5_sigmaIetaIeta[scIDX]		  );
+	    th1fStore[tag+"Full5x5_sigmaIetaIphi"	]->Fill(ntupleRawTree.bG_scFull5x5_sigmaIetaIphi[scIDX]		  );
+	    th1fStore[tag+"Full5x5_sigmaIphiIphi"	]->Fill(ntupleRawTree.bG_scFull5x5_sigmaIphiIphi[scIDX]		  );
+	    th1fStore[tag+"PFChIso1"		        ]->Fill(ntupleRawTree.bG_scPFChIso1[scIDX]		  );
+	    th1fStore[tag+"PFChIso2"		        ]->Fill(ntupleRawTree.bG_scPFChIso2[scIDX]		  );
+	    th1fStore[tag+"PFChIso"		            ]->Fill(ntupleRawTree.bG_scPFChIso3[scIDX]		  );
+	    th1fStore[tag+"PFChIso4"		        ]->Fill(ntupleRawTree.bG_scPFChIso4[scIDX]		  );
+	    th1fStore[tag+"PFChIso5"		        ]->Fill(ntupleRawTree.bG_scPFChIso5[scIDX]		  );
+	    th1fStore[tag+"PFPhoIso1"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso1[scIDX]		  );
+	    th1fStore[tag+"PFPhoIso2"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso2[scIDX]		  );
+	    th1fStore[tag+"PFPhoIso"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso3[scIDX]		  );
+	    th1fStore[tag+"PFPhoIso4"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso4[scIDX]		  );
+	    th1fStore[tag+"PFPhoIso5"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso5[scIDX]		  );
+	    th1fStore[tag+"PFNeuIso1"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso1[scIDX]		  );
+	    th1fStore[tag+"PFNeuIso2"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso2[scIDX]		  );             
+	    th1fStore[tag+"PFNeuIso"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso3[scIDX]		  );             
+	    th1fStore[tag+"PFNeuIso4"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso4[scIDX]		  );
+	    th1fStore[tag+"PFNeuIso5"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso5[scIDX]		  );
 }

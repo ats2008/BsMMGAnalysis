@@ -60,6 +60,9 @@ if len(sys.argv) > argC:
     FILES_PER_JOB=int(sys.argv[argC])  
 argC+=1
 if len(sys.argv) > argC:
+    NEVENTS_PER_JOB=int(sys.argv[argC])  
+argC+=1
+if len(sys.argv) > argC:
     tag=sys.argv[argC]  
 
 if(not os.path.exists(destination)):
@@ -93,8 +96,8 @@ error = $Fp(filename)run.$(Cluster).stderr\n\
 log = $Fp(filename)run.$(Cluster).log\n\
 +JobFlavour = \"espresso\"\n\
 "
-
-condorScript=open('job'+tag+'.sub','w')
+condorScriptName='job'+tag+'.sub'
+condorScript=open(condorScriptName,'w')
 condorScript.write(condorScriptString)
 
 
@@ -187,3 +190,7 @@ print(" Number of jobs made : ", njobs)
 print(" Number of files left : ", len(sourceFileList) )
 condorScript.close()
 
+print()
+print("Job Files are in  : ",head)
+print("Destination of the results are  : ",destination)
+print("condor submit file is : ",condorScriptName)

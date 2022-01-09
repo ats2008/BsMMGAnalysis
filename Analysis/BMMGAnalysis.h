@@ -72,7 +72,7 @@ class BMMGAnalysis
     TChain *treeChain ;
     TTree *outTree;
     MergedBMMX ntupleRawTree;
-    
+    Bool_t makeSCTree;   
     // Storage Vars
     
     // Defenition of the storage of type Double_t
@@ -126,6 +126,7 @@ class BMMGAnalysis
     const Double_t BDTWorkingPoint ; 
     
     // Analysis Cuts
+    Double_t maxAbsSCEta ;
     Double_t maxMuMuDr          ;
     Double_t maxDimuPhotonDr    ;
     Double_t maxMMGMass         ;
@@ -153,8 +154,10 @@ class BMMGAnalysis
     
     // Histogram Related Functions
     void bookHistograms();
+    void AddSCHistos(TString tag);
     Double_t getDCAGammaToDimuVertex(Int_t mumuIdx,Int_t phoId);
     void fill_muonHists(Int_t idx=-1);
+    void fill_scHists(Int_t scIDX,TString tag,Double_t dr);
     void fill_scHists(Int_t idx =-1);
     void fill_photonHists(Int_t idx  = -1);
     void fill_dimuonPassHists(Int_t idx=-1);
@@ -199,9 +202,10 @@ void BMMGAnalysis::Init(string cfgFileName)
     InFileList.clear();
     ofileName="output.root";
     maxEvents=1000;
-    
+    makeSCTree=false;
     outTree=nullptr;
 
+    maxAbsSCEta = 3.0;
     maxMuMuDr          =1.4;
     maxDimuPhotonDr    =1.4;
     maxMMGMass         =6.2;
@@ -421,7 +425,12 @@ void BMMGAnalysis::readParameters(string fname)
                  maxDimuPhotonDr=std::atof(field.c_str());
                  cout<<" setting maxDimuPhotonDr  = "<<maxDimuPhotonDr<<"\n";
             }
-             if(field.compare("MaxMMGMass")==0){
+            if(field.compare("MaxAbsSCEta")==0){
+                 getline(strStream, field);
+                 maxAbsSCEta=std::atof(field.c_str());
+                 cout<<" setting maxAbsSCEta  = "<<maxAbsSCEta<<"\n";
+            }
+            if(field.compare("MaxMMGMass")==0){
                  getline(strStream, field);
                  maxMMGMass=std::atof(field.c_str());
                  cout<<" setting maxMMGMass  = "<<maxMMGMass<<"\n";

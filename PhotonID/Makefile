@@ -8,11 +8,14 @@ INCPATH     =.
 TARGET		= mvaDataMaker
 all:	$(TARGET) 
 
-mvaTrainer : photonID_bdt_MLP_classification.C 
+mvaTrainer2 : photonID_bdt_MLP_classification.C 
 	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
 
 
 mvaDataMaker : mvaDataMaker.cc Util.h TreeMaker.h TreeMaker.cc 
+	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
+
+mvaTrainer: makeMVAModels.cc  MVATrainer.h MVATrainer.cc 
 	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
 
 clean :

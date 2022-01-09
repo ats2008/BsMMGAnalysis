@@ -116,6 +116,7 @@ void MVATrainer::SetupTMVAOptions()
   // global event weights per tree (see below for setting event-wise weights)
   // You can add an arbitrary number of signal or background trees
     std::cout<<__LINE__<<" \n";
+  Double_t x;
   for(int i=0 ; i < signalFnames.size() ; i++)
   {
     std::cout<<__LINE__<<" \n";
@@ -125,6 +126,16 @@ void MVATrainer::SetupTMVAOptions()
             signalTrees.push_back(aTree);
             std::cout<<"Adding sig "<<signalTreeNames[i]<<" from "<<signalFnames[i]<<" with "<<signalTrees[i]->GetEntries()<<"\n";
             dataloader->AddSignalTree    ( signalTrees[i], signalWeight[i] );
+            //for(int j =0;j<mvaTrainVars.size();j++)
+            //{
+            //    signalTrees[i]->SetBranchAddress(mvaTrainVars[j].c_str(),&x);
+            //    std::cout<<" j =" <<j<<"\n";
+            //}   
+            //for(int j =0;j<spectatorVars.size();j++)
+            //{
+            //    signalTrees[i]->SetBranchAddress(spectatorVars[j].c_str(),&x);
+            //    std::cout<<" j =" <<j<<"\n";
+            //}   
   }
   for(int i=0 ; i < bkgFnames.size() ; i++)
   {
@@ -133,15 +144,25 @@ void MVATrainer::SetupTMVAOptions()
             bkgFiles.push_back(aFile)     ;
             auto aTree =  (TTree * ) bkgFiles[i]->Get(bkgTreeNames[i].c_str());
             bkgTrees.push_back(aTree);
-            std::cout<<"Adding bkg "<<signalTreeNames[i]<<" from "<<signalFnames[i]<<" with "<<signalTrees[i]->GetEntries()<<"\n";
-            dataloader->AddSignalTree    ( bkgTrees[i], bkgWeight[i] );
-  }
+            std::cout<<"Adding bkg "<<bkgTreeNames[i]<<" from "<<bkgFnames[i]<<" with "<<bkgTrees[i]->GetEntries()<<"\n";
+            dataloader->AddBackgroundTree    ( bkgTrees[i], bkgWeight[i] );
+            //for(int j =0;j<mvaTrainVars.size();j++)
+            //{
+            //    bkgTrees[i]->SetBranchAddress(mvaTrainVars[j].c_str(),&x);
+            //    std::cout<<" j =" <<j<<"\n";
+            //}  
+            //for(int j =0;j<spectatorVars.size();j++)
+            //{
+            //    bkgTrees[i]->SetBranchAddress(spectatorVars[j].c_str(),&x);
+            //    std::cout<<" j =" <<j<<"\n";
+            //}  
+    }
 
 
   // cuts can be like :  "VBFJet_mjj > 400 && leadVBF_pt > 40 && subleadVBF_pt > 30 "; // for example: TCut mycuts = "abs(var1)<0.5 && abs(var2-0.5)<1";
   // cuts can be like :  "VBFJet_mjj > 400 && leadVBF_pt > 40 && subleadVBF_pt > 30 "; // for example: TCut mycutb = "abs(var1)<0.5";
   dataloader->PrepareTrainingAndTestTree( sigCuts.c_str() , bkgCuts.c_str(), testTrainConfig.c_str() );
-  
+  std::cout<<sigCuts.c_str()<<" , "<<bkgCuts.c_str()<<" , "<<testTrainConfig<<"\n";
   
     std::cout<<__LINE__<<" \n";
   
@@ -349,10 +370,13 @@ void MVATrainer::trainAndTest()
      factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDTG",
 			  "!H:!V:NTrees=1000:MinNodeSize=2.5%:BoostType=Grad:Shrinkage=0.10:UseBaggedBoost:BaggedSampleFraction=0.5:nCuts=20:MaxDepth=3" );
    
-   if (Use["BDT"])  // Adaptive Boost
+   if (Use["BDT"]) 
+    {// Adaptive Boost
+     std::cout<<" Its heres ! \n";
      factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDT",
-			  "!H:!V:NTrees=500:MinNodeSize=2.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=20" );
-   
+			  "!H:V=True:NTrees=500:MinNodeSize=2.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=20" );
+    
+    }
    if (Use["BDTB"]) // Bagging
      factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDTB",
 			  "!H:!V:NTrees=400:BoostType=Bagging:SeparationType=GiniIndex:nCuts=20"  );
@@ -384,6 +408,7 @@ void MVATrainer::trainAndTest()
    // Now you can tell the factory to train, test, and evaluate the MVAs
    //
    // Train MVAs using the set of training events
+   std::cout<<__LINE__<<"\n";
    factory->TrainAllMethods();
    
    // Evaluate all MVAs using the set of test events

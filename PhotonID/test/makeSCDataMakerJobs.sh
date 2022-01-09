@@ -1,6 +1,13 @@
 #./makeCondorJobForAnalysis.py <EXECUTABLE> <InputFileListFname> <CFG_TEMPLATE> <analysisOption> <destination> <NJOBS> <FILES_PER_JOB> <jobPrefix>
+NJOBS=${1-5}
+FILES_PER_JOB=${2-1}
+MAXEVENTS=${3--1}
+echo NJOBS : $NJOBS
+echo FILES_PER_JOB : $FILES_PER_JOB
+echo MAXEVENTS : $MAXEVENTS
+echo ""
 EXECUTABLE=mvaDataMaker.exe
-CFG_TEMPLATE=configs/QcdSample.template
+CFG_TEMPLATE=configs/QcdSample_template.cfg
 ANALYSIS_OPT=1
 
 declare -a SourceFiles=(\
@@ -24,14 +31,15 @@ for i in "${!tagArr[@]}"; do
     TAG=${tagArr[$i]}
     ANALYSIS_OPT=${AnalysisOption[$i]}
  #   set -x
-    echo ./makeCondorJobForAnalysis.py \
+     ./makeCondorJobForAnalysis.py \
         $EXECUTABLE \
         $src \
         $CFG_TEMPLATE \
         $ANALYSIS_OPT \
         $PWD/results/MC/$TAG \
-        200 \
-        2 \
+        $NJOBS \
+        $FILES_PER_JOB \
+        $MAXEVENTS \
         $TAG
 #    set +x
 done

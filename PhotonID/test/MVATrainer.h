@@ -115,9 +115,10 @@ void MVATrainer::InitializeTMVAModel()
   TMVA::Tools::Instance();
   
   // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
-  outputFile = TFile::Open( ofileName.c_str(), "RECREATE" );
+  outputFile = TFile::Open( (prefix+ofileName).c_str(), "RECREATE" );
   if(factoryOptions=="auto")
-    factoryOptions="ROC:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification";   
+    factoryOptions="ROC:V=True:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification";   
+  std::cout<<factoryOptions<<"\n";
   factory = new TMVA::Factory( modelFactoryName.c_str(), outputFile, factoryOptions.c_str());
   dataloader=new TMVA::DataLoader(modelFactoryName.c_str());
 
@@ -146,7 +147,7 @@ void MVATrainer::readParameters(string fname)
     std::string field;
 	string line;
     Int_t tmpI;
-
+    
 	while(std::getline(cfgFile,line))
 	{
 	   if(line=="#PARAMS_BEG") {cfgModeFlag=true;continue;}
@@ -237,7 +238,7 @@ void MVATrainer::readParameters(string fname)
     getVetorFillledFromConfigFile(cfgFile, bkgTreeNames   , "#BKGTREELIST_BEG", "#BKGTREELIST_END", true);
     
     std::vector<string> vect;
-    getVetorFillledFromConfigFile(cfgFile, vect     , "#SIGTREELIST_BEG", "#SIGTREELIST_END", true);
+    getVetorFillledFromConfigFile(cfgFile, vect     , "#SIGWEIGHT_BEG", "#SIGWEIGHT_END", true);
     for(int i=0;i<vect.size();i++)
     {
             signalWeight.push_back(atof(vect[i].c_str()));
@@ -247,7 +248,7 @@ void MVATrainer::readParameters(string fname)
     std::cout<<"\n";
 
     vect.clear();
-    getVetorFillledFromConfigFile(cfgFile, vect     , "#BKGTREELIST_BEG", "#BKGTREELIST_END", true);
+    getVetorFillledFromConfigFile(cfgFile, vect     , "#BKGWEIGHT_BEG", "#BKGWEIGHT_END", true);
     for(int i=0;i<vect.size();i++)
     {
             bkgWeight.push_back(atof(vect[i].c_str()));

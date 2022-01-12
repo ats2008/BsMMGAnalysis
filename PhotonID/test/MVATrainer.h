@@ -27,6 +27,7 @@ class MVATrainer
     string testTrainConfig;
     
     std::map<std::string,int> Use;
+    std::map<std::string,string> mvaMethordOptions;
  
     string modelFactoryName;
 
@@ -47,7 +48,6 @@ class MVATrainer
     string factoryOptions;
     string mvaMethords;
     std::vector<string> mvaModelsToTrain;
-    std::vector<string> mvaModelParams;
     std::vector<string> mvaTrainVars;
     std::vector<string> spectatorVars;
 
@@ -229,15 +229,22 @@ void MVATrainer::readParameters(string fname)
         mvaMethords+= ","+mvaModelsToTrain[i];
     }
     std::cout<<"setting mvaMethords = "<<mvaMethords<<"\n";
+    std::vector<string> vect;
+    vect.clear();
+    getVetorFillledFromConfigFile(cfgFile, vect   , "#MODELPARAMS_BEG", "#MODELPARAMS_END", true);
+    if( mvaModelsToTrain.size() != vect.size()) {std::cout<<__LINE__<<" config error !! \n";exit(1) ;}
+    for(int i=0;i<mvaModelsToTrain.size();i++)
+    {
+            mvaMethordOptions[mvaModelsToTrain[i]]=vect[i];
+    }
 
-    getVetorFillledFromConfigFile(cfgFile, mvaModelParams   , "#MODELPARAMS_BEG", "#MODELPARAMS_END", true);
     
     getVetorFillledFromConfigFile(cfgFile, signalFnames   , "#SIGFILELIST_BEG", "#SIGFILELIST_END", true);
     getVetorFillledFromConfigFile(cfgFile, signalTreeNames, "#SIGTREELIST_BEG", "#SIGTREELIST_END", true);
     getVetorFillledFromConfigFile(cfgFile, bkgFnames      , "#BKGFILELIST_BEG", "#BKGFILELIST_END", true);
     getVetorFillledFromConfigFile(cfgFile, bkgTreeNames   , "#BKGTREELIST_BEG", "#BKGTREELIST_END", true);
     
-    std::vector<string> vect;
+    vect.clear();
     getVetorFillledFromConfigFile(cfgFile, vect     , "#SIGWEIGHT_BEG", "#SIGWEIGHT_END", true);
     for(int i=0;i<vect.size();i++)
     {

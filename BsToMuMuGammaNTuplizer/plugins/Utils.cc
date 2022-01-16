@@ -80,11 +80,11 @@ Utils::Utils (bool rightFlavorTag)
   // ################################
   // # Print out internal variables #
   // ################################
-  std::cout << "\n@@@@@@ Utils class settings : public  @@@@@@" << std::endl;
-  std::cout << "RIGHTflavorTAG: "            << RIGHTflavorTAG << std::endl;
-  std::cout << "B0ToKstMuMu: "               << B0ToKstMuMu << std::endl;
-  std::cout << "B0ToJPsiKst: "               << B0ToJPsiKst << std::endl;
-  std::cout << "B0ToPsi2SKst: "              << B0ToPsi2SKst << std::endl;
+//  std::cout << "\n@@@@@@ Utils class settings : public  @@@@@@" << std::endl;
+//  std::cout << "RIGHTflavorTAG: "            << RIGHTflavorTAG << std::endl;
+//  std::cout << "B0ToKstMuMu: "               << B0ToKstMuMu << std::endl;
+//  std::cout << "B0ToJPsiKst: "               << B0ToJPsiKst << std::endl;
+//  std::cout << "B0ToPsi2SKst: "              << B0ToPsi2SKst << std::endl;
 }
 
 double Utils::computeInvMass (double Px1,

@@ -22,10 +22,10 @@ process.load("Geometry.HcalEventSetup.hcalTopologyIdeal_cfi")
 process.GlobalTag.globaltag = cms.string('106X_upgrade2018_realistic_v15_L1v1')
 #process.GlobalTag.globaltag = cms.string('102X_upgrade2018_realistic_v15')
 
-process.MessageLogger.cerr.FwkReport.reportEvery = 500
+process.MessageLogger.cerr.FwkReport.reportEvery = 50
 
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20) )
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(200) )
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
 
 process.options = cms.untracked.PSet( numberOfConcurrentLuminosityBlocks = cms.untracked.uint32(1),
@@ -42,17 +42,7 @@ process.options = cms.untracked.PSet( numberOfConcurrentLuminosityBlocks = cms.u
 process.source = cms.Source("PoolSource",
      duplicateCheckMode=cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-   #'root://se01.indiacms.res.in//store/mc/RunIIAutumn18DRPremix/BsToMuMuGamma_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-evtgen-pythia8/AODSIM/102X_upgrade2018_realistic_v15-v1/30000/0D69C40E-AE25-9941-8F01-B43BBB86FF4D.root',
-  #  'file:/eos/user/a/athachay/workarea/data/BsToMuMuGamma/RunIIAutumn18DRPremix/BsToMuMuGamma_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-evtgen-pythia8/AODSIM/102X_upgrade2018_realistic_v15-v1/606765BD-9BB4-9741-925C-A0C69B933039.root',      
-   #'file:/eos/user/a/athachay/workarea/data/BsToMuMuGamma/RunIIAutumn18DRPremix/BsToMuMuGamma_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-evtgen-pythia8/AODSIM/102X_upgrade2018_realistic_v15-v1/606765BD-9BB4-9741-925C-A0C69B933039.root',      
- #  'file:/afs/cern.ch/work/a/athachay/public/BsToMuMuGamma/RunIIAutumn18DRPremix/BsToMuMuGamma_BMuonFilter_SoftQCDnonD_TuneCP5_13TeV-evtgen-pythia8/AODSIM/102X_upgrade2018_realistic_v15-v1/606765BD-9BB4-9741-925C-A0C69B933039.root',      
-   #'file:DoublePhotonGun/DoublePhoton0To40FlatPtAODSIM_HI_Reco_1.root',      
-   #'file:/afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/PhotonAnalyzer/test/AEFD418A-0A8D-414C-A8AC-86EE20287BDF.root'
-   'file:/eos/cms/store/group/phys_heavyions/rchudasa/lowPT_photonReco/SinglePhotonFlatPt1To20_GENSIM_Run2018/crab_SinglePhotonFlatPt1To20_default_RecoAOD_Run2018/210504_050451/0000/AODSIM_3.root'      
-   #'root://se01.indiacms.res.in//store/user/rchudasa/BsMMG_2018UL/DoubleElectronFlatPt1To20_GENSIM_Run2018/crab_DoubleElectronFlatPt1To20_RecoAOD_Run2018/210816_180704/0000/AODSIM_1.root'
-   #'file:EmptyBx_pp_2018_0B87F849-1E7B-A54C-AE8D-17C6D4549317.root'
-   #'file:/afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/mcProduction/AODSIM_pion.root'
-   #'/store/group/phys_heavyions/rchudasa/lowPT_photonReco/DoublePi0FlatPt1To20_GENSIM_Run2018_correctEta/crab_DoublePi0FlatPt1To20_RecoAOD_Run2018_correctEta/210908_093218/0000/AODSIM_pion_1.root'
+   'file:/grid_mnt/t3storage3/athachay/bs2mumug/photonID/analysis/CMSSW_10_6_29/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/aodBs3MMGUL18.root'
    )
 )
 process.TFileService = cms.Service("TFileService",
@@ -83,6 +73,7 @@ process.Ntuples = cms.EDAnalyzer("BsToMuMuGammaNTuplizer",
     	MustacheSCBarrelSrc= cms.InputTag("particleFlowSuperClusterECAL:particleFlowSuperClusterECALBarrel"),
     	MustacheSCEndcapSrc= cms.InputTag("particleFlowSuperClusterECAL:particleFlowSuperClusterECALEndcapWithPreshower"),
 	GsfElectronSrc     = cms.InputTag("gedGsfElectrons"),
+    Run2_2018          = cms.bool(True),
 	muon_EtaMax      	= cms.untracked.double(1e3),	 
 	muon_dcaMAX 		= cms.untracked.double(1e3),	
 	muon_minPt  		= cms.untracked.double(1.0),	
@@ -95,35 +86,36 @@ process.Ntuples = cms.EDAnalyzer("BsToMuMuGammaNTuplizer",
 	dimuon_maxLStoBS  	= cms.untracked.double(1e5),	
 	dimuon_maxDCAMuMu 	= cms.untracked.double(1e5),	
 	dimuon_maxCosAlphaToBS 	= cms.untracked.double(1e5),	
-        doHLT              = cms.bool(False),
-    	doGenParticles     = cms.bool(True),
-    	doFlatPt           = cms.bool(True),
-   	doMuons            = cms.bool(False),
-   	doPhotons          = cms.bool(True),
-    	doPFPhotons        = cms.bool(True),
-	PFPhoton_minPt     = cms.untracked.double(0.0),	
-    	doSuperClusters    = cms.bool(True),
-    	Run2_2018          = cms.bool(True),
-    	genParticles       = cms.InputTag("genParticles"),
-    	gedPhotonSrc       = cms.untracked.InputTag("gedPhotons"),
-    	pfPhotonSrc        = cms.untracked.InputTag("particleFlow"),
-	TriggerNames = cms.vstring("HLT_DoubleMu4_3_Bs_v14",
-	                           "HLT_DoubleMu4_3_Jpsi_v2",
-				   "HLT_DoubleMu4_JpsiTrk_Displaced_v15",
-				   "HLT_DoubleMu4_LowMassNonResonantTrk_Displaced_v15",
-				   "HLT_DoubleMu4_Mass3p8_DZ_PFHT350_v8"),
-	HLTResult = cms.InputTag("TriggerResults","","HLT"),
-	verbose  = cms.bool(False),
-	doBsToMuMuGamma = cms.bool(False),
 	isMC = cms.bool(True),
-    	#caloParticleCollection          = cms.InputTag("mix","MergedCaloTruth"),
+    doGenParticles     = cms.bool(True),
+	doBsToMuMuGamma = cms.bool(False),
+    doFlatPt           = cms.bool(True),
+    genParticles       = cms.InputTag("genParticles"),
+   	doMuons            = cms.bool(False),
+	PFPhoton_minPt     = cms.untracked.double(0.0),	
+    doSuperClusters    = cms.bool(True),
  	hbheRechitCollection            = cms.InputTag("reducedHcalRecHits","hbhereco","RECO"),
  	ebRechitCollection              = cms.InputTag("reducedEcalRecHitsEB","","RECO"),
    	eeRechitCollection              = cms.InputTag("reducedEcalRecHitsEE","","RECO"),
-    	pfRechitCollection              = cms.InputTag("particleFlowRecHitECAL","","RECO"),
-    	#pfClusterCollection            = cms.InputTag("particleFlowClusterECAL","","RECO"),
-        doCompression                   = cms.bool(True),  #do the compression of floats
-        nBits                           = cms.int32(23),   #nbits for float compression (<=23)
+    pfRechitCollection              = cms.InputTag("particleFlowRecHitECAL","","RECO"),
+   	doPhotons          = cms.bool(False),
+    gedPhotonSrc       = cms.untracked.InputTag("gedPhotons"),
+    doPFPhotons        = cms.bool(False),
+    pfPhotonSrc        = cms.untracked.InputTag("particleFlow"),
+    doParticleFlow     = cms.bool(True),
+    particlFlowSrc     = cms.InputTag("particleFlow"),
+    doGeneralTracks    = cms.bool(True),
+    generalTrackSrc    = cms.InputTag("generalTracks"),
+    doHCALClusters     = cms.bool(True),
+    hcalClusterSrc     = cms.InputTag("particleFlowClusterHCAL"),
+    doECALClusters     = cms.bool(True),
+    ecalClusterSrc     = cms.InputTag("particleFlowClusterECAL"),
+    doHLT              = cms.bool(False),
+	TriggerNames = cms.vstring("HLT_DoubleMu4_3_Bs_v14"),
+	HLTResult = cms.InputTag("TriggerResults","","HLT"),
+	verbose  = cms.bool(False),
+    doCompression                   = cms.bool(True),  #do the compression of floats
+    nBits                           = cms.int32(23)   #nbits for float compression (<=23)
 )
 
 

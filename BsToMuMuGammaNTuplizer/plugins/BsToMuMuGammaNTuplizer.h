@@ -171,7 +171,7 @@
 #include <TTree.h>
 #include "TMath.h"
 
-#define NITEM_MAX 1000
+#define N_TRK_MAX 5000
 #define N_PF_MAX 10000
 #define N_ECAL_CLUSTERS 1000
 #define N_HCAL_CLUSTERS 1000
@@ -246,6 +246,7 @@ private:
   
  // const EcalClusterLazyTools::ESGetTokens ecalClusterToolsESGetTokens_;
   const Int_t energyMatrixSize_;
+  Int_t energyMatrixSizeFull_;
   //      edm::EDGetTokenT<std::vector<CaloParticle> > caloPartToken_;
   edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRechitToken_; 
   edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> eeRechitToken_; 

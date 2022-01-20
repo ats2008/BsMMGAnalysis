@@ -3,6 +3,40 @@
 #include "chrono"
 #define NSTORAGE_ARRAY_MAX 5000
 
+class genericMatrixStore
+{
+    public :
+        genericMatrixStore(Int_t sizeX=8,Int_t sizeY=8)
+        {
+            matrixStore=new Float_t[sizeY*sizeX];
+            nX=sizeX;
+            nY=sizeY;
+        }
+        ~genericMatrixStore()
+        {
+            if(matrixStore!=nullptr)
+             delete matrixStore;
+        }
+        void initialize(Float_t def=0.0)
+        {
+            for(Int_t i; i <nX;i++)
+            for(Int_t j; j <nY;j++)
+            {
+                matrixStore[i*nY+j]=def;
+            }
+        }
+        Float_t get(Int_t x, Int_t y)
+        {
+            return matrixStore[x*nY+y];
+        }
+        void fill(Int_t x, Int_t y, Float_t val)
+        {
+            matrixStore[x*nY+y]=val;
+        }
+        Float_t * matrixStore;
+        Int_t nX,nY;
+};
+
 class TreeMaker 
 {
     public  :
@@ -30,6 +64,7 @@ class TreeMaker
     Int_t storageIdxFilledInt;
     Int_t* storageArrayInt ;
     std::map<string, Int_t > candidateMapInt;
+    std::map<string, Float_t > storageFloat;
     
     Int_t* photonSelectionCheck;
     
@@ -77,10 +112,42 @@ class TreeMaker
     void fill_eventHists();
     void genParticleSCMaker();
     void Pi0ParticleSCMaker();  
+    void genParticleBMMGSCMaker();
+    void fillECALClusterVariables( Int_t scIdx);
+    void fillHCALClusterVariables( Int_t scIdx);
+  
+  private :
+     int   pTBins;
+     float pTmin;
+     float pTmax;
+
+     int   etaBins;
+     float etamin;
+     float etamax;
+
+     int   deltaRNBins;
+     float deltaRMin;
+     float deltaRMax;
+
+
+
 };
 
 TreeMaker::TreeMaker()
-{
+{    
+     pTBins=50;
+     pTmin=0.0;
+     pTmax=50.0;
+
+     etaBins=70;
+     etamin=-3.5;
+     etamax=3.5;
+
+     deltaRNBins=300;
+     deltaRMin=0.0;
+     deltaRMax=3.0;
+
+
     initDone=false;
 }
 

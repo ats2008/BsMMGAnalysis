@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Tue Jan  4 14:38:15 2022 by ROOT version 6.14/09
+// Thu Jan 20 00:22:38 2022 by ROOT version 6.14/09
 // from TTree EventTree/Event data
-// found on file: /home/athachay/t3store3/bs2mumug/photonID/store/flatPtPhoton_ntuple_genInfo.root
+// found on file: workarea/bsToMuMuG_run2UL2018_0.root
 //////////////////////////////////////////////////////////
 
 #ifndef SCMVANtuple_h
@@ -107,54 +107,6 @@ public :
    vector<float>   *mcE;
    vector<float>   *mcEt;
    vector<float>   *mcMass;
-   Int_t           nPho;
-   vector<float>   *phoE;
-   vector<float>   *phoEt;
-   vector<float>   *phoEta;
-   vector<float>   *phoPhi;
-   vector<float>   *phoSigmaE;
-   vector<float>   *phoCalibE;
-   vector<float>   *phoCalibEt;
-   vector<float>   *phoSCE;
-   vector<float>   *phoSCEt;
-   vector<float>   *phoSCRawE;
-   vector<float>   *phoESEnP1;
-   vector<float>   *phoESEnP2;
-   vector<float>   *phoSCEta;
-   vector<float>   *phoSCPhi;
-   vector<float>   *phoSCEtaWidth;
-   vector<float>   *phoSCPhiWidth;
-   vector<float>   *phoSCBrem;
-   vector<int>     *phohasPixelSeed;
-   vector<int>     *phoEleVeto;
-   vector<float>   *phoR9;
-   vector<float>   *phoHoverE;
-   vector<float>   *phoESEffSigmaRR;
-   vector<float>   *phoSigmaIEtaIEtaFull5x5;
-   vector<float>   *phoSigmaIEtaIPhiFull5x5;
-   vector<float>   *phoSigmaIPhiIPhiFull5x5;
-   vector<float>   *phoE2x2Full5x5;
-   vector<float>   *phoE5x5Full5x5;
-   vector<float>   *phoR9Full5x5;
-   vector<float>   *phoPFChIso;
-   vector<float>   *phoPFPhoIso;
-   vector<float>   *phoPFNeuIso;
-   vector<float>   *phoEcalPFClusterIso;
-   vector<float>   *phoHcalPFClusterIso;
-   vector<float>   *phoIDMVA;
-   vector<float>   *phoSeedTime;
-   vector<float>   *phoSeedEnergy;
-   vector<float>   *phoMIPTotEnergy;
-   vector<float>   *phoMIPChi2;
-   vector<float>   *phoMIPSlope;
-   vector<float>   *phoMIPIntercept;
-   vector<float>   *phoMIPNhitCone;
-   vector<float>   *phoMIPIsHalo;
-   Int_t           nPFPho;
-   vector<float>   *phoPFE;
-   vector<float>   *phoPFEt;
-   vector<float>   *phoPFEta;
-   vector<float>   *phoPFPhi;
    Int_t           nSC;
    vector<float>   *scE;
    vector<float>   *scEt;
@@ -226,6 +178,59 @@ public :
    vector<float>   *scPFNeuIso3;
    vector<float>   *scPFNeuIso4;
    vector<float>   *scPFNeuIso5;
+   Int_t           nPFCandidates;
+   Float_t         pf_ecalEnergy[3282];   //[nPFCandidates]
+   Float_t         pf_ecalRawEnergy[3282];   //[nPFCandidates]
+   Float_t         pf_hcalEnergy[3282];   //[nPFCandidates]
+   Float_t         pf_hcalRawEnergy[3282];   //[nPFCandidates]
+   Float_t         pf_HoE[3282];   //[nPFCandidates]
+   Float_t         pf_mvaIso[3282];   //[nPFCandidates]
+   Float_t         pf_vertexX[3282];   //[nPFCandidates]
+   Float_t         pf_vertexY[3282];   //[nPFCandidates]
+   Float_t         pf_vertexZ[3282];   //[nPFCandidates]
+   Float_t         pf_ecalEntryEta[3282];   //[nPFCandidates]
+   Float_t         pf_ecalEntryPhi[3282];   //[nPFCandidates]
+   Float_t         pf_ecalEntryX[3282];   //[nPFCandidates]
+   Float_t         pf_ecalEntryY[3282];   //[nPFCandidates]
+   Float_t         pf_ecalEntryZ[3282];   //[nPFCandidates]
+   Float_t         pf_eta[3282];   //[nPFCandidates]
+   Float_t         pf_phi[3282];   //[nPFCandidates]
+   Float_t         pf_pt[3282];   //[nPFCandidates]
+   Float_t         pf_id[3282];   //[nPFCandidates]
+   Float_t         pf_mass[3282];   //[nPFCandidates]
+   Int_t           nHCALClusters;
+   Int_t           nHCALClusterEnergyMatrix;
+   Float_t         clusterHCAL_energy[268];   //[nHCALClusters]
+   Float_t         clusterHCAL_correctedEnergy[268];   //[nHCALClusters]
+   Float_t         clusterHCAL_time[268];   //[nHCALClusters]
+   Float_t         clusterHCAL_x[268];   //[nHCALClusters]
+   Float_t         clusterHCAL_y[268];   //[nHCALClusters]
+   Float_t         clusterHCAL_z[268];   //[nHCALClusters]
+   Float_t         clusterHCAL_pt[268];   //[nHCALClusters]
+   Float_t         clusterHCAL_eta[268];   //[nHCALClusters]
+   Float_t         clusterHCAL_phi[268];   //[nHCALClusters]
+   Float_t         clusterHCAL_size[268];   //[nHCALClusters]
+   Int_t           nECALClusters;
+   Int_t           nECALClusterEnergyMatrix;
+   Float_t         clusterECAL_energy[619];   //[nECALClusters]
+   Float_t         clusterECAL_correctedEnergy[619];   //[nECALClusters]
+   Float_t         clusterECAL_time[619];   //[nECALClusters]
+   Float_t         clusterECAL_eta[619];   //[nECALClusters]
+   Float_t         clusterECAL_phi[619];   //[nECALClusters]
+   Float_t         clusterECAL_x[619];   //[nECALClusters]
+   Float_t         clusterECAL_y[619];   //[nECALClusters]
+   Float_t         clusterECAL_z[619];   //[nECALClusters]
+   Float_t         clusterECAL_pt[619];   //[nECALClusters]
+   Float_t         clusterECAL_size[619];   //[nECALClusters]
+   Float_t         clusterECAL_energyMatrix[15475];   //[nECALClusterEnergyMatrix]
+   Int_t           nGeneralTracks;
+   Float_t         generalTracks_outer_x[2869];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_y[2869];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_z[2869];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_px[2869];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_py[2869];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_pz[2869];   //[nGeneralTracks]
+   Float_t         generalTracks_charge[2869];   //[nGeneralTracks]
 
    // List of branches
    TBranch        *b_run;   //!
@@ -306,54 +311,6 @@ public :
    TBranch        *b_mcE;   //!
    TBranch        *b_mcEt;   //!
    TBranch        *b_mcMass;   //!
-   TBranch        *b_nPho;   //!
-   TBranch        *b_phoE;   //!
-   TBranch        *b_phoEt;   //!
-   TBranch        *b_phoEta;   //!
-   TBranch        *b_phoPhi;   //!
-   TBranch        *b_phoSigmaE;   //!
-   TBranch        *b_phoCalibE;   //!
-   TBranch        *b_phoCalibEt;   //!
-   TBranch        *b_phoSCE;   //!
-   TBranch        *b_phoSCEt;   //!
-   TBranch        *b_phoSCRawE;   //!
-   TBranch        *b_phoESEnP1;   //!
-   TBranch        *b_phoESEnP2;   //!
-   TBranch        *b_phoSCEta;   //!
-   TBranch        *b_phoSCPhi;   //!
-   TBranch        *b_phoSCEtaWidth;   //!
-   TBranch        *b_phoSCPhiWidth;   //!
-   TBranch        *b_phoSCBrem;   //!
-   TBranch        *b_phohasPixelSeed;   //!
-   TBranch        *b_phoEleVeto;   //!
-   TBranch        *b_phoR9;   //!
-   TBranch        *b_phoHoverE;   //!
-   TBranch        *b_phoESEffSigmaRR;   //!
-   TBranch        *b_phoSigmaIEtaIEtaFull5x5;   //!
-   TBranch        *b_phoSigmaIEtaIPhiFull5x5;   //!
-   TBranch        *b_phoSigmaIPhiIPhiFull5x5;   //!
-   TBranch        *b_phoE2x2Full5x5;   //!
-   TBranch        *b_phoE5x5Full5x5;   //!
-   TBranch        *b_phoR9Full5x5;   //!
-   TBranch        *b_phoPFChIso;   //!
-   TBranch        *b_phoPFPhoIso;   //!
-   TBranch        *b_phoPFNeuIso;   //!
-   TBranch        *b_phoEcalPFClusterIso;   //!
-   TBranch        *b_phoHcalPFClusterIso;   //!
-   TBranch        *b_phoIDMVA;   //!
-   TBranch        *b_phoSeedTime;   //!
-   TBranch        *b_phoSeedEnergy;   //!
-   TBranch        *b_phoMIPTotEnergy;   //!
-   TBranch        *b_phoMIPChi2;   //!
-   TBranch        *b_phoMIPSlope;   //!
-   TBranch        *b_phoMIPIntercept;   //!
-   TBranch        *b_phoMIPNhitCone;   //!
-   TBranch        *b_phoMIPIsHalo;   //!
-   TBranch        *b_nPFPho;   //!
-   TBranch        *b_phoPFE;   //!
-   TBranch        *b_phoPFEt;   //!
-   TBranch        *b_phoPFEta;   //!
-   TBranch        *b_phoPFPhi;   //!
    TBranch        *b_nSC;   //!
    TBranch        *b_scE;   //!
    TBranch        *b_scEt;   //!
@@ -425,6 +382,59 @@ public :
    TBranch        *b_scPFNeuIso3;   //!
    TBranch        *b_scPFNeuIso4;   //!
    TBranch        *b_scPFNeuIso5;   //!
+   TBranch        *b_nPFCandidates;   //!
+   TBranch        *b_pf_ecalEnergy;   //!
+   TBranch        *b_pf_ecalRawEnergy;   //!
+   TBranch        *b_pf_hcalEnergy;   //!
+   TBranch        *b_pf_hcalRawEnergy;   //!
+   TBranch        *b_pf_HoE;   //!
+   TBranch        *b_pf_mvaIso;   //!
+   TBranch        *b_pf_vertexX;   //!
+   TBranch        *b_pf_vertexY;   //!
+   TBranch        *b_pf_vertexZ;   //!
+   TBranch        *b_pf_ecalEntryEta;   //!
+   TBranch        *b_pf_ecalEntryPhi;   //!
+   TBranch        *b_pf_ecalEntryX;   //!
+   TBranch        *b_pf_ecalEntryY;   //!
+   TBranch        *b_pf_ecalEntryZ;   //!
+   TBranch        *b_pf_eta;   //!
+   TBranch        *b_pf_phi;   //!
+   TBranch        *b_pf_pt;   //!
+   TBranch        *b_pf_id;   //!
+   TBranch        *b_pf_mass;   //!
+   TBranch        *b_nHCALClusters;   //!
+   TBranch        *b_nHCALClusterEnergyMatrix;   //!
+   TBranch        *b_clusterHCAL_energy;   //!
+   TBranch        *b_clusterHCAL_correctedEnergy;   //!
+   TBranch        *b_clusterHCAL_time;   //!
+   TBranch        *b_clusterHCAL_x;   //!
+   TBranch        *b_clusterHCAL_y;   //!
+   TBranch        *b_clusterHCAL_z;   //!
+   TBranch        *b_clusterHCAL_pt;   //!
+   TBranch        *b_clusterHCAL_eta;   //!
+   TBranch        *b_clusterHCAL_phi;   //!
+   TBranch        *b_clusterHCAL_size;   //!
+   TBranch        *b_nECALClusters;   //!
+   TBranch        *b_nECALClusterEnergyMatrix;   //!
+   TBranch        *b_clusterECAL_energy;   //!
+   TBranch        *b_clusterECAL_correctedEnergy;   //!
+   TBranch        *b_clusterECAL_time;   //!
+   TBranch        *b_clusterECAL_eta;   //!
+   TBranch        *b_clusterECAL_phi;   //!
+   TBranch        *b_clusterECAL_x;   //!
+   TBranch        *b_clusterECAL_y;   //!
+   TBranch        *b_clusterECAL_z;   //!
+   TBranch        *b_clusterECAL_pt;   //!
+   TBranch        *b_clusterECAL_size;   //!
+   TBranch        *b_clusterECAL_energyMatrix;   //!
+   TBranch        *b_nGeneralTracks;   //!
+   TBranch        *b_generalTracks_outer_x;   //!
+   TBranch        *b_generalTracks_outer_y;   //!
+   TBranch        *b_generalTracks_outer_z;   //!
+   TBranch        *b_generalTracks_outer_px;   //!
+   TBranch        *b_generalTracks_outer_py;   //!
+   TBranch        *b_generalTracks_outer_pz;   //!
+   TBranch        *b_generalTracks_charge;   //!
 
    SCMVANtuple(TTree *tree=0);
    virtual ~SCMVANtuple();
@@ -445,10 +455,11 @@ SCMVANtuple::SCMVANtuple(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-            std::cout<<"Initializing with an empty tree !! \n";
+        std::cout<<"Initializing empty tree !! \n";
    }
-   else
+   else {
    Init(tree);
+   }
 }
 
 SCMVANtuple::~SCMVANtuple()
@@ -533,52 +544,6 @@ void SCMVANtuple::Init(TTree *tree)
    mcE = 0;
    mcEt = 0;
    mcMass = 0;
-   phoE = 0;
-   phoEt = 0;
-   phoEta = 0;
-   phoPhi = 0;
-   phoSigmaE = 0;
-   phoCalibE = 0;
-   phoCalibEt = 0;
-   phoSCE = 0;
-   phoSCEt = 0;
-   phoSCRawE = 0;
-   phoESEnP1 = 0;
-   phoESEnP2 = 0;
-   phoSCEta = 0;
-   phoSCPhi = 0;
-   phoSCEtaWidth = 0;
-   phoSCPhiWidth = 0;
-   phoSCBrem = 0;
-   phohasPixelSeed = 0;
-   phoEleVeto = 0;
-   phoR9 = 0;
-   phoHoverE = 0;
-   phoESEffSigmaRR = 0;
-   phoSigmaIEtaIEtaFull5x5 = 0;
-   phoSigmaIEtaIPhiFull5x5 = 0;
-   phoSigmaIPhiIPhiFull5x5 = 0;
-   phoE2x2Full5x5 = 0;
-   phoE5x5Full5x5 = 0;
-   phoR9Full5x5 = 0;
-   phoPFChIso = 0;
-   phoPFPhoIso = 0;
-   phoPFNeuIso = 0;
-   phoEcalPFClusterIso = 0;
-   phoHcalPFClusterIso = 0;
-   phoIDMVA = 0;
-   phoSeedTime = 0;
-   phoSeedEnergy = 0;
-   phoMIPTotEnergy = 0;
-   phoMIPChi2 = 0;
-   phoMIPSlope = 0;
-   phoMIPIntercept = 0;
-   phoMIPNhitCone = 0;
-   phoMIPIsHalo = 0;
-   phoPFE = 0;
-   phoPFEt = 0;
-   phoPFEta = 0;
-   phoPFPhi = 0;
    scE = 0;
    scEt = 0;
    scRawE = 0;
@@ -732,54 +697,6 @@ void SCMVANtuple::Init(TTree *tree)
    fChain->SetBranchAddress("mcE", &mcE, &b_mcE);
    fChain->SetBranchAddress("mcEt", &mcEt, &b_mcEt);
    fChain->SetBranchAddress("mcMass", &mcMass, &b_mcMass);
-   fChain->SetBranchAddress("nPho", &nPho, &b_nPho);
-   fChain->SetBranchAddress("phoE", &phoE, &b_phoE);
-   fChain->SetBranchAddress("phoEt", &phoEt, &b_phoEt);
-   fChain->SetBranchAddress("phoEta", &phoEta, &b_phoEta);
-   fChain->SetBranchAddress("phoPhi", &phoPhi, &b_phoPhi);
-   fChain->SetBranchAddress("phoSigmaE", &phoSigmaE, &b_phoSigmaE);
-   fChain->SetBranchAddress("phoCalibE", &phoCalibE, &b_phoCalibE);
-   fChain->SetBranchAddress("phoCalibEt", &phoCalibEt, &b_phoCalibEt);
-   fChain->SetBranchAddress("phoSCE", &phoSCE, &b_phoSCE);
-   fChain->SetBranchAddress("phoSCEt", &phoSCEt, &b_phoSCEt);
-   fChain->SetBranchAddress("phoSCRawE", &phoSCRawE, &b_phoSCRawE);
-   fChain->SetBranchAddress("phoESEnP1", &phoESEnP1, &b_phoESEnP1);
-   fChain->SetBranchAddress("phoESEnP2", &phoESEnP2, &b_phoESEnP2);
-   fChain->SetBranchAddress("phoSCEta", &phoSCEta, &b_phoSCEta);
-   fChain->SetBranchAddress("phoSCPhi", &phoSCPhi, &b_phoSCPhi);
-   fChain->SetBranchAddress("phoSCEtaWidth", &phoSCEtaWidth, &b_phoSCEtaWidth);
-   fChain->SetBranchAddress("phoSCPhiWidth", &phoSCPhiWidth, &b_phoSCPhiWidth);
-   fChain->SetBranchAddress("phoSCBrem", &phoSCBrem, &b_phoSCBrem);
-   fChain->SetBranchAddress("phohasPixelSeed", &phohasPixelSeed, &b_phohasPixelSeed);
-   fChain->SetBranchAddress("phoEleVeto", &phoEleVeto, &b_phoEleVeto);
-   fChain->SetBranchAddress("phoR9", &phoR9, &b_phoR9);
-   fChain->SetBranchAddress("phoHoverE", &phoHoverE, &b_phoHoverE);
-   fChain->SetBranchAddress("phoESEffSigmaRR", &phoESEffSigmaRR, &b_phoESEffSigmaRR);
-   fChain->SetBranchAddress("phoSigmaIEtaIEtaFull5x5", &phoSigmaIEtaIEtaFull5x5, &b_phoSigmaIEtaIEtaFull5x5);
-   fChain->SetBranchAddress("phoSigmaIEtaIPhiFull5x5", &phoSigmaIEtaIPhiFull5x5, &b_phoSigmaIEtaIPhiFull5x5);
-   fChain->SetBranchAddress("phoSigmaIPhiIPhiFull5x5", &phoSigmaIPhiIPhiFull5x5, &b_phoSigmaIPhiIPhiFull5x5);
-   fChain->SetBranchAddress("phoE2x2Full5x5", &phoE2x2Full5x5, &b_phoE2x2Full5x5);
-   fChain->SetBranchAddress("phoE5x5Full5x5", &phoE5x5Full5x5, &b_phoE5x5Full5x5);
-   fChain->SetBranchAddress("phoR9Full5x5", &phoR9Full5x5, &b_phoR9Full5x5);
-   fChain->SetBranchAddress("phoPFChIso", &phoPFChIso, &b_phoPFChIso);
-   fChain->SetBranchAddress("phoPFPhoIso", &phoPFPhoIso, &b_phoPFPhoIso);
-   fChain->SetBranchAddress("phoPFNeuIso", &phoPFNeuIso, &b_phoPFNeuIso);
-   fChain->SetBranchAddress("phoEcalPFClusterIso", &phoEcalPFClusterIso, &b_phoEcalPFClusterIso);
-   fChain->SetBranchAddress("phoHcalPFClusterIso", &phoHcalPFClusterIso, &b_phoHcalPFClusterIso);
-   fChain->SetBranchAddress("phoIDMVA", &phoIDMVA, &b_phoIDMVA);
-   fChain->SetBranchAddress("phoSeedTime", &phoSeedTime, &b_phoSeedTime);
-   fChain->SetBranchAddress("phoSeedEnergy", &phoSeedEnergy, &b_phoSeedEnergy);
-   fChain->SetBranchAddress("phoMIPTotEnergy", &phoMIPTotEnergy, &b_phoMIPTotEnergy);
-   fChain->SetBranchAddress("phoMIPChi2", &phoMIPChi2, &b_phoMIPChi2);
-   fChain->SetBranchAddress("phoMIPSlope", &phoMIPSlope, &b_phoMIPSlope);
-   fChain->SetBranchAddress("phoMIPIntercept", &phoMIPIntercept, &b_phoMIPIntercept);
-   fChain->SetBranchAddress("phoMIPNhitCone", &phoMIPNhitCone, &b_phoMIPNhitCone);
-   fChain->SetBranchAddress("phoMIPIsHalo", &phoMIPIsHalo, &b_phoMIPIsHalo);
-   fChain->SetBranchAddress("nPFPho", &nPFPho, &b_nPFPho);
-   fChain->SetBranchAddress("phoPFE", &phoPFE, &b_phoPFE);
-   fChain->SetBranchAddress("phoPFEt", &phoPFEt, &b_phoPFEt);
-   fChain->SetBranchAddress("phoPFEta", &phoPFEta, &b_phoPFEta);
-   fChain->SetBranchAddress("phoPFPhi", &phoPFPhi, &b_phoPFPhi);
    fChain->SetBranchAddress("nSC", &nSC, &b_nSC);
    fChain->SetBranchAddress("scE", &scE, &b_scE);
    fChain->SetBranchAddress("scEt", &scEt, &b_scEt);
@@ -851,6 +768,59 @@ void SCMVANtuple::Init(TTree *tree)
    fChain->SetBranchAddress("scPFNeuIso3", &scPFNeuIso3, &b_scPFNeuIso3);
    fChain->SetBranchAddress("scPFNeuIso4", &scPFNeuIso4, &b_scPFNeuIso4);
    fChain->SetBranchAddress("scPFNeuIso5", &scPFNeuIso5, &b_scPFNeuIso5);
+   fChain->SetBranchAddress("nPFCandidates", &nPFCandidates, &b_nPFCandidates);
+   fChain->SetBranchAddress("pf_ecalEnergy", pf_ecalEnergy, &b_pf_ecalEnergy);
+   fChain->SetBranchAddress("pf_ecalRawEnergy", pf_ecalRawEnergy, &b_pf_ecalRawEnergy);
+   fChain->SetBranchAddress("pf_hcalEnergy", pf_hcalEnergy, &b_pf_hcalEnergy);
+   fChain->SetBranchAddress("pf_hcalRawEnergy", pf_hcalRawEnergy, &b_pf_hcalRawEnergy);
+   fChain->SetBranchAddress("pf_HoE", pf_HoE, &b_pf_HoE);
+   fChain->SetBranchAddress("pf_mvaIso", pf_mvaIso, &b_pf_mvaIso);
+   fChain->SetBranchAddress("pf_vertexX", pf_vertexX, &b_pf_vertexX);
+   fChain->SetBranchAddress("pf_vertexY", pf_vertexY, &b_pf_vertexY);
+   fChain->SetBranchAddress("pf_vertexZ", pf_vertexZ, &b_pf_vertexZ);
+   fChain->SetBranchAddress("pf_ecalEntryEta", pf_ecalEntryEta, &b_pf_ecalEntryEta);
+   fChain->SetBranchAddress("pf_ecalEntryPhi", pf_ecalEntryPhi, &b_pf_ecalEntryPhi);
+   fChain->SetBranchAddress("pf_ecalEntryX", pf_ecalEntryX, &b_pf_ecalEntryX);
+   fChain->SetBranchAddress("pf_ecalEntryY", pf_ecalEntryY, &b_pf_ecalEntryY);
+   fChain->SetBranchAddress("pf_ecalEntryZ", pf_ecalEntryZ, &b_pf_ecalEntryZ);
+   fChain->SetBranchAddress("pf_eta", pf_eta, &b_pf_eta);
+   fChain->SetBranchAddress("pf_phi", pf_phi, &b_pf_phi);
+   fChain->SetBranchAddress("pf_pt", pf_pt, &b_pf_pt);
+   fChain->SetBranchAddress("pf_id", pf_id, &b_pf_id);
+   fChain->SetBranchAddress("pf_mass", pf_mass, &b_pf_mass);
+   fChain->SetBranchAddress("nHCALClusters", &nHCALClusters, &b_nHCALClusters);
+   fChain->SetBranchAddress("nHCALClusterEnergyMatrix", &nHCALClusterEnergyMatrix, &b_nHCALClusterEnergyMatrix);
+   fChain->SetBranchAddress("clusterHCAL_energy", clusterHCAL_energy, &b_clusterHCAL_energy);
+   fChain->SetBranchAddress("clusterHCAL_correctedEnergy", clusterHCAL_correctedEnergy, &b_clusterHCAL_correctedEnergy);
+   fChain->SetBranchAddress("clusterHCAL_time", clusterHCAL_time, &b_clusterHCAL_time);
+   fChain->SetBranchAddress("clusterHCAL_x", clusterHCAL_x, &b_clusterHCAL_x);
+   fChain->SetBranchAddress("clusterHCAL_y", clusterHCAL_y, &b_clusterHCAL_y);
+   fChain->SetBranchAddress("clusterHCAL_z", clusterHCAL_z, &b_clusterHCAL_z);
+   fChain->SetBranchAddress("clusterHCAL_pt", clusterHCAL_pt, &b_clusterHCAL_pt);
+   fChain->SetBranchAddress("clusterHCAL_eta", clusterHCAL_eta, &b_clusterHCAL_eta);
+   fChain->SetBranchAddress("clusterHCAL_phi", clusterHCAL_phi, &b_clusterHCAL_phi);
+   fChain->SetBranchAddress("clusterHCAL_size", clusterHCAL_size, &b_clusterHCAL_size);
+   fChain->SetBranchAddress("nECALClusters", &nECALClusters, &b_nECALClusters);
+   fChain->SetBranchAddress("nECALClusterEnergyMatrix", &nECALClusterEnergyMatrix, &b_nECALClusterEnergyMatrix);
+   fChain->SetBranchAddress("clusterECAL_energy", clusterECAL_energy, &b_clusterECAL_energy);
+   fChain->SetBranchAddress("clusterECAL_correctedEnergy", clusterECAL_correctedEnergy, &b_clusterECAL_correctedEnergy);
+   fChain->SetBranchAddress("clusterECAL_time", clusterECAL_time, &b_clusterECAL_time);
+   fChain->SetBranchAddress("clusterECAL_eta", clusterECAL_eta, &b_clusterECAL_eta);
+   fChain->SetBranchAddress("clusterECAL_phi", clusterECAL_phi, &b_clusterECAL_phi);
+   fChain->SetBranchAddress("clusterECAL_x", clusterECAL_x, &b_clusterECAL_x);
+   fChain->SetBranchAddress("clusterECAL_y", clusterECAL_y, &b_clusterECAL_y);
+   fChain->SetBranchAddress("clusterECAL_z", clusterECAL_z, &b_clusterECAL_z);
+   fChain->SetBranchAddress("clusterECAL_pt", clusterECAL_pt, &b_clusterECAL_pt);
+   fChain->SetBranchAddress("clusterECAL_size", clusterECAL_size, &b_clusterECAL_size);
+   fChain->SetBranchAddress("clusterECAL_energyMatrix", clusterECAL_energyMatrix, &b_clusterECAL_energyMatrix);
+   fChain->SetBranchAddress("nGeneralTracks", &nGeneralTracks, &b_nGeneralTracks);
+   fChain->SetBranchAddress("generalTracks_outer_x", generalTracks_outer_x, &b_generalTracks_outer_x);
+   fChain->SetBranchAddress("generalTracks_outer_y", generalTracks_outer_y, &b_generalTracks_outer_y);
+   fChain->SetBranchAddress("generalTracks_outer_z", generalTracks_outer_z, &b_generalTracks_outer_z);
+   fChain->SetBranchAddress("generalTracks_outer_px", generalTracks_outer_px, &b_generalTracks_outer_px);
+   fChain->SetBranchAddress("generalTracks_outer_py", generalTracks_outer_py, &b_generalTracks_outer_py);
+   fChain->SetBranchAddress("generalTracks_outer_pz", generalTracks_outer_pz, &b_generalTracks_outer_pz);
+   fChain->SetBranchAddress("generalTracks_charge", generalTracks_charge, &b_generalTracks_charge);
    Notify();
 }
 

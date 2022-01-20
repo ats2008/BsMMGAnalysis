@@ -26,6 +26,7 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 50
 
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20) )
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(200) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
 
 process.options = cms.untracked.PSet( numberOfConcurrentLuminosityBlocks = cms.untracked.uint32(1),
@@ -42,7 +43,8 @@ process.options = cms.untracked.PSet( numberOfConcurrentLuminosityBlocks = cms.u
 process.source = cms.Source("PoolSource",
      duplicateCheckMode=cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-   'file:/grid_mnt/t3storage3/athachay/bs2mumug/photonID/analysis/CMSSW_10_6_29/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/aodBs3MMGUL18.root'
+   #'file:/grid_mnt/t3storage3/athachay/bs2mumug/photonID/analysis/CMSSW_10_6_29/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/aodBs3MMGUL18.root'
+   'file:qcd30To50RecoSample.root'
    )
 )
 process.TFileService = cms.Service("TFileService",

@@ -47,7 +47,7 @@ int  main(int argc,char *argv[])
     
     if(val == 0) aTreeeMaker.genParticleSCMaker();
     if(val == 1) aTreeeMaker.Pi0ParticleSCMaker();
-
+    if(val == 2) aTreeeMaker.genParticleBMMGSCMaker();
     aTreeeMaker.SaveFile();
 
 }

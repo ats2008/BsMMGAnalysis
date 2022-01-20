@@ -118,7 +118,7 @@ BsToMuMuGammaNTuplizer::BsToMuMuGammaNTuplizer(const edm::ParameterSet& iConfig)
   energyMatrixSize_(2)
 {
   
-  
+  energyMatrixSizeFull_=(2*energyMatrixSize_+1)*(2*energyMatrixSize_+1);
   Utility= new Utils();
   
   if(doMuons_) muonToken_              = consumes<reco::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"));
@@ -2155,19 +2155,19 @@ void BsToMuMuGammaNTuplizer::addGeneralTracksBranches()
 {
     storageMapInt["nGeneralTracks"]  = 0 ;
     theTree->Branch("nGeneralTracks",   &storageMapInt["nGeneralTracks"]);
-    storageMapFloatArray["generalTracks_outer_x"] = new Float_t[NITEM_MAX];
+    storageMapFloatArray["generalTracks_outer_x"] = new Float_t[N_TRK_MAX];
     theTree->Branch("generalTracks_outer_x",   storageMapFloatArray["generalTracks_outer_x"],"generalTracks_outer_x[nGeneralTracks]/F");
-    storageMapFloatArray["generalTracks_outer_y"] = new Float_t[NITEM_MAX];
+    storageMapFloatArray["generalTracks_outer_y"] = new Float_t[N_TRK_MAX];
     theTree->Branch("generalTracks_outer_y",   storageMapFloatArray["generalTracks_outer_y"],"generalTracks_outer_y[nGeneralTracks]/F");
-    storageMapFloatArray["generalTracks_outer_z"] = new Float_t[NITEM_MAX];
+    storageMapFloatArray["generalTracks_outer_z"] = new Float_t[N_TRK_MAX];
     theTree->Branch("generalTracks_outer_z",   storageMapFloatArray["generalTracks_outer_z"],"generalTracks_outer_z[nGeneralTracks]/F");
-    storageMapFloatArray["generalTracks_outer_px"] = new Float_t[NITEM_MAX];
+    storageMapFloatArray["generalTracks_outer_px"] = new Float_t[N_TRK_MAX];
     theTree->Branch("generalTracks_outer_px",   storageMapFloatArray["generalTracks_outer_px"],"generalTracks_outer_px[nGeneralTracks]/F");
-    storageMapFloatArray["generalTracks_outer_py"] = new Float_t[NITEM_MAX];
+    storageMapFloatArray["generalTracks_outer_py"] = new Float_t[N_TRK_MAX];
     theTree->Branch("generalTracks_outer_py",   storageMapFloatArray["generalTracks_outer_py"],"generalTracks_outer_py[nGeneralTracks]/F");
-    storageMapFloatArray["generalTracks_outer_pz"] = new Float_t[NITEM_MAX];
+    storageMapFloatArray["generalTracks_outer_pz"] = new Float_t[N_TRK_MAX];
     theTree->Branch("generalTracks_outer_pz",   storageMapFloatArray["generalTracks_outer_pz"],"generalTracks_outer_pz[nGeneralTracks]/F");
-    storageMapFloatArray["generalTracks_charge"] = new Float_t[NITEM_MAX];
+    storageMapFloatArray["generalTracks_charge"] = new Float_t[N_TRK_MAX];
     theTree->Branch("generalTracks_charge",   storageMapFloatArray["generalTracks_charge"],"generalTracks_charge[nGeneralTracks]/F");
 }
 
@@ -2187,7 +2187,7 @@ void BsToMuMuGammaNTuplizer::fillGeneralTrackCollectionBranches( const edm::Even
     storageMapFloatArray["generalTracks_outer_pz"][i] =   track->outerPz();
     storageMapFloatArray["generalTracks_charge"][i]   =   track->charge();
     i++;
-    if(i >= NITEM_MAX) break;
+    if(i >= N_TRK_MAX) break;
   }
     
     storageMapInt["nGeneralTracks"]=i;
@@ -2233,6 +2233,10 @@ void BsToMuMuGammaNTuplizer::addParticleFlowBranches()
       theTree->Branch("pf_vertexY",   storageMapFloatArray["pf_vertexY"],"pf_vertexY[nPFCandidates]/F");
       storageMapFloatArray["pf_vertexZ"] = new Float_t[N_PF_MAX];
       theTree->Branch("pf_vertexZ",   storageMapFloatArray["pf_vertexZ"],"pf_vertexZ[nPFCandidates]/F");
+      storageMapFloatArray["pf_ecalEntryEta"] = new Float_t[N_PF_MAX];
+      theTree->Branch("pf_ecalEntryEta",   storageMapFloatArray["pf_ecalEntryEta"],"pf_ecalEntryEta[nPFCandidates]/F");
+      storageMapFloatArray["pf_ecalEntryPhi"] = new Float_t[N_PF_MAX];
+      theTree->Branch("pf_ecalEntryPhi",   storageMapFloatArray["pf_ecalEntryPhi"],"pf_ecalEntryPhi[nPFCandidates]/F");
       storageMapFloatArray["pf_ecalEntryX"] = new Float_t[N_PF_MAX];
       theTree->Branch("pf_ecalEntryX",   storageMapFloatArray["pf_ecalEntryX"],"pf_ecalEntryX[nPFCandidates]/F");
       storageMapFloatArray["pf_ecalEntryY"] = new Float_t[N_PF_MAX];
@@ -2245,6 +2249,8 @@ void BsToMuMuGammaNTuplizer::addParticleFlowBranches()
       theTree->Branch("pf_phi",   storageMapFloatArray["pf_phi"],"pf_phi[nPFCandidates]/F");
       storageMapFloatArray["pf_pt"] = new Float_t[N_PF_MAX];
       theTree->Branch("pf_pt",   storageMapFloatArray["pf_pt"],"pf_pt[nPFCandidates]/F");
+      storageMapFloatArray["pf_id"] = new Float_t[N_PF_MAX];
+      theTree->Branch("pf_id",   storageMapFloatArray["pf_id"],"pf_id[nPFCandidates]/F");
       storageMapFloatArray["pf_mass"] = new Float_t[N_PF_MAX];
       theTree->Branch("pf_mass",   storageMapFloatArray["pf_mass"],"pf_mass[nPFCandidates]/F");
 }
@@ -2276,12 +2282,15 @@ void BsToMuMuGammaNTuplizer::fillPFCandiateCollection( const edm::Event& iEvent,
       storageMapFloatArray["pf_vertexX"]    [i] = pfCd->vx();  
       storageMapFloatArray["pf_vertexY"]    [i] = pfCd->vy();
       storageMapFloatArray["pf_vertexZ"]    [i] = pfCd->vz();
+      storageMapFloatArray["pf_ecalEntryEta"] [i] = (pfCd->positionAtECALEntrance()).Eta();
+      storageMapFloatArray["pf_ecalEntryPhi"] [i] = (pfCd->positionAtECALEntrance()).Phi();
       storageMapFloatArray["pf_ecalEntryX"] [i] = (pfCd->positionAtECALEntrance()).X();
       storageMapFloatArray["pf_ecalEntryY"] [i] = (pfCd->positionAtECALEntrance()).Y();
       storageMapFloatArray["pf_ecalEntryZ"] [i] = (pfCd->positionAtECALEntrance()).Z();
       storageMapFloatArray["pf_eta"]        [i] = pfCd->eta();
       storageMapFloatArray["pf_phi"]        [i] = pfCd->phi();
       storageMapFloatArray["pf_pt"]         [i] = pfCd->pt();
+      storageMapFloatArray["pf_id"]         [i] = pfCd->particleId();
       storageMapFloatArray["pf_mass"]       [i] = pfCd->mass();
       i++;
     if(i >= N_PF_MAX) break;
@@ -2301,6 +2310,10 @@ void BsToMuMuGammaNTuplizer::addECALCluserBranches()
       theTree->Branch("clusterECAL_correctedEnergy",   storageMapFloatArray["clusterECAL_correctedEnergy"],"clusterECAL_correctedEnergy[nECALClusters]/F");
       storageMapFloatArray["clusterECAL_time"] = new Float_t[N_ECAL_CLUSTERS];
       theTree->Branch("clusterECAL_time",   storageMapFloatArray["clusterECAL_time"],"clusterECAL_time[nECALClusters]/F");
+      storageMapFloatArray["clusterECAL_eta"] = new Float_t[N_ECAL_CLUSTERS];
+      theTree->Branch("clusterECAL_eta",   storageMapFloatArray["clusterECAL_eta"],"clusterECAL_eta[nECALClusters]/F");
+      storageMapFloatArray["clusterECAL_phi"] = new Float_t[N_ECAL_CLUSTERS];
+      theTree->Branch("clusterECAL_phi",   storageMapFloatArray["clusterECAL_phi"],"clusterECAL_phi[nECALClusters]/F");
       storageMapFloatArray["clusterECAL_x"] = new Float_t[N_ECAL_CLUSTERS];
       theTree->Branch("clusterECAL_x",   storageMapFloatArray["clusterECAL_x"],"clusterECAL_x[nECALClusters]/F");
       storageMapFloatArray["clusterECAL_y"] = new Float_t[N_ECAL_CLUSTERS];
@@ -2311,7 +2324,7 @@ void BsToMuMuGammaNTuplizer::addECALCluserBranches()
       theTree->Branch("clusterECAL_pt",   storageMapFloatArray["clusterECAL_pt"],"clusterECAL_pt[nECALClusters]/F");
       storageMapFloatArray["clusterECAL_size"] = new Float_t[N_ECAL_CLUSTERS];
       theTree->Branch("clusterECAL_size",   storageMapFloatArray["clusterECAL_size"],"clusterECAL_size[nECALClusters]/F");
-      storageMapFloatArray["clusterECAL_energyMatrix"] = new Float_t[N_ECAL_CLUSTERS*energyMatrixSize_];
+      storageMapFloatArray["clusterECAL_energyMatrix"] = new Float_t[N_ECAL_CLUSTERS*energyMatrixSizeFull_];
       theTree->Branch("clusterECAL_energyMatrix",   storageMapFloatArray["clusterECAL_energyMatrix"],"clusterECAL_energyMatrix[nECALClusterEnergyMatrix]/F");
 }
 
@@ -2341,11 +2354,13 @@ void BsToMuMuGammaNTuplizer::fillECALClusterCollection( const edm::Event& iEvent
       storageMapFloatArray["clusterECAL_y"]               [i]  =  ecalClus->y()      ; 
       storageMapFloatArray["clusterECAL_z"]               [i]  =  ecalClus->z()      ; 
       storageMapFloatArray["clusterECAL_pt"]              [i]  =  ecalClus->pt()     ; 
+      storageMapFloatArray["clusterECAL_eta"]              [i]  =  ecalClus->eta()     ; 
+      storageMapFloatArray["clusterECAL_phi"]              [i]  =  ecalClus->phi()     ; 
       storageMapFloatArray["clusterECAL_size"]            [i]  =  ecalClus->size()   ; 
       auto energyMatrix_ = lazyTool.energyMatrix(*ecalClus , energyMatrixSize_)  ;
-      for( int j=0; j < energyMatrixSize_; j++)
+      for( int j=0; j < energyMatrixSizeFull_; j++)
       {
-            storageMapFloatArray["clusterECAL_energyMatrix"][ i*energyMatrixSize_+ j] = energyMatrix_[j];
+            storageMapFloatArray["clusterECAL_energyMatrix"][ i*energyMatrixSizeFull_+ j] = energyMatrix_[j];
             energySize++;
       }
     i++;
@@ -2376,6 +2391,10 @@ void BsToMuMuGammaNTuplizer::addHCALCluserBranches()
       theTree->Branch("clusterHCAL_z",   storageMapFloatArray["clusterHCAL_z"],"clusterHCAL_z[nHCALClusters]/F");
       storageMapFloatArray["clusterHCAL_pt"] = new Float_t[N_HCAL_CLUSTERS];
       theTree->Branch("clusterHCAL_pt",   storageMapFloatArray["clusterHCAL_pt"],"clusterHCAL_pt[nHCALClusters]/F");
+      storageMapFloatArray["clusterHCAL_eta"] = new Float_t[N_HCAL_CLUSTERS];
+      theTree->Branch("clusterHCAL_eta",   storageMapFloatArray["clusterHCAL_eta"],"clusterHCAL_eta[nHCALClusters]/F");
+      storageMapFloatArray["clusterHCAL_phi"] = new Float_t[N_HCAL_CLUSTERS];
+      theTree->Branch("clusterHCAL_phi",   storageMapFloatArray["clusterHCAL_phi"],"clusterHCAL_phi[nHCALClusters]/F");
       storageMapFloatArray["clusterHCAL_size"] = new Float_t[N_HCAL_CLUSTERS];
       theTree->Branch("clusterHCAL_size",   storageMapFloatArray["clusterHCAL_size"],"clusterHCAL_size[nHCALClusters]/F");
 }
@@ -2401,6 +2420,8 @@ void BsToMuMuGammaNTuplizer::fillHCALClusterCollection( const edm::Event& iEvent
          storageMapFloatArray["clusterHCAL_y"]               [i]  =  hcalClus->y()      ; 
          storageMapFloatArray["clusterHCAL_z"]               [i]  =  hcalClus->z()      ; 
          storageMapFloatArray["clusterHCAL_pt"]              [i]  =  hcalClus->pt()     ; 
+         storageMapFloatArray["clusterHCAL_eta"]              [i]  =  hcalClus->eta()     ; 
+         storageMapFloatArray["clusterHCAL_phi"]              [i]  =  hcalClus->phi()     ; 
          storageMapFloatArray["clusterHCAL_size"]            [i]  =  hcalClus->size()   ; 
          i++;
        if(i >= N_HCAL_CLUSTERS) break;

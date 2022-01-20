@@ -21,8 +21,8 @@ config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 
 #config.Data.outLFNDirBase = '/store/group/phys_diffraction/lbyl_2018/mc_lbl/ntuples'
-config.Data.outLFNDirBase = '/store/group/phys_heavyions/rchudasa/lowPT_photonReco'
+config.Data.outLFNDirBase = '/store/user/athachay/BsToMuMuGamma/Run2Studies/PhotonIDNtuples/'
 config.Data.allowNonValidInputDataset = True
 config.Data.publication = False
 config.Data.outputDatasetTag = 'ntuples_defaultReco_QCDEmEnriched_Pt30to50'
-config.Site.storageSite = 'T2_CH_CERN'
+config.Site.storageSite = 'T2_IN_TIFR'

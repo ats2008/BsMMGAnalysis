@@ -374,6 +374,115 @@ void TreeMaker::genParticleSCMaker()
     std::cout<<" Number of candidates              : "<<nCands<<"\n";
 }
 
+void TreeMaker::genParticleBMMGSCMaker()
+{
+    AddSCHistos("genMatchedBMMGSC_");
+    AddSCTree("genMatchedBMMGSCTree");
+    th1fStore["genBsGammaPt"                      ]  = new TH1F("genBsGammaPt" ,"Pt of GEN", pTBins , pTmin  , pTmax  );
+    th1fStore["genBsGammaEta"                     ]  = new TH1F("genBsGammaEta","Eta of GEN", etaBins , etamin  , etamax  );
+    th1fStore["genBsGammaphi"                     ]  = new TH1F("genBsGammaphi","Phi of GEN", 64 , -3.20  , 3.20  );
+    th1fStore["genBsGammaE"		                  ]  = new TH1F("genBsGammaE"  ,"E", 600 , 0.0 ,150.0 ) ;                  
+
+    Double_t dr;
+    
+    std::cout<<"\nBegining Analysis Script !";
+    if (maxEvents >0 ) maxEvents = nentries > maxEvents ? maxEvents : nentries;
+    cout<<"\nProcessing total "<<maxEvents<<" events \n\n";
+   
+    Long64_t EventCount=0;
+    Long64_t EventCountWithCand=0;
+    Long64_t nCands=0;
+    
+    Long64_t nb = 0,nbytes=0 ;
+
+    auto t_start = std::chrono::high_resolution_clock::now();
+    auto t_end = std::chrono::high_resolution_clock::now();
+    bool goodRunLumi = false;
+
+    Double_t drMin;
+    Int_t scMatchIdx;
+    Bool_t foundmatch=false;
+    for (Long64_t jentry=0; jentry<maxEvents; jentry++)
+    {  
+       eventGenMultiplicity=0;
+       Long64_t ientry_evt = ntupleRawTree.LoadTree(jentry);
+       if (ientry_evt < 0) break;
+       nb = ntupleRawTree.fChain->GetEntry(jentry);   nbytes += nb;
+       
+       if(jentry%10000 == 0 )
+       {
+             t_end = std::chrono::high_resolution_clock::now();
+             std::cout<<"Processing Entry in event loop : "<<jentry<<" / "<<maxEvents<<"  [ "<<100.0*jentry/maxEvents<<"  % ]  "
+                      << " Elapsed time : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0
+                      <<"  Estimated time left : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()*( maxEvents - jentry)/(1e-9 + jentry)* 0.001
+                      <<std::endl;
+       
+       }
+       
+       EventCount++;
+       foundmatch=false;
+       if(isMC)
+       {
+            if( ntupleRawTree.gen_nBsPhoton!=1 ) continue;
+            std::cout<<"Bs Gamma pt = "<<ntupleRawTree.gen_BsPhoton_pt->at(0)<<"\n";
+            th1fStore["genBsGammaPt"    ]  ->Fill(ntupleRawTree.gen_BsPhoton_pt->at(0)) ;  
+            th1fStore["genBsGammaEta"    ] ->Fill(ntupleRawTree.gen_BsPhoton_eta->at(0)) ;  
+            th1fStore["genBsGammaphi"    ] ->Fill(ntupleRawTree.gen_BsPhoton_phi->at(0));  
+            th1fStore["genBsGammaE"	    ]  ->Fill(ntupleRawTree.gen_BsPhoton_energy->at(0));	
+            drMin=drGenMatchMin;
+            scMatchIdx=-1;
+            for( Int_t j =0 ;j< ntupleRawTree.nSC ;j++)
+            {
+                if(abs(ntupleRawTree.scEta->at(j)) < scAbsEtaMin ) continue;
+                if(abs(ntupleRawTree.scEta->at(j)) > scAbsEtaMax ) continue;
+
+                    dr=getDR(ntupleRawTree.gen_BsPhoton_eta->at(0),ntupleRawTree.gen_BsPhoton_phi->at(0), ntupleRawTree.scEta->at(j),ntupleRawTree.scPhi->at(j));
+                    if(dr<drMin)
+                    {
+                        drMin=dr;
+                        scMatchIdx=j;
+                    }
+            }
+            
+            if( scMatchIdx > -1)
+            {
+                fill_scHists(scMatchIdx,"genMatchedBMMGSC_",drMin);
+                fillSCVariablesToOutTree(scMatchIdx,"genMatchedBMMGSCTree");
+                nCands++;
+                foundmatch=true;
+            }
+       }
+       if(foundmatch==true)     EventCountWithCand++;
+       
+       for( Int_t j =0 ;j< ntupleRawTree.nSC ;j++)
+       {
+            if(abs(ntupleRawTree.scEta->at(j)) < scAbsEtaMin ) continue;
+            if(abs(ntupleRawTree.scEta->at(j)) > scAbsEtaMax ) continue;
+
+            drMin=2.99;
+            if(isMC)
+            for(int i=0;i < ntupleRawTree.nMC ; i++)
+            {
+                 if( ntupleRawTree.mcPID->at(i) != genParticlePDGID ) continue;
+                 if(genParticleIsStable) if(not ntupleRawTree.mcStatus->at(i) != 1 ) continue;
+                 dr=getDR(ntupleRawTree.mcEta->at(i),ntupleRawTree.mcPhi->at(i), ntupleRawTree.scEta->at(j),ntupleRawTree.scPhi->at(j));
+                 if(dr<drMin)
+                 {
+                        drMin=dr;
+                 }
+            }
+            fill_scHists(j,"allSC_",dr);
+            
+
+       }
+      fill_eventHists();
+    }
+
+    std::cout<<" Number of Evnets processed        : "<<EventCount<<"\n";
+    std::cout<<" Number of Evnets with candidates  : "<<EventCountWithCand<<"\n";
+    std::cout<<" Number of candidates              : "<<nCands<<"\n";
+}
+
 void TreeMaker::setupOutputSCTree()
 {
 }
@@ -381,8 +490,6 @@ void TreeMaker::setupOutputSCTree()
 
 void TreeMaker::AddSCTree(TString SCTreeName)
 {
-
-    
     auto outSC_Tree = new TTree(SCTreeName,"variables for the PhotonID from SC");
 
     Int_t idx(0), offset(candidateMapDouble["SCTreeStorage"]);
@@ -439,19 +546,141 @@ void TreeMaker::AddSCTree(TString SCTreeName)
 	outSC_Tree->Branch("scFull5x5_SigmaIphiIphi"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFChIso1"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFChIso2"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
-	outSC_Tree->Branch("scPFChIso"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("scPFChIso3"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFChIso4"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFChIso5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFPhoIso1"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFPhoIso2"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
-	outSC_Tree->Branch("scPFPhoIso"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("scPFPhoIso3"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFPhoIso4"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFPhoIso5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFNeuIso1"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFNeuIso2"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
-	outSC_Tree->Branch("scPFNeuIso"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("scPFNeuIso3"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFNeuIso4"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFNeuIso5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+
+    storageFloat["scClusterECAL_nClusInDr0p1"]=0;
+	outSC_Tree->Branch("scClusterECAL_nClusInDr0p1"		,&storageFloat["scClusterECAL_nClusInDr0p1"]);
+    storageFloat["scClusterECAL_nClusInDr0p3"]=0;
+	outSC_Tree->Branch("scClusterECAL_nClusInDr0p3"		,&storageFloat["scClusterECAL_nClusInDr0p3"]);
+    storageFloat["scClusterECAL_nClusInDr0p5"]=0;
+	outSC_Tree->Branch("scClusterECAL_nClusInDr0p5"		,&storageFloat["scClusterECAL_nClusInDr0p5"]);
+
+    storageFloat["scClusterECAL_sumPtInDr0p1"]=0;
+	outSC_Tree->Branch("scClusterECAL_sumPtInDr0p1"		,&storageFloat["scClusterECAL_sumPtInDr0p1"]);
+    storageFloat["scClusterECAL_sumPtInDr0p3"]=0;
+	outSC_Tree->Branch("scClusterECAL_sumPtInDr0p3"		,&storageFloat["scClusterECAL_sumPtInDr0p3"]);
+    storageFloat["scClusterECAL_sumPtInDr0p5"]=0;
+	outSC_Tree->Branch("scClusterECAL_sumPtInDr0p5"		,&storageFloat["scClusterECAL_sumPtInDr0p5"]);
+
+    storageFloat["scClusterECAL_sumSizesInDr0p1"]=0;
+	outSC_Tree->Branch("scClusterECAL_sumSizesInDr0p1"		,&storageFloat["scClusterECAL_sumSizesInDr0p1"]);
+    storageFloat["scClusterECAL_sumSizesInDr0p3"]=0;
+	outSC_Tree->Branch("scClusterECAL_sumSizesInDr0p3"		,&storageFloat["scClusterECAL_sumSizesInDr0p3"]);
+    storageFloat["scClusterECAL_sumSizesInDr0p5"]=0;
+	outSC_Tree->Branch("scClusterECAL_sumSizesInDr0p5"		,&storageFloat["scClusterECAL_sumSizesInDr0p5"]);
+
+    storageFloat["scClusterECAL_closestClusDr"]=0;
+	outSC_Tree->Branch("scClusterECAL_closestClusDr"		,&storageFloat["scClusterECAL_closest3ClusDr"]);
+    storageFloat["scClusterECAL_closest2ClusDr"]=0;
+	outSC_Tree->Branch("scClusterECAL_closest2ClusDr"		,&storageFloat["scClusterECAL_closest3ClusDr"]);
+    storageFloat["scClusterECAL_closest3ClusDr"]=0;
+	outSC_Tree->Branch("scClusterECAL_closest3ClusDr"		,&storageFloat["scClusterECAL_closest3ClusDr"]);
+
+    storageFloat["scClusterHCAL_nClusInDr0p1"]=0;
+	outSC_Tree->Branch("scClusterHCAL_nClusInDr0p1"		,&storageFloat["scClusterHCAL_nClusInDr0p1"]);
+    storageFloat["scClusterHCAL_nClusInDr0p3"]=0;
+	outSC_Tree->Branch("scClusterHCAL_nClusInDr0p3"		,&storageFloat["scClusterHCAL_nClusInDr0p3"]);
+    storageFloat["scClusterHCAL_nClusInDr0p5"]=0;
+	outSC_Tree->Branch("scClusterHCAL_nClusInDr0p5"		,&storageFloat["scClusterHCAL_nClusInDr0p5"]);
+
+    storageFloat["scClusterHCAL_sumPtInDr0p1"]=0;
+	outSC_Tree->Branch("scClusterHCAL_sumPtInDr0p1"		,&storageFloat["scClusterHCAL_sumPtInDr0p1"]);
+    storageFloat["scClusterHCAL_sumPtInDr0p3"]=0;
+	outSC_Tree->Branch("scClusterHCAL_sumPtInDr0p3"		,&storageFloat["scClusterHCAL_sumPtInDr0p3"]);
+    storageFloat["scClusterHCAL_sumPtInDr0p5"]=0;
+	outSC_Tree->Branch("scClusterHCAL_sumPtInDr0p5"		,&storageFloat["scClusterHCAL_sumPtInDr0p5"]);
+
+    storageFloat["scClusterHCAL_sumSizesInDr0p1"]=0;
+	outSC_Tree->Branch("scClusterHCAL_sumSizesInDr0p1"		,&storageFloat["scClusterHCAL_sumSizesInDr0p1"]);
+    storageFloat["scClusterHCAL_sumSizesInDr0p3"]=0;
+	outSC_Tree->Branch("scClusterHCAL_sumSizesInDr0p3"		,&storageFloat["scClusterHCAL_sumSizesInDr0p3"]);
+    storageFloat["scClusterHCAL_sumSizesInDr0p5"]=0;
+	outSC_Tree->Branch("scClusterHCAL_sumSizesInDr0p5"		,&storageFloat["scClusterHCAL_sumSizesInDr0p5"]);
+
+    storageFloat["scClusterHCAL_closestClusDr"]=0;
+	outSC_Tree->Branch("scClusterHCAL_closestClusDr"		,&storageFloat["scClusterHCAL_closest3ClusDr"]);
+    storageFloat["scClusterHCAL_closest2ClusDr"]=0;
+	outSC_Tree->Branch("scClusterHCAL_closest2ClusDr"		,&storageFloat["scClusterHCAL_closest3ClusDr"]);
+    storageFloat["scClusterHCAL_closest3ClusDr"]=0;
+	outSC_Tree->Branch("scClusterHCAL_closest3ClusDr"		,&storageFloat["scClusterHCAL_closest3ClusDr"]);
+    
+    storageFloat["scPF_nGammaInDr0p1"]=0;
+	outSC_Tree->Branch("scPF_nGammaInDr0p1"		,&storageFloat["scPF_nGammaInDr0p1"]);
+    storageFloat["scPF_nCHadronInDr0p1"]=0;
+	outSC_Tree->Branch("scPF_nCHadronInDr0p1"		,&storageFloat["scPF_nCHadronInDr0p1"]);
+    storageFloat["scPF_nNHadronInDr0p1"]=0;
+	outSC_Tree->Branch("scPF_nNHadronInDr0p1"		,&storageFloat["scPF_nNHadronInDr0p1"]);
+    storageFloat["scPF_nElectronInDr0p1"]=0;
+	outSC_Tree->Branch("scPF_nElectronInDr0p1"		,&storageFloat["scPF_nElectronInDr0p1"]);
+    storageFloat["scPF_nOtherInDr0p1"]=0;
+	outSC_Tree->Branch("scPF_nOtherInDr0p1"		,&storageFloat["scPF_nOtherInDr0p1"]);
+
+    storageFloat["scPF_sumPtGammaInDr0p1"]=0;
+	outSC_Tree->Branch("scPF_sumPtGammaInDr0p1"		,&storageFloat["scPF_sumPtGammaInDr0p1"]);
+    storageFloat["scPF_sumPtCHadronInDr0p1"]=0;
+	outSC_Tree->Branch("scPF_sumPtCHadronInDr0p1"		,&storageFloat["scPF_sumPtCHadronInDr0p1"]);
+    storageFloat["scPF_sumPtNHadronInDr0p1"]=0;
+	outSC_Tree->Branch("scPF_sumPtNHadronInDr0p1"		,&storageFloat["scPF_sumPtNHadronInDr0p1"]);
+    storageFloat["scPF_sumPtElectronInDr0p1"]=0;
+	outSC_Tree->Branch("scPF_sumPtElectronInDr0p1"		,&storageFloat["scPF_sumPtElectronInDr0p1"]);
+    storageFloat["scPF_sumPtOtherInDr0p1"]=0;
+	outSC_Tree->Branch("scPF_sumPtOtherInDr0p1"		,&storageFloat["scPF_sumPtOtherInDr0p1"]);
+
+    storageFloat["scPF_nGammaInDr0p3"]=0;
+	outSC_Tree->Branch("scPF_nGammaInDr0p3"		,&storageFloat["scPF_nGammaInDr0p3"]);
+    storageFloat["scPF_nCHadronInDr0p3"]=0;
+	outSC_Tree->Branch("scPF_nCHadronInDr0p3"		,&storageFloat["scPF_nCHadronInDr0p3"]);
+    storageFloat["scPF_nNHadronInDr0p3"]=0;
+	outSC_Tree->Branch("scPF_nNHadronInDr0p3"		,&storageFloat["scPF_nNHadronInDr0p3"]);
+    storageFloat["scPF_nElectronInDr0p3"]=0;
+	outSC_Tree->Branch("scPF_nElectronInDr0p3"		,&storageFloat["scPF_nElectronInDr0p3"]);
+    storageFloat["scPF_nOtherInDr0p3"]=0;
+	outSC_Tree->Branch("scPF_nOtherInDr0p3"		,&storageFloat["scPF_nOtherInDr0p3"]);
+
+    storageFloat["scPF_sumPtGammaInDr0p3"]=0;
+	outSC_Tree->Branch("scPF_sumPtGammaInDr0p3"		,&storageFloat["scPF_sumPtGammaInDr0p3"]);
+    storageFloat["scPF_sumPtCHadronInDr0p3"]=0;
+	outSC_Tree->Branch("scPF_sumPtCHadronInDr0p3"		,&storageFloat["scPF_sumPtCHadronInDr0p3"]);
+    storageFloat["scPF_sumPtNHadronInDr0p3"]=0;
+	outSC_Tree->Branch("scPF_sumPtNHadronInDr0p3"		,&storageFloat["scPF_sumPtNHadronInDr0p3"]);
+    storageFloat["scPF_sumPtElectronInDr0p3"]=0;
+	outSC_Tree->Branch("scPF_sumPtElectronInDr0p3"		,&storageFloat["scPF_sumPtElectronInDr0p3"]);
+    storageFloat["scPF_sumPtOtherInDr0p3"]=0;
+	outSC_Tree->Branch("scPF_sumPtOtherInDr0p3"		,&storageFloat["scPF_sumPtOtherInDr0p3"]);
+
+    storageFloat["scPF_nGammaInDr0p5"]=0;
+	outSC_Tree->Branch("scPF_nGammaInDr0p5"		,&storageFloat["scPF_nGammaInDr0p5"]);
+    storageFloat["scPF_nCHadronInDr0p5"]=0;
+	outSC_Tree->Branch("scPF_nCHadronInDr0p5"		,&storageFloat["scPF_nCHadronInDr0p5"]);
+    storageFloat["scPF_nNHadronInDr0p5"]=0;
+	outSC_Tree->Branch("scPF_nNHadronInDr0p5"		,&storageFloat["scPF_nNHadronInDr0p5"]);
+    storageFloat["scPF_nElectronInDr0p5"]=0;
+	outSC_Tree->Branch("scPF_nElectronInDr0p5"		,&storageFloat["scPF_nElectronInDr0p5"]);
+    storageFloat["scPF_nOtherInDr0p5"]=0;
+	outSC_Tree->Branch("scPF_nOtherInDr0p5"		,&storageFloat["scPF_nOtherInDr0p5"]);
+
+    storageFloat["scPF_sumPtGammaInDr0p5"]=0;
+	outSC_Tree->Branch("scPF_sumPtGammaInDr0p5"		,&storageFloat["scPF_sumPtGammaInDr0p5"]);
+    storageFloat["scPF_sumPtCHadronInDr0p5"]=0;
+	outSC_Tree->Branch("scPF_sumPtCHadronInDr0p5"		,&storageFloat["scPF_sumPtCHadronInDr0p5"]);
+    storageFloat["scPF_sumPtNHadronInDr0p5"]=0;
+	outSC_Tree->Branch("scPF_sumPtNHadronInDr0p5"		,&storageFloat["scPF_sumPtNHadronInDr0p5"]);
+    storageFloat["scPF_sumPtElectronInDr0p5"]=0;
+	outSC_Tree->Branch("scPF_sumPtElectronInDr0p5"		,&storageFloat["scPF_sumPtElectronInDr0p5"]);
+    storageFloat["scPF_sumPtOtherInDr0p5"]=0;
+	outSC_Tree->Branch("scPF_sumPtOtherInDr0p5"		,&storageFloat["scPF_sumPtOtherInDr0p5"]);
 
     treeStore[SCTreeName]=outSC_Tree;
 }
@@ -527,22 +756,256 @@ void TreeMaker::fillSCVariablesToOutTree(Int_t scIDX,TString SCTreeName)
 	storageArrayDouble[idx + offset ] =ntupleRawTree.scPFNeuIso4->at(scIDX)		  ;idx+=1 ;
 	storageArrayDouble[idx + offset ] =ntupleRawTree.scPFNeuIso5->at(scIDX)		  ;idx+=1 ;
     
+    fillECALClusterVariables(scIDX);
+    fillHCALClusterVariables(scIDX);
+
     treeStore[SCTreeName]->Fill();
 }
 
+void TreeMaker::fillECALClusterVariables(Int_t scIDX)
+{   
+    storageFloat["scClusterECAL_nClusInDr0p1"]=0;
+    storageFloat["scClusterECAL_nClusInDr0p3"]=0;
+    storageFloat["scClusterECAL_nClusInDr0p5"]=0;
+    storageFloat["scClusterECAL_sumPtInDr0p1"]=0;
+    storageFloat["scClusterECAL_sumPtInDr0p3"]=0;
+    storageFloat["scClusterECAL_sumPtInDr0p5"]=0;
+    storageFloat["scClusterECAL_sumSizesInDr0p1"]=0;
+    storageFloat["scClusterECAL_sumSizesInDr0p3"]=0;
+    storageFloat["scClusterECAL_sumSizesInDr0p5"]=0;
+    storageFloat["scClusterECAL_closestClusDr"]=0;
+    storageFloat["scClusterECAL_closest2ClusDr"]=0;
+    storageFloat["scClusterECAL_closest3ClusDr"]=0;
+
+    Float_t closesestClusDr[4]={3.0,3.0,3.0,3.0};
+    
+    Float_t eta0(ntupleRawTree.scEta->at(scIDX));
+    Float_t phi0(ntupleRawTree.scPhi->at(scIDX));
+    Float_t dr,drMin(0.05);
+    Int_t matchIdx(-1);
+    for(Int_t i =0;i< ntupleRawTree.nECALClusters;i++)
+    {
+               dr=getDR(eta0,phi0,ntupleRawTree.clusterECAL_eta[i],ntupleRawTree.clusterECAL_phi[i]);
+               if(dr< closesestClusDr[0])
+               {
+                    closesestClusDr[3]=closesestClusDr[2];
+                    closesestClusDr[2]=closesestClusDr[1];
+                    closesestClusDr[1]=closesestClusDr[0];
+                    closesestClusDr[0]=dr;
+               }
+
+               if(dr<0.1)
+               {
+                    storageFloat["scClusterECAL_nClusInDr0p1"]+=1;
+                    storageFloat["scClusterECAL_sumPtInDr0p1"]+=ntupleRawTree.clusterECAL_pt[i];
+                    storageFloat["scClusterECAL_sumSizesInDr0p1"]+=ntupleRawTree.clusterECAL_size[i];
+               }
+
+               if(dr<0.3)
+               {
+                    storageFloat["scClusterECAL_nClusInDr0p3"]+=1;
+                    storageFloat["scClusterECAL_sumPtInDr0p3"]+=ntupleRawTree.clusterECAL_pt[i];
+                    storageFloat["scClusterECAL_sumSizesInDr0p3"]+=ntupleRawTree.clusterECAL_size[i];
+               }
+               
+               if(dr<0.5)
+               {
+                    storageFloat["scClusterECAL_nClusInDr0p5"]+=1;
+                    storageFloat["scClusterECAL_sumPtInDr0p5"]+=ntupleRawTree.clusterECAL_pt[i];
+                    storageFloat["scClusterECAL_sumSizesInDr0p5"]+=ntupleRawTree.clusterECAL_size[i];
+               }
+               if(dr<drMin)
+               {
+                    matchIdx=i;
+                    drMin=dr;
+               }
+    }
+
+    Int_t offset=0;
+    if(matchIdx > -1)
+    {
+
+              storageFloat["scClusterECAL_nClusInDr0p1"]-=1;
+              storageFloat["scClusterECAL_sumPtInDr0p1"]-=ntupleRawTree.clusterECAL_pt[matchIdx];
+              storageFloat["scClusterECAL_sumSizesInDr0p1"]-=ntupleRawTree.clusterECAL_size[matchIdx];
+              storageFloat["scClusterECAL_nClusInDr0p3"]-=1;
+              storageFloat["scClusterECAL_sumPtInDr0p3"]-=ntupleRawTree.clusterECAL_pt[matchIdx];
+              storageFloat["scClusterECAL_sumSizesInDr0p3"]-=ntupleRawTree.clusterECAL_size[matchIdx];
+              storageFloat["scClusterECAL_nClusInDr0p5"]-=1;
+              storageFloat["scClusterECAL_sumPtInDr0p5"]-=ntupleRawTree.clusterECAL_pt[matchIdx];
+              storageFloat["scClusterECAL_sumSizesInDr0p5"]-=ntupleRawTree.clusterECAL_size[matchIdx];
+              offset=1;
+    }
+    
+    storageFloat["scClusterECAL_closestClusDr"]  = closesestClusDr[0 + offset];
+    storageFloat["scClusterECAL_closest2ClusDr"] = closesestClusDr[1 + offset];
+    storageFloat["scClusterECAL_closest3ClusDr"] = closesestClusDr[2 + offset];
+    std::cout<<"drMin for the scIdx="<<scIDX<<"  = "<<drMin<<"\n";
+
+}
+
+void TreeMaker::fillHCALClusterVariables(Int_t scIDX)
+{   
+    storageFloat["scClusterHCAL_nClusInDr0p1"]=0;
+    storageFloat["scClusterHCAL_nClusInDr0p3"]=0;
+    storageFloat["scClusterHCAL_nClusInDr0p5"]=0;
+    storageFloat["scClusterHCAL_sumPtInDr0p1"]=0;
+    storageFloat["scClusterHCAL_sumPtInDr0p3"]=0;
+    storageFloat["scClusterHCAL_sumPtInDr0p5"]=0;
+    storageFloat["scClusterHCAL_sumSizesInDr0p1"]=0;
+    storageFloat["scClusterHCAL_sumSizesInDr0p3"]=0;
+    storageFloat["scClusterHCAL_sumSizesInDr0p5"]=0;
+    storageFloat["scClusterHCAL_closestClusDr"]=0;
+    storageFloat["scClusterHCAL_closest2ClusDr"]=0;
+    storageFloat["scClusterHCAL_closest3ClusDr"]=0;
+
+    Float_t closesestClusDr[4]={3.0,3.0,3.0,3.0};
+    
+    Float_t eta0(ntupleRawTree.scEta->at(scIDX));
+    Float_t phi0(ntupleRawTree.scPhi->at(scIDX));
+    Float_t dr,drMin(0.05);
+    Int_t matchIdx(-1);
+    for(Int_t i =0;i< ntupleRawTree.nHCALClusters;i++)
+    {
+               dr=getDR(eta0,phi0,ntupleRawTree.clusterHCAL_eta[i],ntupleRawTree.clusterHCAL_phi[i]);
+               if(dr< closesestClusDr[0])
+               {
+                    closesestClusDr[3]=closesestClusDr[2];
+                    closesestClusDr[2]=closesestClusDr[1];
+                    closesestClusDr[1]=closesestClusDr[0];
+                    closesestClusDr[0]=dr;
+               }
+
+               if(dr<0.1)
+               {
+                    storageFloat["scClusterHCAL_nClusInDr0p1"]+=1;
+                    storageFloat["scClusterHCAL_sumPtInDr0p1"]+=ntupleRawTree.clusterHCAL_pt[i];
+                    storageFloat["scClusterHCAL_sumSizesInDr0p1"]+=ntupleRawTree.clusterHCAL_size[i];
+               }
+
+               if(dr<0.3)
+               {
+                    storageFloat["scClusterHCAL_nClusInDr0p3"]+=1;
+                    storageFloat["scClusterHCAL_sumPtInDr0p3"]+=ntupleRawTree.clusterHCAL_pt[i];
+                    storageFloat["scClusterHCAL_sumSizesInDr0p3"]+=ntupleRawTree.clusterHCAL_size[i];
+               }
+               
+               if(dr<0.5)
+               {
+                    storageFloat["scClusterHCAL_nClusInDr0p5"]+=1;
+                    storageFloat["scClusterHCAL_sumPtInDr0p5"]+=ntupleRawTree.clusterHCAL_pt[i];
+                    storageFloat["scClusterHCAL_sumSizesInDr0p5"]+=ntupleRawTree.clusterHCAL_size[i];
+               }
+               if(dr<drMin)
+               {
+                    matchIdx=i;
+                    drMin=dr;
+               }
+    }    
+
+    storageFloat["scClusterHCAL_closestClusDr"]  = closesestClusDr[0 ];
+    storageFloat["scClusterHCAL_closest2ClusDr"] = closesestClusDr[1 ];
+    storageFloat["scClusterHCAL_closest3ClusDr"] = closesestClusDr[2 ];
+}
+
+
+void TreeMaker::fillPFVariables()
+{
+    storageFloat["scPF_nGammaInDr0p1"]=0;
+    storageFloat["scPF_nEleGammaInDr0p1"]=0;
+    storageFloat["scPF_nCHadronInDr0p1"]=0;
+    storageFloat["scPF_nNHadronInDr0p1"]=0;
+    storageFloat["scPF_nOtherInDr0p1"]=0;
+    storageFloat["scPF_sumPtGammaInDr0p1"]=0;
+    storageFloat["scPF_sumPtElectronInDr0p1"]=0;
+    storageFloat["scPF_sumPtCHadronInDr0p1"]=0;
+    storageFloat["scPF_sumPtNHadronInDr0p1"]=0;
+    storageFloat["scPF_sumPtOtherInDr0p1"]=0;
+
+    storageFloat["scPF_nGammaInDr0p3"]=0;
+    storageFloat["scPF_nEleGammaInDr0p3"]=0;
+    storageFloat["scPF_nCHadronInDr0p3"]=0;
+    storageFloat["scPF_nNHadronInDr0p3"]=0;
+    storageFloat["scPF_nOtherInDr0p3"]=0;
+    storageFloat["scPF_sumPtGammaInDr0p3"]=0;
+    storageFloat["scPF_sumPtElectronInDr0p3"]=0;
+    storageFloat["scPF_sumPtCHadronInDr0p3"]=0;
+    storageFloat["scPF_sumPtNHadronInDr0p3"]=0;
+    storageFloat["scPF_sumPtOtherInDr0p3"]=0;
+
+    storageFloat["scPF_nGammaInDr0p5"]=0;
+    storageFloat["scPF_nEleGammaInDr0p5"]=0;
+    storageFloat["scPF_nCHadronInDr0p5"]=0;
+    storageFloat["scPF_nNHadronInDr0p5"]=0;
+    storageFloat["scPF_nOtherInDr0p5"]=0;
+    storageFloat["scPF_sumPtGammaInDr0p5"]=0;
+    storageFloat["scPF_sumPtElectronInDr0p5"]=0;
+    storageFloat["scPF_sumPtCHadronInDr0p5"]=0;
+    storageFloat["scPF_sumPtNHadronInDr0p5"]=0;
+    storageFloat["scPF_sumPtOtherInDr0p5"]=0;
+
+
+    
+    Float_t eta0(ntupleRawTree.scEta->at(scIDX));
+    Float_t phi0(ntupleRawTree.scPhi->at(scIDX));
+    Float_t dr;
+    for(Int_t i =0;i< ntupleRawTree.nHCALClusters;i++)
+    {
+               dr=getDR(eta0,phi0,ntupleRawTree.pf_eta[i],ntupleRawTree.pf_phi[i]);
+               if(dr<0.1)
+               {
+                    if(ntupleRawTree.pf_id[i] == 4.0)         storageFloat["scPF_nGammaInDr0p1"]+=1;
+                    else if(ntupleRawTree.pf_id[i] == 2.0)    storageFloat["scPF_nEleGammaInDr0p1"]+=1;
+                    else if(ntupleRawTree.pf_id[i] == 1.0)    storageFloat["scPF_nCHadronInDr0p1"]+=1;
+                    else if(ntupleRawTree.pf_id[i] == 5.0)    storageFloat["scPF_nNHadronInDr0p1"]+=1;
+                    else                                 storageFloat["scPF_nOtherInDr0p1"]+=1;
+
+                    if(ntupleRawTree.pf_id[i] == 4.0)         storageFloat["scPF_sumPtGammaInDr0p1"]   +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtElectronInDr0p1"]+=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtCHadronInDr0p1"] +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtNHadronInDr0p1"] +=ntupleRawTree.pf_pt[i];
+                    else                                      storageFloat["scPF_sumPtOtherInDr0p1"]   +=ntupleRawTree.pf_pt[i];
+               }
+
+               if(dr<0.3)
+               {
+                    if(ntupleRawTree.pf_id[i] == 4.0)         storageFloat["scPF_nGammaInDr0p3"]+=1;
+                    else if(ntupleRawTree.pf_id[i] == 2.0)    storageFloat["scPF_nEleGammaInDr0p3"]+=1;
+                    else if(ntupleRawTree.pf_id[i] == 1.0)    storageFloat["scPF_nCHadronInDr0p3"]+=1;
+                    else if(ntupleRawTree.pf_id[i] == 5.0)    storageFloat["scPF_nNHadronInDr0p3"]+=1;
+                    else                                 storageFloat["scPF_nOtherInDr0p3"]+=1;
+
+                    if(ntupleRawTree.pf_id[i] == 4.0)         storageFloat["scPF_sumPtGammaInDr0p3"]   +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtElectronInDr0p3"]+=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtCHadronInDr0p3"] +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtNHadronInDr0p3"] +=ntupleRawTree.pf_pt[i];
+                    else                                      storageFloat["scPF_sumPtOtherInDr0p3"]   +=ntupleRawTree.pf_pt[i];
+
+
+               }
+               
+               if(dr<0.5)
+               {
+                    if(ntupleRawTree.pf_id[i] == 4.0)         storageFloat["scPF_nGammaInDr0p5"]+=1;
+                    else if(ntupleRawTree.pf_id[i] == 2.0)    storageFloat["scPF_nEleGammaInDr0p5"]+=1;
+                    else if(ntupleRawTree.pf_id[i] == 1.0)    storageFloat["scPF_nCHadronInDr0p5"]+=1;
+                    else if(ntupleRawTree.pf_id[i] == 5.0)    storageFloat["scPF_nNHadronInDr0p5"]+=1;
+                    else                                 storageFloat["scPF_nOtherInDr0p5"]+=1;
+
+                    if(ntupleRawTree.pf_id[i] == 4.0)         storageFloat["scPF_sumPtGammaInDr0p5"]   +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtElectronInDr0p5"]+=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtCHadronInDr0p5"] +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtNHadronInDr0p5"] +=ntupleRawTree.pf_pt[i];
+                    else                                      storageFloat["scPF_sumPtOtherInDr0p5"]   +=ntupleRawTree.pf_pt[i];
+
+               }
+    }    
+
+}
+
+
 void TreeMaker::bookHistograms()
 {
-     const int   pTBins=50;
-     const float pTmin(0.0);
-     const float pTmax(50.0);
-
-     const int   etaBins=70;
-     const float etamin(-3.5);
-     const float etamax(3.5);
-
-     const int   deltaRNBins=30;
-     const float deltaRMin(0.0);
-     const float deltaRMax(3.0);
      // All sc 
      for( TString tag : {"allSC_"} )
      {
@@ -564,18 +1027,6 @@ void TreeMaker::bookHistograms()
 
 void TreeMaker::AddSCHistos(TString tag)
 { 
-     const int   pTBins=50;
-     const float pTmin(0.0);
-     const float pTmax(50.0);
-
-     const int   etaBins=70;
-     const float etamin(-3.5);
-     const float etamax(3.5);
-
-     const int   deltaRNBins=300;
-     const float deltaRMin(0.0);
-     const float deltaRMax(3.0);
-
         th1fStore[tag+"deltaR"                  ]  = new TH1F(tag + "deltaR","deltaR of sc Candidate", deltaRNBins , deltaRMin  , deltaRMax  );
         th1fStore[tag+"Eta"                     ]  = new TH1F(tag + "Eta","Eta of sc Candidate", etaBins , etamin  , etamax  );
         th1fStore[tag+"phi"                     ]  = new TH1F(tag + "phi","Phi of sc Candidate", 64 , -3.20  , 3.20  );
@@ -630,17 +1081,17 @@ void TreeMaker::AddSCHistos(TString tag)
 	    th1fStore[tag+"Full5x5_sigmaIphiIphi"	] = new TH1F(tag + "Full5x5_sigmaIphiIphi"	,   "Full5x5_sigmaIphiIphi"	, 142 ,-0.01 , 0.07 );		   	     	
 	    th1fStore[tag+"PFChIso1"		        ] = new TH1F(tag + "PFChIso1"		            ,   "PFChIso1"	, 1000 , 0.0 , 0.20 ) ; 
 	    th1fStore[tag+"PFChIso2"		        ] = new TH1F(tag + "PFChIso2"		            ,   "PFChIso2"	, 1000 , 0.0 , 0.20 ) ;	
-	    th1fStore[tag+"PFChIso"		            ] = new TH1F(tag + "PFChIso3"		            ,   "PFChIso"	, 1000 , 0.0 , 0.20 ) ;	
+	    th1fStore[tag+"PFChIso3"		            ] = new TH1F(tag + "PFChIso3"		            ,   "PFChIso3"	, 1000 , 0.0 , 0.20 ) ;	
 	    th1fStore[tag+"PFChIso4"		        ] = new TH1F(tag + "PFChIso4"		            ,   "PFChIso4"	, 1000 , 0.0 , 0.20 ) ;	
 	    th1fStore[tag+"PFChIso5"		        ] = new TH1F(tag + "PFChIso5"		            ,   "PFChIso5"	, 1000 , 0.0 , 0.20 ) ;	
 	    th1fStore[tag+"PFPhoIso1"		        ] = new TH1F(tag + "PFPhoIso1"		        ,   "PFPhoIso1"	, 1000 , 0.0 , 20.0 ) ;	
 	    th1fStore[tag+"PFPhoIso2"		        ] = new TH1F(tag + "PFPhoIso2"		        ,   "PFPhoIso2" , 1000 , 0.0 , 20.0 ) ;		
-	    th1fStore[tag+"PFPhoIso"		        ] = new TH1F(tag + "PFPhoIso3"	            ,   "PFPhoIso"  , 1000 , 0.0 , 20.0 ) ; 	
+	    th1fStore[tag+"PFPhoIso3"		        ] = new TH1F(tag + "PFPhoIso3"	            ,   "PFPhoIso3"  , 1000 , 0.0 , 20.0 ) ; 	
 	    th1fStore[tag+"PFPhoIso4"		        ] = new TH1F(tag + "PFPhoIso4"		        ,   "PFPhoIso4" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFPhoIso5"		        ] = new TH1F(tag + "PFPhoIso5"		        ,   "PFPhoIso5" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso1"		        ] = new TH1F(tag + "PFNeuIso1"		        ,   "PFNeuIso1" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso2"		        ] = new TH1F(tag + "PFNeuIso2"		        ,   "PFNeuIso2" , 1000 , 0.0 , 20.0 ) ;		
-	    th1fStore[tag+"PFNeuIso"		        ] = new TH1F(tag + "PFNeuIso3"	            ,   "PFNeuIso3" , 1000 , 0.0 , 20.0 ) ;		
+	    th1fStore[tag+"PFNeuIso3"		        ] = new TH1F(tag + "PFNeuIso3"	            ,   "PFNeuIso3" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso4"		        ] = new TH1F(tag + "PFNeuIso4"		        ,   "PFNeuIso4" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso5"		        ] = new TH1F(tag + "PFNeuIso5"		        ,   "PFNeuIso5" , 1000 , 0.0 , 20.0 ) ;		
 
@@ -718,17 +1169,17 @@ void TreeMaker::fill_scHists(Int_t scIDX,TString tag,Double_t dr)
 	    th1fStore[tag+"Full5x5_sigmaIphiIphi"	]->Fill(ntupleRawTree.scFull5x5_sigmaIphiIphi->at(scIDX)		  );
 	    th1fStore[tag+"PFChIso1"		        ]->Fill(ntupleRawTree.scPFChIso1->at(scIDX)		  );
 	    th1fStore[tag+"PFChIso2"		        ]->Fill(ntupleRawTree.scPFChIso2->at(scIDX)		  );
-	    th1fStore[tag+"PFChIso"		            ]->Fill(ntupleRawTree.scPFChIso3->at(scIDX)		  );
+	    th1fStore[tag+"PFChIso3"		            ]->Fill(ntupleRawTree.scPFChIso3->at(scIDX)		  );
 	    th1fStore[tag+"PFChIso4"		        ]->Fill(ntupleRawTree.scPFChIso4->at(scIDX)		  );
 	    th1fStore[tag+"PFChIso5"		        ]->Fill(ntupleRawTree.scPFChIso5->at(scIDX)		  );
 	    th1fStore[tag+"PFPhoIso1"		        ]->Fill(ntupleRawTree.scPFPhoIso1->at(scIDX)		  );
 	    th1fStore[tag+"PFPhoIso2"		        ]->Fill(ntupleRawTree.scPFPhoIso2->at(scIDX)		  );
-	    th1fStore[tag+"PFPhoIso"		        ]->Fill(ntupleRawTree.scPFPhoIso3->at(scIDX)		  );
+	    th1fStore[tag+"PFPhoIso3"		        ]->Fill(ntupleRawTree.scPFPhoIso3->at(scIDX)		  );
 	    th1fStore[tag+"PFPhoIso4"		        ]->Fill(ntupleRawTree.scPFPhoIso4->at(scIDX)		  );
 	    th1fStore[tag+"PFPhoIso5"		        ]->Fill(ntupleRawTree.scPFPhoIso5->at(scIDX)		  );
 	    th1fStore[tag+"PFNeuIso1"		        ]->Fill(ntupleRawTree.scPFNeuIso1->at(scIDX)		  );
 	    th1fStore[tag+"PFNeuIso2"		        ]->Fill(ntupleRawTree.scPFNeuIso2->at(scIDX)		  );             
-	    th1fStore[tag+"PFNeuIso"		        ]->Fill(ntupleRawTree.scPFNeuIso3->at(scIDX)		  );             
+	    th1fStore[tag+"PFNeuIso3"		        ]->Fill(ntupleRawTree.scPFNeuIso3->at(scIDX)		  );             
 	    th1fStore[tag+"PFNeuIso4"		        ]->Fill(ntupleRawTree.scPFNeuIso4->at(scIDX)		  );
 	    th1fStore[tag+"PFNeuIso5"		        ]->Fill(ntupleRawTree.scPFNeuIso5->at(scIDX)		  );
 }                                                       

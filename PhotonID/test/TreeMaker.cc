@@ -297,7 +297,7 @@ void TreeMaker::genParticleSCMaker()
        if (ientry_evt < 0) break;
        nb = ntupleRawTree.fChain->GetEntry(jentry);   nbytes += nb;
        
-       if(jentry%10000 == 0 )
+       if(jentry%reportEvery == 0 )
        {
              t_end = std::chrono::high_resolution_clock::now();
              std::cout<<"Processing Entry in event loop : "<<jentry<<" / "<<maxEvents<<"  [ "<<100.0*jentry/maxEvents<<"  % ]  "
@@ -409,7 +409,7 @@ void TreeMaker::genParticleBMMGSCMaker()
        if (ientry_evt < 0) break;
        nb = ntupleRawTree.fChain->GetEntry(jentry);   nbytes += nb;
        
-       if(jentry%10000 == 0 )
+       if(jentry%reportEvery == 0 )
        {
              t_end = std::chrono::high_resolution_clock::now();
              std::cout<<"Processing Entry in event loop : "<<jentry<<" / "<<maxEvents<<"  [ "<<100.0*jentry/maxEvents<<"  % ]  "
@@ -424,7 +424,7 @@ void TreeMaker::genParticleBMMGSCMaker()
        if(isMC)
        {
             if( ntupleRawTree.gen_nBsPhoton!=1 ) continue;
-            std::cout<<"Bs Gamma pt = "<<ntupleRawTree.gen_BsPhoton_pt->at(0)<<"\n";
+            //std::cout<<"Bs Gamma pt = "<<ntupleRawTree.gen_BsPhoton_pt->at(0)<<"\n";
             th1fStore["genBsGammaPt"    ]  ->Fill(ntupleRawTree.gen_BsPhoton_pt->at(0)) ;  
             th1fStore["genBsGammaEta"    ] ->Fill(ntupleRawTree.gen_BsPhoton_eta->at(0)) ;  
             th1fStore["genBsGammaphi"    ] ->Fill(ntupleRawTree.gen_BsPhoton_phi->at(0));  
@@ -559,6 +559,7 @@ void TreeMaker::AddSCTree(TString SCTreeName)
 	outSC_Tree->Branch("scPFNeuIso3"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFNeuIso4"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFNeuIso5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+    
 
     storageFloat["scClusterECAL_nClusInDr0p1"]=0;
 	outSC_Tree->Branch("scClusterECAL_nClusInDr0p1"		,&storageFloat["scClusterECAL_nClusInDr0p1"]);
@@ -582,9 +583,9 @@ void TreeMaker::AddSCTree(TString SCTreeName)
 	outSC_Tree->Branch("scClusterECAL_sumSizesInDr0p5"		,&storageFloat["scClusterECAL_sumSizesInDr0p5"]);
 
     storageFloat["scClusterECAL_closestClusDr"]=0;
-	outSC_Tree->Branch("scClusterECAL_closestClusDr"		,&storageFloat["scClusterECAL_closest3ClusDr"]);
+	outSC_Tree->Branch("scClusterECAL_closestClusDr"		,&storageFloat["scClusterECAL_closestClusDr"]);
     storageFloat["scClusterECAL_closest2ClusDr"]=0;
-	outSC_Tree->Branch("scClusterECAL_closest2ClusDr"		,&storageFloat["scClusterECAL_closest3ClusDr"]);
+	outSC_Tree->Branch("scClusterECAL_closest2ClusDr"		,&storageFloat["scClusterECAL_closest2ClusDr"]);
     storageFloat["scClusterECAL_closest3ClusDr"]=0;
 	outSC_Tree->Branch("scClusterECAL_closest3ClusDr"		,&storageFloat["scClusterECAL_closest3ClusDr"]);
 
@@ -610,9 +611,9 @@ void TreeMaker::AddSCTree(TString SCTreeName)
 	outSC_Tree->Branch("scClusterHCAL_sumSizesInDr0p5"		,&storageFloat["scClusterHCAL_sumSizesInDr0p5"]);
 
     storageFloat["scClusterHCAL_closestClusDr"]=0;
-	outSC_Tree->Branch("scClusterHCAL_closestClusDr"		,&storageFloat["scClusterHCAL_closest3ClusDr"]);
+	outSC_Tree->Branch("scClusterHCAL_closestClusDr"		,&storageFloat["scClusterHCAL_closestClusDr"]);
     storageFloat["scClusterHCAL_closest2ClusDr"]=0;
-	outSC_Tree->Branch("scClusterHCAL_closest2ClusDr"		,&storageFloat["scClusterHCAL_closest3ClusDr"]);
+	outSC_Tree->Branch("scClusterHCAL_closest2ClusDr"		,&storageFloat["scClusterHCAL_closest2ClusDr"]);
     storageFloat["scClusterHCAL_closest3ClusDr"]=0;
 	outSC_Tree->Branch("scClusterHCAL_closest3ClusDr"		,&storageFloat["scClusterHCAL_closest3ClusDr"]);
     
@@ -681,6 +682,14 @@ void TreeMaker::AddSCTree(TString SCTreeName)
 	outSC_Tree->Branch("scPF_sumPtElectronInDr0p5"		,&storageFloat["scPF_sumPtElectronInDr0p5"]);
     storageFloat["scPF_sumPtOtherInDr0p5"]=0;
 	outSC_Tree->Branch("scPF_sumPtOtherInDr0p5"		,&storageFloat["scPF_sumPtOtherInDr0p5"]);
+    
+    storageArrayDoubleMap["scECAL_energyMatrix"]=new Float_t[25];	
+    outSC_Tree->Branch("scECAL_energyMatrix" ,storageArrayDoubleMap["scECAL_energyMatrix"],"scECAL_energyAtlas[25]/F");
+    
+    //storageArrayDoubleMap["scECAL_energyAtlas"]=new Float_t[25];	
+    //outSC_Tree->Branch("scECAL_energyAtlas" ,storageArrayDoubleMap["scECAL_energyAtlas"],"scECAL_energyAtlas[25]/F");
+    //storageArrayDoubleMap["scHCAL_energyAtlas"]=new Float_t[25];	
+    //outSC_Tree->Branch("scECAL_energyAtlas" ,storageArrayDoubleMap["scECAL_energyAtlas"],"scECAL_energyAtlas25]/F");
 
     treeStore[SCTreeName]=outSC_Tree;
 }
@@ -756,13 +765,13 @@ void TreeMaker::fillSCVariablesToOutTree(Int_t scIDX,TString SCTreeName)
 	storageArrayDouble[idx + offset ] =ntupleRawTree.scPFNeuIso4->at(scIDX)		  ;idx+=1 ;
 	storageArrayDouble[idx + offset ] =ntupleRawTree.scPFNeuIso5->at(scIDX)		  ;idx+=1 ;
     
-    fillECALClusterVariables(scIDX);
-    fillHCALClusterVariables(scIDX);
-
+    AssignECALClusterVariables(scIDX);
+    AssignHCALClusterVariables(scIDX);
+    AssignPFVariables(scIDX);
     treeStore[SCTreeName]->Fill();
 }
 
-void TreeMaker::fillECALClusterVariables(Int_t scIDX)
+void TreeMaker::AssignECALClusterVariables(Int_t scIDX)
 {   
     storageFloat["scClusterECAL_nClusInDr0p1"]=0;
     storageFloat["scClusterECAL_nClusInDr0p3"]=0;
@@ -793,6 +802,23 @@ void TreeMaker::fillECALClusterVariables(Int_t scIDX)
                     closesestClusDr[1]=closesestClusDr[0];
                     closesestClusDr[0]=dr;
                }
+               else if(dr< closesestClusDr[1])
+               {
+                    closesestClusDr[3]=closesestClusDr[2];
+                    closesestClusDr[2]=closesestClusDr[1];
+                    closesestClusDr[1]=dr;
+               }
+               else if(dr< closesestClusDr[2])
+               {
+                    closesestClusDr[3]=closesestClusDr[2];
+                    closesestClusDr[2]=dr;
+               }
+               else if(dr< closesestClusDr[3])
+               {
+                    closesestClusDr[3]=dr;
+               }
+    
+
 
                if(dr<0.1)
                {
@@ -835,16 +861,26 @@ void TreeMaker::fillECALClusterVariables(Int_t scIDX)
               storageFloat["scClusterECAL_sumPtInDr0p5"]-=ntupleRawTree.clusterECAL_pt[matchIdx];
               storageFloat["scClusterECAL_sumSizesInDr0p5"]-=ntupleRawTree.clusterECAL_size[matchIdx];
               offset=1;
+              for(Int_t i=0;i< 25;i++)
+              {
+                    storageArrayDoubleMap["scECAL_energyMatrix"][i]=ntupleRawTree.clusterECAL_energyMatrix[matchIdx*25+i];
+              }
+    }
+    else{
+              for(Int_t i=0;i< 25;i++)
+              {
+                    storageArrayDoubleMap["scECAL_energyMatrix"][i]=-1.0;
+              }
     }
     
     storageFloat["scClusterECAL_closestClusDr"]  = closesestClusDr[0 + offset];
     storageFloat["scClusterECAL_closest2ClusDr"] = closesestClusDr[1 + offset];
     storageFloat["scClusterECAL_closest3ClusDr"] = closesestClusDr[2 + offset];
-    std::cout<<"drMin for the scIdx="<<scIDX<<"  = "<<drMin<<"\n";
+ //   std::cout<<"drMin for the scIdx="<<scIDX<<"  = "<<drMin<<"\n";
 
 }
 
-void TreeMaker::fillHCALClusterVariables(Int_t scIDX)
+void TreeMaker::AssignHCALClusterVariables(Int_t scIDX)
 {   
     storageFloat["scClusterHCAL_nClusInDr0p1"]=0;
     storageFloat["scClusterHCAL_nClusInDr0p3"]=0;
@@ -875,6 +911,22 @@ void TreeMaker::fillHCALClusterVariables(Int_t scIDX)
                     closesestClusDr[1]=closesestClusDr[0];
                     closesestClusDr[0]=dr;
                }
+               else if(dr< closesestClusDr[1])
+               {
+                    closesestClusDr[3]=closesestClusDr[2];
+                    closesestClusDr[2]=closesestClusDr[1];
+                    closesestClusDr[1]=dr;
+               }
+               else if(dr< closesestClusDr[2])
+               {
+                    closesestClusDr[3]=closesestClusDr[2];
+                    closesestClusDr[2]=dr;
+               }
+               else if(dr< closesestClusDr[3])
+               {
+                    closesestClusDr[3]=dr;
+               }
+    
 
                if(dr<0.1)
                {
@@ -901,7 +953,7 @@ void TreeMaker::fillHCALClusterVariables(Int_t scIDX)
                     matchIdx=i;
                     drMin=dr;
                }
-    }    
+    }
 
     storageFloat["scClusterHCAL_closestClusDr"]  = closesestClusDr[0 ];
     storageFloat["scClusterHCAL_closest2ClusDr"] = closesestClusDr[1 ];
@@ -909,7 +961,7 @@ void TreeMaker::fillHCALClusterVariables(Int_t scIDX)
 }
 
 
-void TreeMaker::fillPFVariables()
+void TreeMaker::AssignPFVariables( Int_t scIDX  )
 {
     storageFloat["scPF_nGammaInDr0p1"]=0;
     storageFloat["scPF_nEleGammaInDr0p1"]=0;
@@ -949,8 +1001,8 @@ void TreeMaker::fillPFVariables()
     Float_t eta0(ntupleRawTree.scEta->at(scIDX));
     Float_t phi0(ntupleRawTree.scPhi->at(scIDX));
     Float_t dr;
-    for(Int_t i =0;i< ntupleRawTree.nHCALClusters;i++)
-    {
+    for(Int_t i =0;i< ntupleRawTree.nPFCandidates;i++)
+    {   
                dr=getDR(eta0,phi0,ntupleRawTree.pf_eta[i],ntupleRawTree.pf_phi[i]);
                if(dr<0.1)
                {
@@ -961,9 +1013,9 @@ void TreeMaker::fillPFVariables()
                     else                                 storageFloat["scPF_nOtherInDr0p1"]+=1;
 
                     if(ntupleRawTree.pf_id[i] == 4.0)         storageFloat["scPF_sumPtGammaInDr0p1"]   +=ntupleRawTree.pf_pt[i];
-                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtElectronInDr0p1"]+=ntupleRawTree.pf_pt[i];
-                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtCHadronInDr0p1"] +=ntupleRawTree.pf_pt[i];
-                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtNHadronInDr0p1"] +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 2.0)    storageFloat["scPF_sumPtElectronInDr0p1"]+=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 1.0)    storageFloat["scPF_sumPtCHadronInDr0p1"] +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 5.0)    storageFloat["scPF_sumPtNHadronInDr0p1"] +=ntupleRawTree.pf_pt[i];
                     else                                      storageFloat["scPF_sumPtOtherInDr0p1"]   +=ntupleRawTree.pf_pt[i];
                }
 
@@ -976,9 +1028,9 @@ void TreeMaker::fillPFVariables()
                     else                                 storageFloat["scPF_nOtherInDr0p3"]+=1;
 
                     if(ntupleRawTree.pf_id[i] == 4.0)         storageFloat["scPF_sumPtGammaInDr0p3"]   +=ntupleRawTree.pf_pt[i];
-                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtElectronInDr0p3"]+=ntupleRawTree.pf_pt[i];
-                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtCHadronInDr0p3"] +=ntupleRawTree.pf_pt[i];
-                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtNHadronInDr0p3"] +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 2.0)    storageFloat["scPF_sumPtElectronInDr0p3"]+=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 1.0)    storageFloat["scPF_sumPtCHadronInDr0p3"] +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 5.0)    storageFloat["scPF_sumPtNHadronInDr0p3"] +=ntupleRawTree.pf_pt[i];
                     else                                      storageFloat["scPF_sumPtOtherInDr0p3"]   +=ntupleRawTree.pf_pt[i];
 
 
@@ -993,9 +1045,9 @@ void TreeMaker::fillPFVariables()
                     else                                 storageFloat["scPF_nOtherInDr0p5"]+=1;
 
                     if(ntupleRawTree.pf_id[i] == 4.0)         storageFloat["scPF_sumPtGammaInDr0p5"]   +=ntupleRawTree.pf_pt[i];
-                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtElectronInDr0p5"]+=ntupleRawTree.pf_pt[i];
-                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtCHadronInDr0p5"] +=ntupleRawTree.pf_pt[i];
-                    else if(ntupleRawTree.pf_id[i] == 4.0)    storageFloat["scPF_sumPtNHadronInDr0p5"] +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 2.0)    storageFloat["scPF_sumPtElectronInDr0p5"]+=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 1.0)    storageFloat["scPF_sumPtCHadronInDr0p5"] +=ntupleRawTree.pf_pt[i];
+                    else if(ntupleRawTree.pf_id[i] == 5.0)    storageFloat["scPF_sumPtNHadronInDr0p5"] +=ntupleRawTree.pf_pt[i];
                     else                                      storageFloat["scPF_sumPtOtherInDr0p5"]   +=ntupleRawTree.pf_pt[i];
 
                }
@@ -1079,14 +1131,14 @@ void TreeMaker::AddSCHistos(TString tag)
 	    th1fStore[tag+"Full5x5_sigmaIetaIeta"	] = new TH1F(tag + "Full5x5_sigmaIetaIeta"	,   "Full5x5_sigmaIetaIeta" , 184 ,-0.001,0.045);  		  		     	
 	    th1fStore[tag+"Full5x5_sigmaIetaIphi"	] = new TH1F(tag + "Full5x5_sigmaIetaIphi"	,   "Full5x5_sigmaIetaIphi"	, 800 , -0.0008, 0.0008);			     	
 	    th1fStore[tag+"Full5x5_sigmaIphiIphi"	] = new TH1F(tag + "Full5x5_sigmaIphiIphi"	,   "Full5x5_sigmaIphiIphi"	, 142 ,-0.01 , 0.07 );		   	     	
-	    th1fStore[tag+"PFChIso1"		        ] = new TH1F(tag + "PFChIso1"		            ,   "PFChIso1"	, 1000 , 0.0 , 0.20 ) ; 
-	    th1fStore[tag+"PFChIso2"		        ] = new TH1F(tag + "PFChIso2"		            ,   "PFChIso2"	, 1000 , 0.0 , 0.20 ) ;	
-	    th1fStore[tag+"PFChIso3"		            ] = new TH1F(tag + "PFChIso3"		            ,   "PFChIso3"	, 1000 , 0.0 , 0.20 ) ;	
-	    th1fStore[tag+"PFChIso4"		        ] = new TH1F(tag + "PFChIso4"		            ,   "PFChIso4"	, 1000 , 0.0 , 0.20 ) ;	
-	    th1fStore[tag+"PFChIso5"		        ] = new TH1F(tag + "PFChIso5"		            ,   "PFChIso5"	, 1000 , 0.0 , 0.20 ) ;	
+	    th1fStore[tag+"PFChIso1"		        ] = new TH1F(tag + "PFChIso1"		        ,   "PFChIso1"	, 1000 , 0.0 , 40.0 ) ; 
+	    th1fStore[tag+"PFChIso2"		        ] = new TH1F(tag + "PFChIso2"		        ,   "PFChIso2"	, 1000 , 0.0 , 40.0 ) ;	
+	    th1fStore[tag+"PFChIso3"		        ] = new TH1F(tag + "PFChIso3"		        ,   "PFChIso3"	, 1000 , 0.0 , 60.0 ) ;	
+	    th1fStore[tag+"PFChIso4"		        ] = new TH1F(tag + "PFChIso4"		        ,   "PFChIso4"	, 1000 , 0.0 , 60.0 ) ;	
+	    th1fStore[tag+"PFChIso5"		        ] = new TH1F(tag + "PFChIso5"		        ,   "PFChIso5"	, 1000 , 0.0 , 80.0 ) ;	
 	    th1fStore[tag+"PFPhoIso1"		        ] = new TH1F(tag + "PFPhoIso1"		        ,   "PFPhoIso1"	, 1000 , 0.0 , 20.0 ) ;	
 	    th1fStore[tag+"PFPhoIso2"		        ] = new TH1F(tag + "PFPhoIso2"		        ,   "PFPhoIso2" , 1000 , 0.0 , 20.0 ) ;		
-	    th1fStore[tag+"PFPhoIso3"		        ] = new TH1F(tag + "PFPhoIso3"	            ,   "PFPhoIso3"  , 1000 , 0.0 , 20.0 ) ; 	
+	    th1fStore[tag+"PFPhoIso3"		        ] = new TH1F(tag + "PFPhoIso3"	            ,   "PFPhoIso3" , 1000 , 0.0 , 20.0 ) ; 	
 	    th1fStore[tag+"PFPhoIso4"		        ] = new TH1F(tag + "PFPhoIso4"		        ,   "PFPhoIso4" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFPhoIso5"		        ] = new TH1F(tag + "PFPhoIso5"		        ,   "PFPhoIso5" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso1"		        ] = new TH1F(tag + "PFNeuIso1"		        ,   "PFNeuIso1" , 1000 , 0.0 , 20.0 ) ;		
@@ -1094,6 +1146,68 @@ void TreeMaker::AddSCHistos(TString tag)
 	    th1fStore[tag+"PFNeuIso3"		        ] = new TH1F(tag + "PFNeuIso3"	            ,   "PFNeuIso3" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso4"		        ] = new TH1F(tag + "PFNeuIso4"		        ,   "PFNeuIso4" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso5"		        ] = new TH1F(tag + "PFNeuIso5"		        ,   "PFNeuIso5" , 1000 , 0.0 , 20.0 ) ;		
+	    
+        th1fStore[tag+"ClusterECAL_nClusInDr0p1"	]        = new TH1F(tag + "ClusterECAL_nClusInDr0p1",   "ClusterECAL_nClusInDr0p1" , 30 , -0.5 , 29.5 ) ;		
+        th1fStore[tag+"ClusterECAL_nClusInDr0p3"	]        = new TH1F(tag + "ClusterECAL_nClusInDr0p3",   "ClusterECAL_nClusInDr0p3" , 30 , -0.5 , 29.5 ) ;		
+        th1fStore[tag+"ClusterECAL_nClusInDr0p5"	]        = new TH1F(tag + "ClusterECAL_nClusInDr0p5",   "ClusterECAL_nClusInDr0p5" , 30 , -0.5 , 29.5 ) ;		
+        th1fStore[tag+"ClusterECAL_sumPtInDr0p1"	]        = new TH1F(tag + "ClusterECAL_sumPtInDr0p1",   "ClusterECAL_sumPtInDr0p1" , 400 , -0.05 , 39.95 ) ;		
+        th1fStore[tag+"ClusterECAL_sumPtInDr0p3"	]        = new TH1F(tag + "ClusterECAL_sumPtInDr0p3",   "ClusterECAL_sumPtInDr0p3" , 400 , -0.05 , 39.95 ) ;		
+        th1fStore[tag+"ClusterECAL_sumPtInDr0p5"	]        = new TH1F(tag + "ClusterECAL_sumPtInDr0p5",   "ClusterECAL_sumPtInDr0p5" , 400 , -0.05 , 39.95 ) ;		
+        th1fStore[tag+"ClusterECAL_sumSizesInDr0p1"	]        = new TH1F(tag + "ClusterECAL_sumSizesInDr0p1",   "ClusterECAL_sumSizesInDr0p1" , 70 , -0.5 , 69.5 ) ;		
+        th1fStore[tag+"ClusterECAL_sumSizesInDr0p3"	]        = new TH1F(tag + "ClusterECAL_sumSizesInDr0p3",   "ClusterECAL_sumSizesInDr0p3" , 70 , -0.5 , 69.5 ) ;		
+        th1fStore[tag+"ClusterECAL_sumSizesInDr0p5"	]        = new TH1F(tag + "ClusterECAL_sumSizesInDr0p5",   "ClusterECAL_sumSizesInDr0p5" , 70 , -0.5 , 69.5 ) ;		
+        th1fStore[tag+"ClusterECAL_closestClusDr"	]        = new TH1F(tag + "ClusterECAL_closestClusDr",   "ClusterECAL_closestClusDr" , 200 , 0.0 , 2.0 ) ;		
+        th1fStore[tag+"ClusterECAL_closest2ClusDr"	]        = new TH1F(tag + "ClusterECAL_closest2ClusDr",   "ClusterECAL_closest2ClusDr" , 200 , 0.0 , 2.0 ) ;		
+        th1fStore[tag+"ClusterECAL_closest3ClusDr"	]        = new TH1F(tag + "ClusterECAL_closest3ClusDr",   "ClusterECAL_closest3ClusDr" , 200 , 0.0 , 2.0 ) ;		
+
+        th1fStore[tag+"ClusterHCAL_nClusInDr0p1"	]        = new TH1F(tag + "ClusterHCAL_nClusInDr0p1",   "ClusterHCAL_nClusInDr0p1" , 30 , -0.5 , 29.5 ) ;		
+        th1fStore[tag+"ClusterHCAL_nClusInDr0p3"	]        = new TH1F(tag + "ClusterHCAL_nClusInDr0p3",   "ClusterHCAL_nClusInDr0p3" , 30 , -0.5 , 29.5 ) ;		
+        th1fStore[tag+"ClusterHCAL_nClusInDr0p5"	]        = new TH1F(tag + "ClusterHCAL_nClusInDr0p5",   "ClusterHCAL_nClusInDr0p5" , 30 , -0.5 , 29.5 ) ;		
+        th1fStore[tag+"ClusterHCAL_sumPtInDr0p1"	]        = new TH1F(tag + "ClusterHCAL_sumPtInDr0p1",   "ClusterHCAL_sumPtInDr0p1" , 400 , -0.05 , 39.95 ) ;		
+        th1fStore[tag+"ClusterHCAL_sumPtInDr0p3"	]        = new TH1F(tag + "ClusterHCAL_sumPtInDr0p3",   "ClusterHCAL_sumPtInDr0p3" , 400 , -0.05 , 39.95 ) ;		
+        th1fStore[tag+"ClusterHCAL_sumPtInDr0p5"	]        = new TH1F(tag + "ClusterHCAL_sumPtInDr0p5",   "ClusterHCAL_sumPtInDr0p5" , 400 , -0.05 , 39.95 ) ;		
+        th1fStore[tag+"ClusterHCAL_sumSizesInDr0p1"	]        = new TH1F(tag + "ClusterHCAL_sumSizesInDr0p1",   "ClusterHCAL_sumSizesInDr0p1" , 70 , -0.5 , 69.5 ) ;		
+        th1fStore[tag+"ClusterHCAL_sumSizesInDr0p3"	]        = new TH1F(tag + "ClusterHCAL_sumSizesInDr0p3",   "ClusterHCAL_sumSizesInDr0p3" , 70 , -0.5 , 69.5 ) ;		
+        th1fStore[tag+"ClusterHCAL_sumSizesInDr0p5"	]        = new TH1F(tag + "ClusterHCAL_sumSizesInDr0p5",   "ClusterHCAL_sumSizesInDr0p5" , 70 , -0.5 , 69.5 ) ;		
+        th1fStore[tag+"ClusterHCAL_closestClusDr"	]        = new TH1F(tag + "ClusterHCAL_closestClusDr",   "ClusterHCAL_closestClusDr" , 200 , 0.0 , 2.0 ) ;		
+        th1fStore[tag+"ClusterHCAL_closest2ClusDr"	]        = new TH1F(tag + "ClusterHCAL_closest2ClusDr",   "ClusterHCAL_closest2ClusDr" , 200 , 0.0 , 2.0 ) ;		
+        th1fStore[tag+"ClusterHCAL_closest3ClusDr"	]        = new TH1F(tag + "ClusterHCAL_closest3ClusDr",   "ClusterHCAL_closest3ClusDr" , 200 , 0.0 , 2.0 ) ;		
+
+        th1fStore[tag+"PF_nGammaInDr0p1"]                     = new TH1F(tag + "PF_nGammaInDr0p1",   "PF_nGammaInDr0p1" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_nGammaInDr0p3"]                     = new TH1F(tag + "PF_nGammaInDr0p3",   "PF_nGammaInDr0p3" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_nGammaInDr0p5"]                     = new TH1F(tag + "PF_nGammaInDr0p5",   "PF_nGammaInDr0p5" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_sumPtGammaInDr0p1"]                     = new TH1F(tag + "PF_sumPtGammaInDr0p1",   "PF_sumPtGammaInDr0p1" , 400 , 0.0,40.0) ;		     
+        th1fStore[tag+"PF_sumPtGammaInDr0p3"]                     = new TH1F(tag + "PF_sumPtGammaInDr0p3",   "PF_sumPtGammaInDr0p3" , 400 , 0.0,40.0) ;		     
+        th1fStore[tag+"PF_sumPtGammaInDr0p5"]                     = new TH1F(tag + "PF_sumPtGammaInDr0p5",   "PF_sumPtGammaInDr0p5" , 400 , 0.0,40.0) ;		     
+
+        th1fStore[tag+"PF_nCHadronInDr0p1"]                     = new TH1F(tag + "PF_nCHadronInDr0p1",   "PF_nCHadronInDr0p1" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_nCHadronInDr0p3"]                     = new TH1F(tag + "PF_nCHadronInDr0p3",   "PF_nCHadronInDr0p3" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_nCHadronInDr0p5"]                     = new TH1F(tag + "PF_nCHadronInDr0p5",   "PF_nCHadronInDr0p5" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_sumPtCHadronInDr0p1"]                     = new TH1F(tag + "PF_sumPtCHadronInDr0p1",   "PF_sumPtCHadronInDr0p1" , 400 , 0.0,40.0) ;		     
+        th1fStore[tag+"PF_sumPtCHadronInDr0p3"]                     = new TH1F(tag + "PF_sumPtCHadronInDr0p3",   "PF_sumPtCHadronInDr0p3" , 400 , 0.0,40.0) ;		     
+        th1fStore[tag+"PF_sumPtCHadronInDr0p5"]                     = new TH1F(tag + "PF_sumPtCHadronInDr0p5",   "PF_sumPtCHadronInDr0p5" , 400 , 0.0,40.0) ;		     
+
+        th1fStore[tag+"PF_nNHadronInDr0p1"]                     = new TH1F(tag + "PF_nNHadronInDr0p1",   "PF_nNHadronInDr0p1" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_nNHadronInDr0p3"]                     = new TH1F(tag + "PF_nNHadronInDr0p3",   "PF_nNHadronInDr0p3" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_nNHadronInDr0p5"]                     = new TH1F(tag + "PF_nNHadronInDr0p5",   "PF_nNHadronInDr0p5" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_sumPtNHadronInDr0p1"]                     = new TH1F(tag + "PF_sumPtNHadronInDr0p1",   "PF_sumPtNHadronInDr0p1" , 400 , 0.0,40.0) ;		     
+        th1fStore[tag+"PF_sumPtNHadronInDr0p3"]                     = new TH1F(tag + "PF_sumPtNHadronInDr0p3",   "PF_sumPtNHadronInDr0p3" , 400 , 0.0,40.0) ;		     
+        th1fStore[tag+"PF_sumPtNHadronInDr0p5"]                     = new TH1F(tag + "PF_sumPtNHadronInDr0p5",   "PF_sumPtNHadronInDr0p5" , 400 , 0.0,40.0) ;		     
+        
+        th1fStore[tag+"PF_nElectronInDr0p1"]                     = new TH1F(tag + "PF_nElectronInDr0p1",   "PF_nElectronInDr0p1" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_nElectronInDr0p3"]                     = new TH1F(tag + "PF_nElectronInDr0p3",   "PF_nElectronInDr0p3" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_nElectronInDr0p5"]                     = new TH1F(tag + "PF_nElectronInDr0p5",   "PF_nElectronInDr0p5" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_sumPtElectronInDr0p1"]                     = new TH1F(tag + "PF_sumPtElectronInDr0p1",   "PF_sumPtElectronInDr0p1" , 400 , 0.0,40.0) ;		     
+        th1fStore[tag+"PF_sumPtElectronInDr0p3"]                     = new TH1F(tag + "PF_sumPtElectronInDr0p3",   "PF_sumPtElectronInDr0p3" , 400 , 0.0,40.0) ;		     
+        th1fStore[tag+"PF_sumPtElectronInDr0p5"]                     = new TH1F(tag + "PF_sumPtElectronInDr0p5",   "PF_sumPtElectronInDr0p5" , 400 , 0.0,40.0) ;		     
+        
+        th1fStore[tag+"PF_nOtherInDr0p1"]                     = new TH1F(tag + "PF_nOtherInDr0p1",   "PF_nOtherInDr0p1" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_nOtherInDr0p3"]                     = new TH1F(tag + "PF_nOtherInDr0p3",   "PF_nOtherInDr0p3" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_nOtherInDr0p5"]                     = new TH1F(tag + "PF_nOtherInDr0p5",   "PF_nOtherInDr0p5" , 30 , -0.5 , 29.5 ) ;		     
+        th1fStore[tag+"PF_sumPtOtherInDr0p1"]                     = new TH1F(tag + "PF_sumPtOtherInDr0p1",   "PF_sumPtOtherInDr0p1" , 400 , 0.0,40.0) ;		     
+        th1fStore[tag+"PF_sumPtOtherInDr0p3"]                     = new TH1F(tag + "PF_sumPtOtherInDr0p3",   "PF_sumPtOtherInDr0p3" , 400 , 0.0,40.0) ;		     
+        th1fStore[tag+"PF_sumPtOtherInDr0p5"]                     = new TH1F(tag + "PF_sumPtOtherInDr0p5",   "PF_sumPtOtherInDr0p5" , 400 , 0.0,40.0) ;		     
+
 
 
 }
@@ -1169,7 +1283,7 @@ void TreeMaker::fill_scHists(Int_t scIDX,TString tag,Double_t dr)
 	    th1fStore[tag+"Full5x5_sigmaIphiIphi"	]->Fill(ntupleRawTree.scFull5x5_sigmaIphiIphi->at(scIDX)		  );
 	    th1fStore[tag+"PFChIso1"		        ]->Fill(ntupleRawTree.scPFChIso1->at(scIDX)		  );
 	    th1fStore[tag+"PFChIso2"		        ]->Fill(ntupleRawTree.scPFChIso2->at(scIDX)		  );
-	    th1fStore[tag+"PFChIso3"		            ]->Fill(ntupleRawTree.scPFChIso3->at(scIDX)		  );
+	    th1fStore[tag+"PFChIso3"		        ]->Fill(ntupleRawTree.scPFChIso3->at(scIDX)		  );
 	    th1fStore[tag+"PFChIso4"		        ]->Fill(ntupleRawTree.scPFChIso4->at(scIDX)		  );
 	    th1fStore[tag+"PFChIso5"		        ]->Fill(ntupleRawTree.scPFChIso5->at(scIDX)		  );
 	    th1fStore[tag+"PFPhoIso1"		        ]->Fill(ntupleRawTree.scPFPhoIso1->at(scIDX)		  );
@@ -1182,5 +1296,71 @@ void TreeMaker::fill_scHists(Int_t scIDX,TString tag,Double_t dr)
 	    th1fStore[tag+"PFNeuIso3"		        ]->Fill(ntupleRawTree.scPFNeuIso3->at(scIDX)		  );             
 	    th1fStore[tag+"PFNeuIso4"		        ]->Fill(ntupleRawTree.scPFNeuIso4->at(scIDX)		  );
 	    th1fStore[tag+"PFNeuIso5"		        ]->Fill(ntupleRawTree.scPFNeuIso5->at(scIDX)		  );
+        
+        AssignECALClusterVariables(scIDX);
+        AssignHCALClusterVariables(scIDX);
+        AssignPFVariables(scIDX);
+
+        th1fStore[tag+"ClusterECAL_nClusInDr0p1"	]        ->Fill(storageFloat[ "scClusterECAL_nClusInDr0p1"	 ]  );
+        th1fStore[tag+"ClusterECAL_nClusInDr0p3"	]        ->Fill(storageFloat[ "scClusterECAL_nClusInDr0p3"	 ]  );
+        th1fStore[tag+"ClusterECAL_nClusInDr0p5"	]        ->Fill(storageFloat[ "scClusterECAL_nClusInDr0p5"	 ]  );
+        th1fStore[tag+"ClusterECAL_sumPtInDr0p1"	]        ->Fill(storageFloat[ "scClusterECAL_sumPtInDr0p1"	 ]  );
+        th1fStore[tag+"ClusterECAL_sumPtInDr0p3"	]        ->Fill(storageFloat[ "scClusterECAL_sumPtInDr0p3"	 ]  );
+        th1fStore[tag+"ClusterECAL_sumPtInDr0p5"	]        ->Fill(storageFloat[ "scClusterECAL_sumPtInDr0p5"	 ]  );
+        th1fStore[tag+"ClusterECAL_sumSizesInDr0p1"	]        ->Fill(storageFloat[ "scClusterECAL_sumSizesInDr0p1"	 ]  );
+        th1fStore[tag+"ClusterECAL_sumSizesInDr0p3"	]        ->Fill(storageFloat[ "scClusterECAL_sumSizesInDr0p3"	 ]  );
+        th1fStore[tag+"ClusterECAL_sumSizesInDr0p5"	]        ->Fill(storageFloat[ "scClusterECAL_sumSizesInDr0p5"	 ]  );
+        th1fStore[tag+"ClusterECAL_closestClusDr"	]        ->Fill(storageFloat[ "scClusterECAL_closestClusDr"	 ]  );
+        th1fStore[tag+"ClusterECAL_closest2ClusDr"	]        ->Fill(storageFloat[ "scClusterECAL_closest2ClusDr"	 ]  );
+        th1fStore[tag+"ClusterECAL_closest3ClusDr"	]        ->Fill(storageFloat[ "scClusterECAL_closest3ClusDr"	 ]  );
+        
+        th1fStore[tag+"ClusterHCAL_nClusInDr0p1"	]        ->Fill(storageFloat[ "scClusterHCAL_nClusInDr0p1"	 ]  );
+        th1fStore[tag+"ClusterHCAL_nClusInDr0p3"	]        ->Fill(storageFloat[ "scClusterHCAL_nClusInDr0p3"	 ]  );
+        th1fStore[tag+"ClusterHCAL_nClusInDr0p5"	]        ->Fill(storageFloat[ "scClusterHCAL_nClusInDr0p5"	 ]  );
+        th1fStore[tag+"ClusterHCAL_sumPtInDr0p1"	]        ->Fill(storageFloat[ "scClusterHCAL_sumPtInDr0p1"	 ]  );
+        th1fStore[tag+"ClusterHCAL_sumPtInDr0p3"	]        ->Fill(storageFloat[ "scClusterHCAL_sumPtInDr0p3"	 ]  );
+        th1fStore[tag+"ClusterHCAL_sumPtInDr0p5"	]        ->Fill(storageFloat[ "scClusterHCAL_sumPtInDr0p5"	 ]  );
+        th1fStore[tag+"ClusterHCAL_sumSizesInDr0p1"	]        ->Fill(storageFloat[ "scClusterHCAL_sumSizesInDr0p1"	 ]  );
+        th1fStore[tag+"ClusterHCAL_sumSizesInDr0p3"	]        ->Fill(storageFloat[ "scClusterHCAL_sumSizesInDr0p3"	 ]  );
+        th1fStore[tag+"ClusterHCAL_sumSizesInDr0p5"	]        ->Fill(storageFloat[ "scClusterHCAL_sumSizesInDr0p5"	 ]  );
+        th1fStore[tag+"ClusterHCAL_closestClusDr"	]        ->Fill(storageFloat[ "scClusterHCAL_closestClusDr"	 ]  );
+        th1fStore[tag+"ClusterHCAL_closest2ClusDr"	]        ->Fill(storageFloat[ "scClusterHCAL_closest2ClusDr"	 ]  );
+        th1fStore[tag+"ClusterHCAL_closest3ClusDr"	]        ->Fill(storageFloat[ "scClusterHCAL_closest3ClusDr"	 ]  );
+
+        th1fStore[tag+"PF_nGammaInDr0p1"        ]                   ->Fill(storageFloat[ "scPF_nGammaInDr0p1"         ]  );
+        th1fStore[tag+"PF_nGammaInDr0p3"        ]                   ->Fill(storageFloat[ "scPF_nGammaInDr0p3"         ]  );
+        th1fStore[tag+"PF_nGammaInDr0p5"        ]                   ->Fill(storageFloat[ "scPF_nGammaInDr0p5"         ]  );
+        th1fStore[tag+"PF_sumPtGammaInDr0p1"    ]                   ->Fill(storageFloat[ "scPF_sumPtGammaInDr0p1"     ]  );
+        th1fStore[tag+"PF_sumPtGammaInDr0p3"    ]                   ->Fill(storageFloat[ "scPF_sumPtGammaInDr0p3"     ]  );
+        th1fStore[tag+"PF_sumPtGammaInDr0p5"    ]                   ->Fill(storageFloat[ "scPF_sumPtGammaInDr0p5"     ]  );
+                                                                                                                   
+        th1fStore[tag+"PF_nCHadronInDr0p1"      ]                   ->Fill(storageFloat[ "scPF_nCHadronInDr0p1"       ]  );
+        th1fStore[tag+"PF_nCHadronInDr0p3"      ]                   ->Fill(storageFloat[ "scPF_nCHadronInDr0p3"       ]  );
+        th1fStore[tag+"PF_nCHadronInDr0p5"      ]                   ->Fill(storageFloat[ "scPF_nCHadronInDr0p5"       ]  );
+        th1fStore[tag+"PF_sumPtCHadronInDr0p1"  ]                   ->Fill(storageFloat[ "scPF_sumPtCHadronInDr0p1"   ]  );
+        th1fStore[tag+"PF_sumPtCHadronInDr0p3"  ]                   ->Fill(storageFloat[ "scPF_sumPtCHadronInDr0p3"   ]  );
+        th1fStore[tag+"PF_sumPtCHadronInDr0p5"  ]                   ->Fill(storageFloat[ "scPF_sumPtCHadronInDr0p5"   ]  );
+                                                                                                                   
+        th1fStore[tag+"PF_nNHadronInDr0p1"      ]                   ->Fill(storageFloat[ "scPF_nNHadronInDr0p1"       ]  );
+        th1fStore[tag+"PF_nNHadronInDr0p3"      ]                   ->Fill(storageFloat[ "scPF_nNHadronInDr0p3"       ]  );
+        th1fStore[tag+"PF_nNHadronInDr0p5"      ]                   ->Fill(storageFloat[ "scPF_nNHadronInDr0p5"       ]  );
+        th1fStore[tag+"PF_sumPtNHadronInDr0p1"  ]                   ->Fill(storageFloat[ "scPF_sumPtNHadronInDr0p1"   ]  );
+        th1fStore[tag+"PF_sumPtNHadronInDr0p3"  ]                   ->Fill(storageFloat[ "scPF_sumPtNHadronInDr0p3"   ]  );
+        th1fStore[tag+"PF_sumPtNHadronInDr0p5"  ]                   ->Fill(storageFloat[ "scPF_sumPtNHadronInDr0p5"   ]  );
+                                                                                                                   
+        th1fStore[tag+"PF_nElectronInDr0p1"     ]                   ->Fill(storageFloat[ "scPF_nElectronInDr0p1"      ]  );
+        th1fStore[tag+"PF_nElectronInDr0p3"     ]                   ->Fill(storageFloat[ "scPF_nElectronInDr0p3"      ]  );
+        th1fStore[tag+"PF_nElectronInDr0p5"     ]                   ->Fill(storageFloat[ "scPF_nElectronInDr0p5"      ]  );
+        th1fStore[tag+"PF_sumPtElectronInDr0p1" ]                   ->Fill(storageFloat[ "scPF_sumPtElectronInDr0p1"  ]  );
+        th1fStore[tag+"PF_sumPtElectronInDr0p3" ]                   ->Fill(storageFloat[ "scPF_sumPtElectronInDr0p3"  ]  );
+        th1fStore[tag+"PF_sumPtElectronInDr0p5" ]                   ->Fill(storageFloat[ "scPF_sumPtElectronInDr0p5"  ]  );
+                                                                                                                   
+        th1fStore[tag+"PF_nOtherInDr0p1"        ]                   ->Fill(storageFloat[ "scPF_nOtherInDr0p1"         ]  );
+        th1fStore[tag+"PF_nOtherInDr0p3"        ]                   ->Fill(storageFloat[ "scPF_nOtherInDr0p3"         ]  );
+        th1fStore[tag+"PF_nOtherInDr0p5"        ]                   ->Fill(storageFloat[ "scPF_nOtherInDr0p5"         ]  );
+        th1fStore[tag+"PF_sumPtOtherInDr0p1"    ]                   ->Fill(storageFloat[ "scPF_sumPtOtherInDr0p1"     ]  );
+        th1fStore[tag+"PF_sumPtOtherInDr0p3"    ]                   ->Fill(storageFloat[ "scPF_sumPtOtherInDr0p3"     ]  );
+        th1fStore[tag+"PF_sumPtOtherInDr0p5"    ]                   ->Fill(storageFloat[ "scPF_sumPtOtherInDr0p5"     ]  );
+
 }                                                       
                                                         

@@ -8,21 +8,26 @@ echo MAXEVENTS : $MAXEVENTS
 echo ""
 EXECUTABLE=mvaDataMaker.exe
 CFG_TEMPLATE=configs/QcdSample_template.cfg
-ANALYSIS_OPT=1
 
 declare -a SourceFiles=(\
-"srcFiles/QCD_Pt_15to30_TuneCP5_13TeV_pythia8.files" \
-"srcFiles/QCD_Pt_30to50_TuneCP5_13TeV_pythia8.files" \
+"srcFiles/bs2mmg.files" \
+"srcFiles/qcd30to50Extended.files" \
+#"srcFiles/QCD_Pt_15to30_TuneCP5_13TeV_pythia8.files" \
+#"srcFiles/QCD_Pt_30to50_TuneCP5_13TeV_pythia8.files" \
 )
 
 declare -a tagArr=(\
-"mc_QCD_Pt_15to30" \
-"mc_QCD_Pt_30to50" \
+"mc_sig_bs2mmg" \
+"mc_QCD_Pt_30to50ext" \
+#"mc_QCD_Pt_15to30" \
+#"mc_QCD_Pt_30to50" \
 )
 
 declare -a AnalysisOption=(\
+2 \
 1 \
-1 \
+#1 \
+#1 \
 )
 
 for i in "${!tagArr[@]}"; do 
@@ -31,7 +36,7 @@ for i in "${!tagArr[@]}"; do
     TAG=${tagArr[$i]}
     ANALYSIS_OPT=${AnalysisOption[$i]}
  #   set -x
-     ./makeCondorJobForAnalysis.py \
+     echo ./makeCondorJobForAnalysis.py \
         $EXECUTABLE \
         $src \
         $CFG_TEMPLATE \

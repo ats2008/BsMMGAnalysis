@@ -58,6 +58,7 @@ class TreeMaker
     // Storage Vars
         // Defenition of the storage of type Double_t
     Int_t storageIdxFilledDouble; 
+    std::map<string, Float_t*> storageArrayDoubleMap;
     Double_t *storageArrayDouble;
     std::map<string, Int_t > candidateMapDouble;
         // Defenition of the storage of type Int_t
@@ -113,9 +114,9 @@ class TreeMaker
     void genParticleSCMaker();
     void Pi0ParticleSCMaker();  
     void genParticleBMMGSCMaker();
-    void fillECALClusterVariables( Int_t scIdx);
-    void fillHCALClusterVariables( Int_t scIdx);
-  
+    void AssignECALClusterVariables( Int_t scIdx);
+    void AssignHCALClusterVariables( Int_t scIdx);
+    void AssignPFVariables(Int_t) ;
   private :
      int   pTBins;
      float pTmin;
@@ -241,7 +242,7 @@ void TreeMaker::AllocateMemory()
     storageIdxFilledInt=0;
 
     candidateMapDouble["SCTreeStorage"]   = storageIdxFilledDouble ;
-    storageIdxFilledDouble+=250;
+    storageIdxFilledDouble+=500;
 }
 
 void TreeMaker::SaveFile()

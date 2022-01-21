@@ -1848,17 +1848,17 @@ void BMMGAnalysis::setupOutputSCTree()
 	outSC_Tree->Branch("scFull5x5_SigmaIphiIphi"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFChIso1"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFChIso2"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
-	outSC_Tree->Branch("scPFChIso"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("scPFChIso3"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFChIso4"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFChIso5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFPhoIso1"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFPhoIso2"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
-	outSC_Tree->Branch("scPFPhoIso"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("scPFPhoIso3"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFPhoIso4"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFPhoIso5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFNeuIso1"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFNeuIso2"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
-	outSC_Tree->Branch("scPFNeuIso"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
+	outSC_Tree->Branch("scPFNeuIso3"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFNeuIso4"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 	outSC_Tree->Branch("scPFNeuIso5"		,&storageArrayDouble[ idx +  offset ]); idx+=1 ;
 
@@ -2009,17 +2009,17 @@ void BMMGAnalysis::AddSCHistos(TString tag)
 	    th1fStore[tag+"Full5x5_sigmaIphiIphi"	] = new TH1F(tag + "Full5x5_sigmaIphiIphi"	,   "Full5x5_sigmaIphiIphi"	, 142 ,-0.01 , 0.07 );		   	     	
 	    th1fStore[tag+"PFChIso1"		        ] = new TH1F(tag + "PFChIso1"		            ,   "PFChIso1"	, 1000 , 0.0 , 0.20 ) ; 
 	    th1fStore[tag+"PFChIso2"		        ] = new TH1F(tag + "PFChIso2"		            ,   "PFChIso2"	, 1000 , 0.0 , 0.20 ) ;	
-	    th1fStore[tag+"PFChIso"		            ] = new TH1F(tag + "PFChIso3"		            ,   "PFChIso"	, 1000 , 0.0 , 0.20 ) ;	
+	    th1fStore[tag+"PFChIso3"		            ] = new TH1F(tag + "PFChIso3"		            ,   "PFChIso"	, 1000 , 0.0 , 0.20 ) ;	
 	    th1fStore[tag+"PFChIso4"		        ] = new TH1F(tag + "PFChIso4"		            ,   "PFChIso4"	, 1000 , 0.0 , 0.20 ) ;	
 	    th1fStore[tag+"PFChIso5"		        ] = new TH1F(tag + "PFChIso5"		            ,   "PFChIso5"	, 1000 , 0.0 , 0.20 ) ;	
 	    th1fStore[tag+"PFPhoIso1"		        ] = new TH1F(tag + "PFPhoIso1"		        ,   "PFPhoIso1"	, 1000 , 0.0 , 20.0 ) ;	
 	    th1fStore[tag+"PFPhoIso2"		        ] = new TH1F(tag + "PFPhoIso2"		        ,   "PFPhoIso2" , 1000 , 0.0 , 20.0 ) ;		
-	    th1fStore[tag+"PFPhoIso"		        ] = new TH1F(tag + "PFPhoIso3"	            ,   "PFPhoIso"  , 1000 , 0.0 , 20.0 ) ; 	
+	    th1fStore[tag+"PFPhoIso3"		        ] = new TH1F(tag + "PFPhoIso3"	            ,   "PFPhoIso"  , 1000 , 0.0 , 20.0 ) ; 	
 	    th1fStore[tag+"PFPhoIso4"		        ] = new TH1F(tag + "PFPhoIso4"		        ,   "PFPhoIso4" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFPhoIso5"		        ] = new TH1F(tag + "PFPhoIso5"		        ,   "PFPhoIso5" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso1"		        ] = new TH1F(tag + "PFNeuIso1"		        ,   "PFNeuIso1" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso2"		        ] = new TH1F(tag + "PFNeuIso2"		        ,   "PFNeuIso2" , 1000 , 0.0 , 20.0 ) ;		
-	    th1fStore[tag+"PFNeuIso"		        ] = new TH1F(tag + "PFNeuIso3"	            ,   "PFNeuIso3" , 1000 , 0.0 , 20.0 ) ;		
+	    th1fStore[tag+"PFNeuIso3"		        ] = new TH1F(tag + "PFNeuIso3"	            ,   "PFNeuIso3" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso4"		        ] = new TH1F(tag + "PFNeuIso4"		        ,   "PFNeuIso4" , 1000 , 0.0 , 20.0 ) ;		
 	    th1fStore[tag+"PFNeuIso5"		        ] = new TH1F(tag + "PFNeuIso5"		        ,   "PFNeuIso5" , 1000 , 0.0 , 20.0 ) ;		
 }
@@ -2080,17 +2080,17 @@ void BMMGAnalysis::fill_scHists(Int_t scIDX,TString tag,Double_t dr)
 	    th1fStore[tag+"Full5x5_sigmaIphiIphi"	]->Fill(ntupleRawTree.bG_scFull5x5_sigmaIphiIphi[scIDX]		  );
 	    th1fStore[tag+"PFChIso1"		        ]->Fill(ntupleRawTree.bG_scPFChIso1[scIDX]		  );
 	    th1fStore[tag+"PFChIso2"		        ]->Fill(ntupleRawTree.bG_scPFChIso2[scIDX]		  );
-	    th1fStore[tag+"PFChIso"		            ]->Fill(ntupleRawTree.bG_scPFChIso3[scIDX]		  );
+	    th1fStore[tag+"PFChIso3"		            ]->Fill(ntupleRawTree.bG_scPFChIso3[scIDX]		  );
 	    th1fStore[tag+"PFChIso4"		        ]->Fill(ntupleRawTree.bG_scPFChIso4[scIDX]		  );
 	    th1fStore[tag+"PFChIso5"		        ]->Fill(ntupleRawTree.bG_scPFChIso5[scIDX]		  );
 	    th1fStore[tag+"PFPhoIso1"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso1[scIDX]		  );
 	    th1fStore[tag+"PFPhoIso2"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso2[scIDX]		  );
-	    th1fStore[tag+"PFPhoIso"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso3[scIDX]		  );
+	    th1fStore[tag+"PFPhoIso3"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso3[scIDX]		  );
 	    th1fStore[tag+"PFPhoIso4"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso4[scIDX]		  );
 	    th1fStore[tag+"PFPhoIso5"		        ]->Fill(ntupleRawTree.bG_scPFPhoIso5[scIDX]		  );
 	    th1fStore[tag+"PFNeuIso1"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso1[scIDX]		  );
 	    th1fStore[tag+"PFNeuIso2"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso2[scIDX]		  );             
-	    th1fStore[tag+"PFNeuIso"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso3[scIDX]		  );             
+	    th1fStore[tag+"PFNeuIso3"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso3[scIDX]		  );             
 	    th1fStore[tag+"PFNeuIso4"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso4[scIDX]		  );
 	    th1fStore[tag+"PFNeuIso5"		        ]->Fill(ntupleRawTree.bG_scPFNeuIso5[scIDX]		  );
 }

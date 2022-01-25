@@ -45,24 +45,31 @@ else:
     sys.exit(1)
 argC+=1
 if len(sys.argv) > argC:
+    print(argC," : ",sys.argv[argC])
     cfgTemplateFname=sys.argv[argC]  
 argC+=1
 if len(sys.argv) > argC:
+    print(argC," : ",sys.argv[argC])
     analysisOption=sys.argv[argC]  
 argC+=1
 if len(sys.argv) > argC:
+    print(argC," : ",sys.argv[argC])
     destination=sys.argv[argC]  
 argC+=1
 if len(sys.argv) > argC:
+    print(argC," : ",sys.argv[argC])
     NJOBS=int(sys.argv[argC])  
 argC+=1
 if len(sys.argv) > argC:
+    print(argC," : ",sys.argv[argC])
     FILES_PER_JOB=int(sys.argv[argC])  
 argC+=1
 if len(sys.argv) > argC:
+    print(argC," : ",sys.argv[argC])
     NEVENTS_PER_JOB=int(sys.argv[argC])  
 argC+=1
 if len(sys.argv) > argC:
+    print(argC," : ",sys.argv[argC])
     tag=sys.argv[argC]  
 
 if(not os.path.exists(destination)):

@@ -1,3 +1,65 @@
+void TreeMaker::DataSCMaker()
+{
+
+    AddSCHistos("dataAllSC_");
+    AddSCTree("dataAllSCTree");
+    
+    
+    std::cout<<"\nBegining Analysis Script !";
+    if (maxEvents >0 ) maxEvents = nentries > maxEvents ? maxEvents : nentries;
+    cout<<"\nProcessing total "<<maxEvents<<" events \n\n";
+   
+    Long64_t EventCount=0;
+    Long64_t EventCountWithCand=0;
+    Long64_t nCands=0;
+    
+    Long64_t nb = 0,nbytes=0 ;
+
+    auto t_start = std::chrono::high_resolution_clock::now();
+    auto t_end = std::chrono::high_resolution_clock::now();
+
+    Double_t dr=-1.0;
+    Double_t drMin;
+
+    Bool_t hasACand=false;
+    
+    for (Long64_t jentry=0; jentry<maxEvents; jentry++)
+    {  
+       Long64_t ientry_evt = ntupleRawTree.LoadTree(jentry);
+       if (ientry_evt < 0) break;
+       nb = ntupleRawTree.fChain->GetEntry(jentry);   nbytes += nb;
+       
+       if(jentry%reportEvery == 0 )
+       {
+             t_end = std::chrono::high_resolution_clock::now();
+             std::cout<<"Processing Entry in event loop : "<<jentry<<" / "<<maxEvents<<"  [ "<<100.0*jentry/maxEvents<<"  % ]  "
+                      << " Elapsed time : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0
+                      <<"  Estimated time left : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()*( maxEvents - jentry)/(1e-9 + jentry)* 0.001
+                      <<std::endl;
+       
+       }
+       
+       EventCount++;
+       hasACand=false;
+       for( Int_t j =0 ;j< ntupleRawTree.nSC ;j++)
+       {
+            if(abs(ntupleRawTree.scEta->at(j)) < scAbsEtaMin ) continue;
+            if(abs(ntupleRawTree.scEta->at(j)) > scAbsEtaMax ) continue;
+        
+            drMin=-1.0;
+            hasACand=true;
+            fill_scHists(j,"allSC_",dr);
+            nCands++;
+       }
+
+      fill_eventHists();
+    }
+
+    std::cout<<" Number of Evnets processed        : "<<EventCount<<"\n";
+    std::cout<<" Number of Evnets with candidates  : "<<EventCountWithCand<<"\n";
+    std::cout<<" Number of candidates              : "<<nCands<<"\n";
+
+}
 void TreeMaker::Pi0ParticleSCMaker()
 {
     AddSCTree("mergedPi0_SCTree");

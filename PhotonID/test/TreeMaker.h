@@ -111,6 +111,7 @@ class TreeMaker
     void fill_genHists(Int_t idx);
     void fill_scHists(Int_t scIDX,TString tag="",Double_t dr=0.0);
     void fill_eventHists();
+    void DataSCMaker();
     void genParticleSCMaker();
     void Pi0ParticleSCMaker();  
     void genParticleBMMGSCMaker();

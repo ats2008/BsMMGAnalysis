@@ -1,0 +1,223 @@
+DEBUG 2021-10-11 17:14:06.956 UTC: 	 CRAB Client version: v3.210825
+DEBUG 2021-10-11 17:14:06.956 UTC: 	 Running on: Linux lxplus754.cern.ch 3.10.0-1160.42.2.el7.x86_64 #1 SMP Tue Sep 7 14:49:57 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2021-10-11 17:14:06.957 UTC: 	 Executing command: 'submit'
+DEBUG 2021-10-11 17:14:06.957 UTC: 	 Found CRAB cache file /afs/cern.ch/user/r/rchudasa/.crab3
+INFO 2021-10-11 17:14:06.958 UTC: 	 Will use CRAB configuration file crabConfig_qcdEmEnriched_170to300.py
+DEBUG 2021-10-11 17:14:06.958 UTC: 	 Loading CRAB configuration file.
+DEBUG 2021-10-11 17:14:06.979 UTC: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2021-10-11 17:14:06.993 UTC: 	 Checking credentials
+DEBUG 2021-10-11 17:14:06.994 UTC: 	 Found proxy file /tmp/x509up_u43677
+DEBUG 2021-10-11 17:14:06.994 UTC: 	 Getting proxy life time left
+DEBUG 2021-10-11 17:14:07.699 UTC: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43677 -timeleft
+ output : 603629
+
+ error: 
+ retcode : 0
+DEBUG 2021-10-11 17:14:08.304 UTC: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43677 -actimeleft
+ output : 603627
+
+ error: 
+ retcode : 0
+DEBUG 2021-10-11 17:14:08.305 UTC: 	 Proxy lifetime 603629 secs is different from voms extension lifetime 603627 secs for proxy: /tmp/x509up_u43677
+DEBUG 2021-10-11 17:14:08.305 UTC: 	 Proxy valid for 167:40:27 hours
+DEBUG 2021-10-11 17:14:08.910 UTC: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u43677 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+DEBUG 2021-10-11 17:14:08.968 UTC: 	 Registering user credentials for server /DC=ch/DC=cern/OU=computers/CN=crab-(preprod|prod|dev)-tw(02|01).cern.ch|/DC=ch/DC=cern/OU=computers/CN=(ddi|ddidk|mytw).cern.ch|/DC=ch/DC=cern/OU=computers/CN=stefanov(m|m2).cern.ch
+DEBUG 2021-10-11 17:14:09.682 UTC: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43677 -identity
+ output : /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=rchudasa/CN=743910/CN=Ruchi Chudasama
+
+ error: 
+ retcode : 0
+DEBUG 2021-10-11 17:14:09.690 UTC: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2021-10-11 17:14:09.690 UTC: 	 using 891a063043b195450bae47f0383240d6b479fa3d as credential login name
+DEBUG 2021-10-11 17:14:10.095 UTC: 	 Executing : 
+ command : myproxy-info -l 891a063043b195450bae47f0383240d6b479fa3d -s myproxy.cern.ch
+ output : username: 891a063043b195450bae47f0383240d6b479fa3d
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=rchudasa/CN=743910/CN=Ruchi Chudasama
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=crab-(preprod|prod|dev)-tw(02|01).cern.ch|/DC=ch/DC=cern/OU=computers/CN=(ddi|ddidk|mytw).cern.ch|/DC=ch/DC=cern/OU=computers/CN=stefanov(m|m2).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=crab-(preprod|prod|dev)-tw(02|01).cern.ch|/DC=ch/DC=cern/OU=computers/CN=(ddi|ddidk|mytw).cern.ch|/DC=ch/DC=cern/OU=computers/CN=stefanov(m|m2).cern.ch
+  timeleft: 714:59:34  (29.8 days)
+
+ error: 
+ retcode : 0
+DEBUG 2021-10-11 17:14:10.096 UTC: 	 Myproxy is valid: 2573974
+DEBUG 2021-10-11 17:14:10.096 UTC: 	 Retrieving username ...
+DEBUG 2021-10-11 17:14:10.096 UTC: 	 Retrieving username from CRIC...
+DEBUG 2021-10-11 17:14:10.877 UTC: 	 username is rchudasa
+DEBUG 2021-10-11 17:14:10.884 UTC: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2021-10-11 17:14:10.885 UTC: 	 using rchudasa_CRAB as credential login name
+DEBUG 2021-10-11 17:14:11.190 UTC: 	 Executing : 
+ command : myproxy-info -l rchudasa_CRAB -s myproxy.cern.ch
+ output : username: rchudasa_CRAB
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=rchudasa/CN=743910/CN=Ruchi Chudasama
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=crab-(preprod|prod|dev)-tw(02|01).cern.ch|/DC=ch/DC=cern/OU=computers/CN=(ddi|ddidk|mytw).cern.ch|/DC=ch/DC=cern/OU=computers/CN=stefanov(m|m2).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=crab-(preprod|prod|dev)-tw(02|01).cern.ch|/DC=ch/DC=cern/OU=computers/CN=(ddi|ddidk|mytw).cern.ch|/DC=ch/DC=cern/OU=computers/CN=stefanov(m|m2).cern.ch
+  timeleft: 714:59:39  (29.8 days)
+
+ error: 
+ retcode : 0
+DEBUG 2021-10-11 17:14:11.190 UTC: 	 Myproxy is valid: 2573979
+DEBUG 2021-10-11 17:14:11.191 UTC: 	 Result of myproxy credential check:
+  Credential exists on myproxy: username: 891a063043b195450bae47f0383240d6b479fa3d  - validity: 29 days, 18:59:34
+  Credential exists on myproxy: username: rchudasa_CRAB  - validity: 29 days, 18:59:39
+DEBUG 2021-10-11 17:14:11.191 UTC: 	 Command use: submit
+DEBUG 2021-10-11 17:14:11.191 UTC: 	 Options use: ['-c', 'crabConfig_qcdEmEnriched_170to300.py']
+DEBUG 2021-10-11 17:14:11.365 UTC: 	 CRABClient version: v3.210825
+DEBUG 2021-10-11 17:14:11.365 UTC: 	 Instance is prod
+DEBUG 2021-10-11 17:14:11.365 UTC: 	 Server base url is cmsweb.cern.ch
+DEBUG 2021-10-11 17:14:11.365 UTC: 	 Command api workflow
+DEBUG 2021-10-11 17:14:11.365 UTC: 	 Started submission
+DEBUG 2021-10-11 17:14:11.365 UTC: 	 Working on /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/tifr_ntuples/crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300
+DEBUG 2021-10-11 17:14:11.491 UTC: 	 Loading required information from the environment
+DEBUG 2021-10-11 17:14:11.492 UTC: 	 Found CMSSW_10_6_20 for slc7_amd64_gcc820 with base /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20
+DEBUG 2021-10-11 17:14:11.492 UTC: 	 Loading required information from the environment
+DEBUG 2021-10-11 17:14:11.492 UTC: 	 Found CMSSW_10_6_20 for slc7_amd64_gcc820 with base /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20
+DEBUG 2021-10-11 17:14:11.492 UTC: 	 UNIQUE NAME: tarUUID a4f82096-25d6-4e9f-86f3-18312b1bc2a3 
+DEBUG 2021-10-11 17:14:11.492 UTC: 	 self.config: from WMCore.Configuration import Configuration
+config = Configuration()
+config.section_('General')
+config.General.transferLogs = True
+config.General.transferOutputs = True
+config.General.workArea = 'crab_projects_Run2MVA'
+config.General.requestName = 'ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300'
+config.section_('JobType')
+config.JobType.psetName = 'ntuplize_AOD.py'
+config.JobType.pluginName = 'Analysis'
+config.JobType.maxMemoryMB = 4000
+config.JobType.allowUndistributedCMSSW = True
+config.section_('Data')
+config.Data.inputDataset = '/QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8/RunIISummer19UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'
+config.Data.allowNonValidInputDataset = True
+config.Data.publication = False
+config.Data.unitsPerJob = 1
+config.Data.inputDBS = 'global'
+config.Data.splitting = 'FileBased'
+config.Data.outputDatasetTag = 'ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300'
+config.Data.outLFNDirBase = '/store/user/rchudasa/BsMMG_2018UL'
+config.section_('Site')
+config.Site.storageSite = 'T2_IN_TIFR'
+config.section_('User')
+config.section_('Debug')
+
+DEBUG 2021-10-11 17:14:11.492 UTC: 	 self.config.JobType.psetName: ntuplize_AOD.py
+INFO 2021-10-11 17:14:11.492 UTC: 	 Importing CMSSW configuration ntuplize_AOD.py
+INFO 2021-10-11 17:14:12.226 UTC: 	 Finished importing CMSSW configuration ntuplize_AOD.py
+DEBUG 2021-10-11 17:14:12.227 UTC: 	 Writing CMSSW configuration to /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/tifr_ntuples/crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300/inputs/PSet.py
+DEBUG 2021-10-11 17:14:12.305 UTC: 	 The following EDM output files will be collected: []
+DEBUG 2021-10-11 17:14:12.305 UTC: 	 The following TFile output files will be collected: ['qcd_EmEnriched_ntuples.root']
+DEBUG 2021-10-11 17:14:12.305 UTC: 	 The following user output files (not listed as PoolOuputModule or TFileService in the CMSSW PSet) will be collected: 
+DEBUG 2021-10-11 17:14:12.305 UTC: 	 Loading required information from the environment
+DEBUG 2021-10-11 17:14:12.306 UTC: 	 Found CMSSW_10_6_20 for slc7_amd64_gcc820 with base /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20
+DEBUG 2021-10-11 17:14:12.306 UTC: 	 Making tarball in /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/tifr_ntuples/crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300/inputs/a4f82096-25d6-4e9f-86f3-18312b1bc2a3default.tgz
+DEBUG 2021-10-11 17:14:12.307 UTC: 	 Checking directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/lib
+DEBUG 2021-10-11 17:14:12.307 UTC: 	 Adding directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/lib to tarball
+DEBUG 2021-10-11 17:14:14.582 UTC: 	 Checking directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/biglib
+DEBUG 2021-10-11 17:14:14.582 UTC: 	 Adding directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/biglib to tarball
+DEBUG 2021-10-11 17:14:14.583 UTC: 	 Checking directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/module
+DEBUG 2021-10-11 17:14:14.601 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/Configuration/Generator/data to tarball
+DEBUG 2021-10-11 17:14:14.625 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoEcal/EgammaClusterProducers/data to tarball
+DEBUG 2021-10-11 17:14:14.631 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoEcal/EgammaClusterProducers/interface to tarball
+DEBUG 2021-10-11 17:14:14.645 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoEgamma/EgammaElectronProducers/interface to tarball
+DEBUG 2021-10-11 17:14:14.651 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoEgamma/EgammaIsolationAlgos/interface to tarball
+DEBUG 2021-10-11 17:14:14.660 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoEgamma/EgammaPhotonProducers/interface to tarball
+DEBUG 2021-10-11 17:14:14.668 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoEgamma/EgammaTools/data to tarball
+DEBUG 2021-10-11 17:14:14.671 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoEgamma/EgammaTools/interface to tarball
+DEBUG 2021-10-11 17:14:14.794 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoEgamma/PhotonIdentification/data to tarball
+DEBUG 2021-10-11 17:14:14.808 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoEgamma/PhotonIdentification/interface to tarball
+DEBUG 2021-10-11 17:14:14.814 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoParticleFlow/PFProducer/interface to tarball
+DEBUG 2021-10-11 17:14:14.824 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoParticleFlow/PFTracking/data to tarball
+DEBUG 2021-10-11 17:14:14.826 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoParticleFlow/PFTracking/interface to tarball
+DEBUG 2021-10-11 17:14:14.836 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/RecoTracker/TkSeedGenerator/interface to tarball
+DEBUG 2021-10-11 17:14:14.860 UTC: 	 Adding data directory /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/interface to tarball
+DEBUG 2021-10-11 17:14:15.112 UTC: 	 Uploading archive /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/tifr_ntuples/crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300/inputs/a4f82096-25d6-4e9f-86f3-18312b1bc2a3default.tgz (4.392578.1 MB) to the CRAB cache. Using URI https://cmsweb.cern.ch/S3/crabcache_prod
+DEBUG 2021-10-11 17:14:16.971 UTC: 	 sandbox a011820144c70267613f4ecff0e85c396126403551b68c5750aa537cee1bd675.tar.gz is already in the S3 store, will not upload again
+DEBUG 2021-10-11 17:14:16.972 UTC: 	 Loading required information from the environment
+DEBUG 2021-10-11 17:14:16.972 UTC: 	 Found CMSSW_10_6_20 for slc7_amd64_gcc820 with base /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20
+DEBUG 2021-10-11 17:14:16.972 UTC: 	 Making tarball in /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/tifr_ntuples/crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300/inputs/debugFiles.tgz
+DEBUG 2021-10-11 17:14:16.978 UTC: 	 Uploading archive /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/tifr_ntuples/crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300/inputs/debugFiles.tgz (3 KB) to the CRAB cache. Using URI https://cmsweb.cern.ch/S3/crabcache_prod
+DEBUG 2021-10-11 17:14:17.068 UTC: 	 Will execute:
+curl -f -v -X POST  -H "User-Agent: CRAB" -F "key=rchudasa/sandboxes/53eb02a7200b1e90beac37c65876986b6c36529f598896db81753e84b911833f.tar.gz" -F "AWSAccessKeyId=ab00fcc889f248c495d2875f15a3badb" -F "policy=eyJjb25kaXRpb25zIjogW3siYnVja2V0IjogImNyYWJjYWNoZV9wcm9kIn0sIHsia2V5IjogInJjaHVkYXNhL3NhbmRib3hlcy81M2ViMDJhNzIwMGIxZTkwYmVhYzM3YzY1ODc2OTg2YjZjMzY1MjlmNTk4ODk2ZGI4MTc1M2U4NGI5MTE4MzNmLnRhci5neiJ9XSwgImV4cGlyYXRpb24iOiAiMjAyMS0xMC0xMVQxODoxNDoxN1oifQ==" -F "signature=G+yGUjgLK98IeqjVpMJgmaJWI2E=" -F "file=@/afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/tifr_ntuples/crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300/inputs/debugFiles.tgz" "https://s3.cern.ch/crabcache_prod"
+DEBUG 2021-10-11 17:14:18.167 UTC: 	 exitcode: 0
+stdout: 
+stderr: Note: Unnecessary use of -X or --request, POST is already inferred.
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 2001:1458:d00:3f::100:2bd...
+* TCP_NODELAY set
+* Connected to s3.cern.ch (2001:1458:d00:3f::100:2bd) port 443 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+  CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.2 (OUT), TLS header, Certificate Status (22):
+} [5 bytes data]
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+} [512 bytes data]
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+{ [70 bytes data]
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+{ [4780 bytes data]
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+{ [333 bytes data]
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+{ [4 bytes data]
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+} [70 bytes data]
+* TLSv1.2 (OUT), TLS change cipher, Client hello (1):
+} [1 bytes data]
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+} [16 bytes data]
+* TLSv1.2 (IN), TLS change cipher, Client hello (1):
+{ [1 bytes data]
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+{ [16 bytes data]
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server accepted to use http/1.1
+* Server certificate:
+*  subject: C=CH; ST=Genève; L=Meyrin; O=Organisation européenne pour la Recherche nucléaire (CERN); CN=*.s3.cern.ch
+*  start date: Mar 10 00:00:00 2021 GMT
+*  expire date: Mar 10 23:59:59 2022 GMT
+*  subjectAltName: host "s3.cern.ch" matched cert's "s3.cern.ch"
+*  issuer: C=GB; ST=Greater Manchester; L=Salford; O=Sectigo Limited; CN=Sectigo RSA Organization Validation Secure Server CA
+*  SSL certificate verify ok.
+} [5 bytes data]
+> POST /crabcache_prod HTTP/1.1
+> Host: s3.cern.ch
+> Accept: */*
+> User-Agent: CRAB
+> Content-Length: 4887
+> Content-Type: multipart/form-data; boundary=------------------------e07ab42f0b63d7cb
+> Expect: 100-continue
+> 
+{ [5 bytes data]
+< HTTP/1.1 100 Continue
+  0  4887    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0} [5 bytes data]
+< HTTP/1.1 204 No Content
+< Accept-Ranges: bytes
+< Bucket: crabcache_prod
+< Date: Mon, 11 Oct 2021 17:14:18 GMT
+< X-Amz-Request-Id: tx000000000000012fc1ea4-00616470e9-1e8ac45f-default
+< 
+100  4887    0     0  100  4887      0   4567  0:00:01  0:00:01 --:--:--  4567
+* Connection #0 to host s3.cern.ch left intact
+
+DEBUG 2021-10-11 17:14:18.167 UTC: 	 sandbox /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/tifr_ntuples/crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300/inputs/debugFiles.tgz successully uploaded to S3
+DEBUG 2021-10-11 17:14:18.167 UTC: 	 Result uploading input files: a011820144c70267613f4ecff0e85c396126403551b68c5750aa537cee1bd675.tar.gz 
+INFO 2021-10-11 17:14:18.168 UTC: 	 Sending the request to the server at cmsweb.cern.ch
+DEBUG 2021-10-11 17:14:18.168 UTC: 	 Submitting {'maxjobruntime': 1250, 'extrajdl': [], 'ignorelocality': 0, 'savelogsflag': 1, 'useparent': 0, 'asyncdest': 'T2_IN_TIFR', 'algoargs': 1, 'cachefilename': 'a011820144c70267613f4ecff0e85c396126403551b68c5750aa537cee1bd675.tar.gz', 'numcores': 1, 'addoutputfiles': [], 'generator': 'pythia', 'maxmemory': 4000, 'publishdbsurl': 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter', 'priority': 10, 'jobsw': 'CMSSW_10_6_20', 'edmoutfiles': [], 'userfiles': [], 'primarydataset': '', 'inputdata': '/QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8/RunIISummer19UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM', 'lfn': '/store/user/rchudasa/BsMMG_2018UL', 'dryrun': 0, 'workflow': 'crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300', 'cacheurl': u'https://cmsweb.cern.ch/S3/crabcache_prod', 'nonprodsw': 1, 'tfileoutfiles': ['qcd_EmEnriched_ntuples.root'], 'oneEventMode': 0, 'debugfilename': '53eb02a7200b1e90beac37c65876986b6c36529f598896db81753e84b911833f.tar.gz', 'saveoutput': 1, 'publication': 0, 'jobarch': 'slc7_amd64_gcc820', 'totalunits': 0, 'splitalgo': 'FileBased', 'ignoreglobalblacklist': 0, 'nonvaliddata': 1, 'dbsurl': 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader', 'publishgroupname': 0, 'jobtype': 'Analysis', 'publishname2': 'ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300'} 
+DEBUG 2021-10-11 17:14:18.168 UTC: 	 Encoded submit request: maxjobruntime=1250&ignorelocality=0&savelogsflag=1&useparent=0&asyncdest=T2_IN_TIFR&algoargs=1&cachefilename=a011820144c70267613f4ecff0e85c396126403551b68c5750aa537cee1bd675.tar.gz&numcores=1&generator=pythia&maxmemory=4000&publishdbsurl=https%3A%2F%2Fcmsweb.cern.ch%2Fdbs%2Fprod%2Fphys03%2FDBSWriter&priority=10&jobsw=CMSSW_10_6_20&primarydataset=&inputdata=%2FQCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8%2FRunIISummer19UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2%2FAODSIM&lfn=%2Fstore%2Fuser%2Frchudasa%2FBsMMG_2018UL&dryrun=0&workflow=crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300&cacheurl=https%3A%2F%2Fcmsweb.cern.ch%2FS3%2Fcrabcache_prod&nonprodsw=1&oneEventMode=0&debugfilename=53eb02a7200b1e90beac37c65876986b6c36529f598896db81753e84b911833f.tar.gz&saveoutput=1&publication=0&jobarch=slc7_amd64_gcc820&totalunits=0&splitalgo=FileBased&ignoreglobalblacklist=0&nonvaliddata=1&dbsurl=https%3A%2F%2Fcmsweb.cern.ch%2Fdbs%2Fprod%2Fglobal%2FDBSReader&publishgroupname=0&jobtype=Analysis&publishname2=ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300&tfileoutfiles=qcd_EmEnriched_ntuples.root
+DEBUG 2021-10-11 17:14:18.237 UTC: 	 Result: {u'result': [{u'RequestName': u'211011_171418:rchudasa_crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300'}]}
+INFO 2021-10-11 17:14:18.241 UTC: 	 Success: Your task has been delivered to the prod CRAB3 server.
+INFO 2021-10-11 17:14:18.241 UTC: 	 Task name: 211011_171418:rchudasa_crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300
+INFO 2021-10-11 17:14:18.241 UTC: 	 Project dir: crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300
+INFO 2021-10-11 17:14:18.241 UTC: 	 Please use ' crab status -d crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300 ' to check how the submission process proceeds.
+DEBUG 2021-10-11 17:14:18.241 UTC: 	 About to return
+INFO 2021-10-11 17:14:18.244 UTC: 	 Log file is /afs/cern.ch/work/r/rchudasa/private/bsmumu/Run2_analysis/CMSSW_10_6_20/src/BsMMGAnalysis/BsToMuMuGammaNTuplizer/test/tifr_ntuples/crab_projects_Run2MVA/crab_ntuples_defaultReco_Run2MVABranches_QCDEmEnriched_Pt170to300/crab.log

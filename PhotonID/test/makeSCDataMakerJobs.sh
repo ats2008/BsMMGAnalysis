@@ -62,7 +62,7 @@ for i in "${!tagArr[@]}"; do
     ANALYSIS_OPT=${AnalysisOption[$i]}
     CFG_TEMPLATE=${CfgTemplate[$i]}
 #    set +x
-    #set -x
+    set -x
     echo ./makeCondorJobForAnalysis.py \
         $EXECUTABLE \
         $src \
@@ -73,5 +73,5 @@ for i in "${!tagArr[@]}"; do
         $FILES_PER_JOB \
         $MAXEVENTS \
         $TAG
-    #set +x
+    set +x
 done

@@ -48,11 +48,14 @@ void TreeMaker::DataSCMaker()
         
             drMin=-1.0;
             hasACand=true;
-            fill_scHists(j,"allSC_",dr);
+            fill_scHists(j,"dataAllSC_",dr);
+            fillSCVariablesToOutTree(j,"dataAllSCTree");
             nCands++;
        }
 
-      fill_eventHists();
+       if(hasACand) EventCountWithCand++;
+
+       fill_eventHists();
     }
 
     std::cout<<" Number of Evnets processed        : "<<EventCount<<"\n";
@@ -827,8 +830,8 @@ void TreeMaker::fillSCVariablesToOutTree(Int_t scIDX,TString SCTreeName)
 	storageArrayDouble[idx + offset ] =ntupleRawTree.scPFNeuIso4->at(scIDX)		  ;idx+=1 ;
 	storageArrayDouble[idx + offset ] =ntupleRawTree.scPFNeuIso5->at(scIDX)		  ;idx+=1 ;
     
-    AssignECALClusterVariables(scIDX);
-    AssignHCALClusterVariables(scIDX);
+    //AssignECALClusterVariables(scIDX);
+    //AssignHCALClusterVariables(scIDX);
     AssignPFVariables(scIDX);
     treeStore[SCTreeName]->Fill();
 }
@@ -1359,8 +1362,8 @@ void TreeMaker::fill_scHists(Int_t scIDX,TString tag,Double_t dr)
 	    th1fStore[tag+"PFNeuIso4"		        ]->Fill(ntupleRawTree.scPFNeuIso4->at(scIDX)		  );
 	    th1fStore[tag+"PFNeuIso5"		        ]->Fill(ntupleRawTree.scPFNeuIso5->at(scIDX)		  );
         
-        AssignECALClusterVariables(scIDX);
-        AssignHCALClusterVariables(scIDX);
+        //AssignECALClusterVariables(scIDX);
+        //AssignHCALClusterVariables(scIDX);
         AssignPFVariables(scIDX);
 
         th1fStore[tag+"ClusterECAL_nClusInDr0p1"	]        ->Fill(storageFloat[ "scClusterECAL_nClusInDr0p1"	 ]  );

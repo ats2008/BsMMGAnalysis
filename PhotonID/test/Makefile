@@ -11,6 +11,8 @@ all:	$(TARGET)
 mvaTrainer2 : photonID_bdt_MLP_classification.C 
 	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
 
+mvaTester : testMVAModels.cc MVATrainer.h
+	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)
 
 mvaDataMaker : mvaDataMaker.cc Util.h TreeMaker.h TreeMaker.cc 
 	$(CXX) $(CXXFLAGS) -I$(INCPATH) -o $@.exe $<  $(LIBS)

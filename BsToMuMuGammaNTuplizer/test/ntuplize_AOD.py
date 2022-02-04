@@ -27,6 +27,7 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 50
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20) )
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(200) )
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
 
 process.options = cms.untracked.PSet( numberOfConcurrentLuminosityBlocks = cms.untracked.uint32(1),
@@ -43,7 +44,8 @@ process.options = cms.untracked.PSet( numberOfConcurrentLuminosityBlocks = cms.u
 process.source = cms.Source("PoolSource",
      duplicateCheckMode=cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-   'file:59B967C8-4A74-ED4F-9A8D-15A05983A34A.root',
+   '/store/mc/RunIISummer19UL18RECO/QCD_Pt_30to50_TuneCP5_13TeV_pythia8/AODSIM/106X_upgrade2018_realistic_v11_L1v1_ext1-v2/10000/5FE97F9B-083C-9241-A7F0-6CFF243A6956.root'
+
    )
 )
 process.TFileService = cms.Service("TFileService",

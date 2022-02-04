@@ -114,6 +114,8 @@ BsToMuMuGammaNTuplizer::BsToMuMuGammaNTuplizer(const edm::ParameterSet& iConfig)
   doHCALClusters(iConfig.getParameter<bool>("doHCALClusters")),
   doPrimaryVetrices(iConfig.getParameter<bool>("doPrimaryVetrices")),
   doBeamSpot(iConfig.getParameter<bool>("doBeamSpot")),
+  doHCALClusters(iConfig.getParameter<bool>("doECALClusters")),
+
   doFlatPt_(iConfig.getParameter<bool>("doFlatPt")),
   Run2_2018_(iConfig.getParameter<bool>("Run2_2018")),
   doHLT(iConfig.getParameter<bool>("doHLT")),
@@ -611,6 +613,7 @@ BsToMuMuGammaNTuplizer::BsToMuMuGammaNTuplizer(const edm::ParameterSet& iConfig)
     theTree->Branch("scPFNeuIso3",             &scPFNeuIso3_);
     theTree->Branch("scPFNeuIso4",             &scPFNeuIso4_);
     theTree->Branch("scPFNeuIso5",             &scPFNeuIso5_);
+
   }
   if(doParticleFlow)
   {
@@ -632,6 +635,8 @@ BsToMuMuGammaNTuplizer::BsToMuMuGammaNTuplizer(const edm::ParameterSet& iConfig)
   {
      addPrimaryVertexBranches();
   }
+
+
 
 }
 
@@ -1095,6 +1100,7 @@ BsToMuMuGammaNTuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup&
   {
         fillPrimaryVertexBranches(iEvent,iSetup);
   }
+
   // MC truth
   if (isMC and doGenParticles_) {
     fillGenParticles(iEvent);
@@ -1104,10 +1110,12 @@ BsToMuMuGammaNTuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup&
   if (doMuons_)     	fillMuons(iEvent, iSetup);
   if (doPhotons_)    	fillPhotons(iEvent, iSetup);
   if (doPFPhotons_) 	fillPFPhotons(iEvent, iSetup);
+
   if (doSuperClusters_) {
         reco::Vertex pv(math::XYZPoint(0, 0, -999), math::Error<3>::type()); 
         fillSC(iEvent, iSetup,pv);
   }
+
   if (doHCALClusters) {
         fillHCALClusterCollection(iEvent,iSetup);
   }
@@ -2186,6 +2194,7 @@ void BsToMuMuGammaNTuplizer::fillPrimaryVertexBranches(const edm::Event& iEvent,
     i++;
   } // loop over primary vertex collection
 }
+
 void BsToMuMuGammaNTuplizer::addGeneralTracksBranches()
 {
     storageMapInt["nGeneralTracks"]  = 0 ;
@@ -2205,8 +2214,6 @@ void BsToMuMuGammaNTuplizer::addGeneralTracksBranches()
     storageMapFloatArray["generalTracks_charge"] = new Float_t[N_TRK_MAX];
     theTree->Branch("generalTracks_charge",   storageMapFloatArray["generalTracks_charge"],"generalTracks_charge[nGeneralTracks]/F");
 }
-
-
 
 void BsToMuMuGammaNTuplizer::fillGeneralTrackCollectionBranches( const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {

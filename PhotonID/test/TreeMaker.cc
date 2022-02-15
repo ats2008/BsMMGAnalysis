@@ -439,6 +439,121 @@ void TreeMaker::genParticleSCMaker()
     std::cout<<" Number of candidates              : "<<nCands<<"\n";
 }
 
+
+void TreeMaker::genParticleBMMGSCMakerJPsiGamma()
+{
+    AddSCHistos("genMatchedBMMGSC_");
+    AddSCTree("genMatchedBMMGSCTree");
+    th1fStore["genBsGammaPt"                      ]  = new TH1F("genBsGammaPt" ,"Pt of GEN", pTBins , pTmin  , pTmax  );
+    th1fStore["genBsGammaEta"                     ]  = new TH1F("genBsGammaEta","Eta of GEN", etaBins , etamin  , etamax  );
+    th1fStore["genBsGammaphi"                     ]  = new TH1F("genBsGammaphi","Phi of GEN", 64 , -3.20  , 3.20  );
+    th1fStore["genBsGammaE"		                  ]  = new TH1F("genBsGammaE"  ,"E", 600 , 0.0 ,150.0 ) ;                  
+
+    Double_t dr;
+    
+    std::cout<<"\nBegining Analysis Script !";
+    if (maxEvents >0 ) maxEvents = nentries > maxEvents ? maxEvents : nentries;
+    cout<<"\nProcessing total "<<maxEvents<<" events \n\n";
+   
+    Long64_t EventCount=0;
+    Long64_t EventCountWithCand=0;
+    Long64_t nCands=0;
+    
+    Long64_t nb = 0,nbytes=0 ;
+
+    auto t_start = std::chrono::high_resolution_clock::now();
+    auto t_end = std::chrono::high_resolution_clock::now();
+    bool goodRunLumi = false;
+
+    Double_t drMin;
+    Int_t scMatchIdx;
+    Bool_t foundmatch=false;
+    TLorentzVector phoVec;
+
+    for (Long64_t jentry=0; jentry<maxEvents; jentry++)
+    {  
+       eventGenMultiplicity=0;
+       Long64_t ientry_evt = ntupleRawTree.LoadTree(jentry);
+       if (ientry_evt < 0) break;
+       nb = ntupleRawTree.fChain->GetEntry(jentry);   nbytes += nb;
+       
+       if(jentry%reportEvery == 0 )
+       {
+             t_end = std::chrono::high_resolution_clock::now();
+             std::cout<<"Processing Entry in event loop : "<<jentry<<" / "<<maxEvents<<"  [ "<<100.0*jentry/maxEvents<<"  % ]  "
+                      << " Elapsed time : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0
+                      <<"  Estimated time left : "<< std::chrono::duration<double, std::milli>(t_end-t_start).count()*( maxEvents - jentry)/(1e-9 + jentry)* 0.001
+                      <<std::endl;
+       
+       }
+       
+       EventCount++;
+       foundmatch=false;
+       if(isMC)
+       {
+            if( ntupleRawTree.gen_nBsPhoton!=1 ) continue;
+            if( not (ntupleRawTree.gen_BsPhoton_pt) ) continue;
+            th1fStore["genBsGammaPt"    ]  ->Fill(ntupleRawTree.genBsPho_pt[0]) ;  
+            th1fStore["genBsGammaEta"    ] ->Fill(ntupleRawTree.genBsPho_eta[0]) ;  
+            th1fStore["genBsGammaphi"    ] ->Fill(ntupleRawTree.genBsPho_phi[0]);  
+            phoVec.SetPtEtaPhiM(ntupleRawTree.genBsPho_pt[0],ntupleRawTree.genBsPho_eta[0],ntupleRawTree.genBsPho_phi[0],ntupleRawTree.genBsPho_mass[0]);
+            th1fStore["genBsGammaE"	    ]  ->Fill(phoVec.Energy());	
+            drMin=drGenMatchMin;
+            scMatchIdx=-1;
+            for( Int_t j =0 ;j< ntupleRawTree.nSC ;j++)
+            {
+                if(abs(ntupleRawTree.scEta->at(j)) < scAbsEtaMin ) continue;
+                if(abs(ntupleRawTree.scEta->at(j)) > scAbsEtaMax ) continue;
+
+                    dr=getDR(ntupleRawTree.genBsPho_eta[0],ntupleRawTree.genBsPho_phi[0], ntupleRawTree.scEta->at(j),ntupleRawTree.scPhi->at(j));
+                    if(dr<drMin)
+                    {
+                        drMin=dr;
+                        scMatchIdx=j;
+                    }
+            }
+            
+            if( scMatchIdx > -1)
+            {
+                fill_scHists(scMatchIdx,"genMatchedBMMGSC_",drMin);
+                fillSCVariablesToOutTree(scMatchIdx,"genMatchedBMMGSCTree");
+                nCands++;
+                foundmatch=true;
+            }
+       }
+       if(foundmatch==true)     EventCountWithCand++;
+       
+       for( Int_t j =0 ;j< ntupleRawTree.nSC ;j++)
+       {
+            if(abs(ntupleRawTree.scEta->at(j)) < scAbsEtaMin ) continue;
+            if(abs(ntupleRawTree.scEta->at(j)) > scAbsEtaMax ) continue;
+
+            drMin=2.99;
+            if(isMC)
+            for(int i=0;i < ntupleRawTree.nMC ; i++)
+            {
+                 if( ntupleRawTree.mcPID->at(i) != genParticlePDGID ) continue;
+                 if(genParticleIsStable) if(not ntupleRawTree.mcStatus->at(i) != 1 ) continue;
+                 dr=getDR(ntupleRawTree.mcEta->at(i),ntupleRawTree.mcPhi->at(i), ntupleRawTree.scEta->at(j),ntupleRawTree.scPhi->at(j));
+                 if(dr<drMin)
+                 {
+                        drMin=dr;
+                 }
+            }
+            fill_scHists(j,"allSC_",dr);
+            
+
+       }
+      fill_eventHists();
+    }
+
+    std::cout<<" Number of Evnets processed        : "<<EventCount<<"\n";
+    std::cout<<" Number of Evnets with candidates  : "<<EventCountWithCand<<"\n";
+    std::cout<<" Number of candidates              : "<<nCands<<"\n";
+}
+
+
+
 void TreeMaker::genParticleBMMGSCMaker()
 {
     AddSCHistos("genMatchedBMMGSC_");
@@ -489,7 +604,7 @@ void TreeMaker::genParticleBMMGSCMaker()
        if(isMC)
        {
             if( ntupleRawTree.gen_nBsPhoton!=1 ) continue;
-            //std::cout<<"Bs Gamma pt = "<<ntupleRawTree.gen_BsPhoton_pt->at(0)<<"\n";
+            if( not (ntupleRawTree.gen_BsPhoton_pt) ) continue;
             th1fStore["genBsGammaPt"    ]  ->Fill(ntupleRawTree.gen_BsPhoton_pt->at(0)) ;  
             th1fStore["genBsGammaEta"    ] ->Fill(ntupleRawTree.gen_BsPhoton_eta->at(0)) ;  
             th1fStore["genBsGammaphi"    ] ->Fill(ntupleRawTree.gen_BsPhoton_phi->at(0));  

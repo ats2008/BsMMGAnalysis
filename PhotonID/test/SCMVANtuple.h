@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Jan 20 00:22:38 2022 by ROOT version 6.14/09
+// Mon Feb 14 01:31:57 2022 by ROOT version 6.14/09
 // from TTree EventTree/Event data
-// found on file: workarea/bsToMuMuG_run2UL2018_0.root
+// found on file: bsToJPsiGamma_run2UL2018_0.root
 //////////////////////////////////////////////////////////
 
 #ifndef SCMVANtuple_h
@@ -33,48 +33,6 @@ public :
    ULong64_t       event;
    UInt_t          lumis;
    Bool_t          isData;
-   Double_t        beamspot_x;
-   Double_t        beamspot_y;
-   Double_t        beamspot_z;
-   Double_t        beamspot_x_error;
-   Double_t        beamspot_y_error;
-   Double_t        beamspot_z_error;
-   Double_t        beamspot_covXX;
-   Double_t        beamspot_covXY;
-   Double_t        beamspot_covXZ;
-   Double_t        beamspot_covYY;
-   Double_t        beamspot_covYZ;
-   Double_t        beamspot_covZZ;
-   Double_t        beamspot_dxdz;
-   Double_t        beamspot_dydz;
-   Double_t        beamspot_sigmaZ;
-   Double_t        beamspot_dxdz_error;
-   Double_t        beamspot_dydz_error;
-   Double_t        beamspot_sigmaZError;
-   Double_t        beamspot_beamWidthX;
-   Double_t        beamspot_beamWidthY;
-   Double_t        beamspot_beamWidthX_error;
-   Double_t        beamspot_beamWidthY_error;
-   Int_t           nPrimaryVertex;
-   vector<bool>    *primaryVertex_isFake;
-   vector<double>  *primaryVertex_x;
-   vector<double>  *primaryVertex_y;
-   vector<double>  *primaryVertex_z;
-   vector<double>  *primaryVertex_t;
-   vector<double>  *primaryVertex_covXX;
-   vector<double>  *primaryVertex_covXY;
-   vector<double>  *primaryVertex_covXZ;
-   vector<double>  *primaryVertex_covYY;
-   vector<double>  *primaryVertex_covYZ;
-   vector<double>  *primaryVertex_covZZ;
-   vector<double>  *primaryVertex_x_error;
-   vector<double>  *primaryVertex_y_error;
-   vector<double>  *primaryVertex_z_error;
-   vector<double>  *primaryVertex_t_error;
-   vector<double>  *primaryVertex_ntracks;
-   vector<double>  *primaryVertex_ndof;
-   vector<double>  *primaryVertex_chi2;
-   vector<double>  *primaryVertex_normalizedChi2;
    Int_t           gen_nBs;
    vector<double>  *gen_Bs_pt;
    vector<double>  *gen_Bs_energy;
@@ -159,10 +117,10 @@ public :
    vector<float>   *scFull5x5_sigmaIetaIeta;
    vector<float>   *scFull5x5_sigmaIetaIphi;
    vector<float>   *scFull5x5_sigmaIphiIphi;
-   Int_t           nhcalRechit;
-   vector<float>   *hcalRechitIEta;
-   vector<float>   *hcalRechitIPhi;
-   vector<float>   *hcalRechitEnergy;
+   vector<float>   *scNHcalRecHitInDIEta5IPhi5;
+   vector<float>   *scEFromHcalRecHitInDIEta5IPhi5;
+   vector<float>   *scNHcalRecHitInDIEta2IPhi2;
+   vector<float>   *scEFromHcalRecHitInDIEta2IPhi2;
    vector<float>   *scPFChIso1;
    vector<float>   *scPFChIso2;
    vector<float>   *scPFChIso3;
@@ -179,106 +137,116 @@ public :
    vector<float>   *scPFNeuIso4;
    vector<float>   *scPFNeuIso5;
    Int_t           nPFCandidates;
-   Float_t         pf_ecalEnergy[3282];   //[nPFCandidates]
-   Float_t         pf_ecalRawEnergy[3282];   //[nPFCandidates]
-   Float_t         pf_hcalEnergy[3282];   //[nPFCandidates]
-   Float_t         pf_hcalRawEnergy[3282];   //[nPFCandidates]
-   Float_t         pf_HoE[3282];   //[nPFCandidates]
-   Float_t         pf_mvaIso[3282];   //[nPFCandidates]
-   Float_t         pf_vertexX[3282];   //[nPFCandidates]
-   Float_t         pf_vertexY[3282];   //[nPFCandidates]
-   Float_t         pf_vertexZ[3282];   //[nPFCandidates]
-   Float_t         pf_ecalEntryEta[3282];   //[nPFCandidates]
-   Float_t         pf_ecalEntryPhi[3282];   //[nPFCandidates]
-   Float_t         pf_ecalEntryX[3282];   //[nPFCandidates]
-   Float_t         pf_ecalEntryY[3282];   //[nPFCandidates]
-   Float_t         pf_ecalEntryZ[3282];   //[nPFCandidates]
-   Float_t         pf_eta[3282];   //[nPFCandidates]
-   Float_t         pf_phi[3282];   //[nPFCandidates]
-   Float_t         pf_pt[3282];   //[nPFCandidates]
-   Float_t         pf_id[3282];   //[nPFCandidates]
-   Float_t         pf_mass[3282];   //[nPFCandidates]
+   Float_t         pf_ecalEnergy[3445];   //[nPFCandidates]
+   Float_t         pf_ecalRawEnergy[3445];   //[nPFCandidates]
+   Float_t         pf_hcalEnergy[3445];   //[nPFCandidates]
+   Float_t         pf_hcalRawEnergy[3445];   //[nPFCandidates]
+   Float_t         pf_HoE[3445];   //[nPFCandidates]
+   Float_t         pf_mvaIso[3445];   //[nPFCandidates]
+   Float_t         pf_vertexX[3445];   //[nPFCandidates]
+   Float_t         pf_vertexY[3445];   //[nPFCandidates]
+   Float_t         pf_vertexZ[3445];   //[nPFCandidates]
+   Float_t         pf_ecalEntryEta[3445];   //[nPFCandidates]
+   Float_t         pf_ecalEntryPhi[3445];   //[nPFCandidates]
+   Float_t         pf_ecalEntryX[3445];   //[nPFCandidates]
+   Float_t         pf_ecalEntryY[3445];   //[nPFCandidates]
+   Float_t         pf_ecalEntryZ[3445];   //[nPFCandidates]
+   Float_t         pf_eta[3445];   //[nPFCandidates]
+   Float_t         pf_phi[3445];   //[nPFCandidates]
+   Float_t         pf_pt[3445];   //[nPFCandidates]
+   Float_t         pf_id[3445];   //[nPFCandidates]
+   Float_t         pf_mass[3445];   //[nPFCandidates]
    Int_t           nHCALClusters;
    Int_t           nHCALClusterEnergyMatrix;
-   Float_t         clusterHCAL_energy[268];   //[nHCALClusters]
-   Float_t         clusterHCAL_correctedEnergy[268];   //[nHCALClusters]
-   Float_t         clusterHCAL_time[268];   //[nHCALClusters]
-   Float_t         clusterHCAL_x[268];   //[nHCALClusters]
-   Float_t         clusterHCAL_y[268];   //[nHCALClusters]
-   Float_t         clusterHCAL_z[268];   //[nHCALClusters]
-   Float_t         clusterHCAL_pt[268];   //[nHCALClusters]
-   Float_t         clusterHCAL_eta[268];   //[nHCALClusters]
-   Float_t         clusterHCAL_phi[268];   //[nHCALClusters]
-   Float_t         clusterHCAL_size[268];   //[nHCALClusters]
+   Float_t         clusterHCAL_energy[278];   //[nHCALClusters]
+   Float_t         clusterHCAL_correctedEnergy[278];   //[nHCALClusters]
+   Float_t         clusterHCAL_time[278];   //[nHCALClusters]
+   Float_t         clusterHCAL_x[278];   //[nHCALClusters]
+   Float_t         clusterHCAL_y[278];   //[nHCALClusters]
+   Float_t         clusterHCAL_z[278];   //[nHCALClusters]
+   Float_t         clusterHCAL_pt[278];   //[nHCALClusters]
+   Float_t         clusterHCAL_eta[278];   //[nHCALClusters]
+   Float_t         clusterHCAL_phi[278];   //[nHCALClusters]
+   Float_t         clusterHCAL_size[278];   //[nHCALClusters]
    Int_t           nECALClusters;
    Int_t           nECALClusterEnergyMatrix;
-   Float_t         clusterECAL_energy[619];   //[nECALClusters]
-   Float_t         clusterECAL_correctedEnergy[619];   //[nECALClusters]
-   Float_t         clusterECAL_time[619];   //[nECALClusters]
-   Float_t         clusterECAL_eta[619];   //[nECALClusters]
-   Float_t         clusterECAL_phi[619];   //[nECALClusters]
-   Float_t         clusterECAL_x[619];   //[nECALClusters]
-   Float_t         clusterECAL_y[619];   //[nECALClusters]
-   Float_t         clusterECAL_z[619];   //[nECALClusters]
-   Float_t         clusterECAL_pt[619];   //[nECALClusters]
-   Float_t         clusterECAL_size[619];   //[nECALClusters]
-   Float_t         clusterECAL_energyMatrix[15475];   //[nECALClusterEnergyMatrix]
+   Float_t         clusterECAL_energy[627];   //[nECALClusters]
+   Float_t         clusterECAL_correctedEnergy[627];   //[nECALClusters]
+   Float_t         clusterECAL_time[627];   //[nECALClusters]
+   Float_t         clusterECAL_eta[627];   //[nECALClusters]
+   Float_t         clusterECAL_phi[627];   //[nECALClusters]
+   Float_t         clusterECAL_x[627];   //[nECALClusters]
+   Float_t         clusterECAL_y[627];   //[nECALClusters]
+   Float_t         clusterECAL_z[627];   //[nECALClusters]
+   Float_t         clusterECAL_pt[627];   //[nECALClusters]
+   Float_t         clusterECAL_size[627];   //[nECALClusters]
+   Float_t         clusterECAL_energyMatrix[15675];   //[nECALClusterEnergyMatrix]
    Int_t           nGeneralTracks;
-   Float_t         generalTracks_outer_x[2869];   //[nGeneralTracks]
-   Float_t         generalTracks_outer_y[2869];   //[nGeneralTracks]
-   Float_t         generalTracks_outer_z[2869];   //[nGeneralTracks]
-   Float_t         generalTracks_outer_px[2869];   //[nGeneralTracks]
-   Float_t         generalTracks_outer_py[2869];   //[nGeneralTracks]
-   Float_t         generalTracks_outer_pz[2869];   //[nGeneralTracks]
-   Float_t         generalTracks_charge[2869];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_x[2926];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_y[2926];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_z[2926];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_px[2926];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_py[2926];   //[nGeneralTracks]
+   Float_t         generalTracks_outer_pz[2926];   //[nGeneralTracks]
+   Float_t         generalTracks_charge[2926];   //[nGeneralTracks]
+   Int_t           nGenBs;
+   Float_t         genBs_nDaus[1];   //[nGenBs]
+   Float_t         genBs_pt[1];   //[nGenBs]
+   Float_t         genBs_eta[1];   //[nGenBs]
+   Float_t         genBs_phi[1];   //[nGenBs]
+   Float_t         genBs_mass[1];   //[nGenBs]
+   Int_t           nGenBsJpsi;
+   Float_t         genBsJpsi_pt[1746];   //[nGenBsJpsi]
+   Float_t         genBsJpsi_eta[1746];   //[nGenBsJpsi]
+   Float_t         genBsJpsi_phi[1746];   //[nGenBsJpsi]
+   Float_t         genBsJpsi_mass[1746];   //[nGenBsJpsi]
+   Int_t           nGenBsMuP;
+   Float_t         genBsMuP_pt[1];   //[nGenBsMuP]
+   Float_t         genBsMuP_eta[1];   //[nGenBsMuP]
+   Float_t         genBsMuP_phi[1];   //[nGenBsMuP]
+   Float_t         genBsMuP_mass[1];   //[nGenBsMuP]
+   Int_t           nGenBsMuM;
+   Float_t         genBsMuM_pt[1];   //[nGenBsMuM]
+   Float_t         genBsMuM_eta[1];   //[nGenBsMuM]
+   Float_t         genBsMuM_phi[1];   //[nGenBsMuM]
+   Float_t         genBsMuM_mass[1];   //[nGenBsMuM]
+   Int_t           nGenBsPho;
+   Float_t         genBsPho_pt[1];   //[nGenBsPho]
+   Float_t         genBsPho_eta[1];   //[nGenBsPho]
+   Float_t         genBsPho_phi[1];   //[nGenBsPho]
+   Float_t         genBsPho_mass[1];   //[nGenBsPho]
+   Int_t           nGenBsDaus;
+   Float_t         genBsDaus_pt[2];   //[nGenBsDaus]
+   Float_t         genBsDaus_eta[2];   //[nGenBsDaus]
+   Float_t         genBsDaus_phi[2];   //[nGenBsDaus]
+   Float_t         genBsDaus_mass[2];   //[nGenBsDaus]
+   Float_t         genBsDaus_pdgid[2];   //[nGenBsDaus]
+   Int_t           nPrimaryVertex;
+   Float_t         primaryVertex_isFake[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_x[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_y[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_z[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_t[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_covXX[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_covXY[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_covXZ[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_covYY[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_covYZ[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_covZZ[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_x_error[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_y_error[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_z_error[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_t_error[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_ntracks[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_ndof[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_chi2[61];   //[nPrimaryVertex]
+   Float_t         primaryVertex_normalizedChi2[61];   //[nPrimaryVertex]
 
    // List of branches
    TBranch        *b_run;   //!
    TBranch        *b_event;   //!
    TBranch        *b_lumis;   //!
    TBranch        *b_isData;   //!
-   TBranch        *b_beamspot_x;   //!
-   TBranch        *b_beamspot_y;   //!
-   TBranch        *b_beamspot_z;   //!
-   TBranch        *b_beamspot_x_error;   //!
-   TBranch        *b_beamspot_y_error;   //!
-   TBranch        *b_beamspot_z_error;   //!
-   TBranch        *b_beamspot_covXX;   //!
-   TBranch        *b_beamspot_covXY;   //!
-   TBranch        *b_beamspot_covXZ;   //!
-   TBranch        *b_beamspot_covYY;   //!
-   TBranch        *b_beamspot_covYZ;   //!
-   TBranch        *b_beamspot_covZZ;   //!
-   TBranch        *b_beamspot_dxdz;   //!
-   TBranch        *b_beamspot_dydz;   //!
-   TBranch        *b_beamspot_sigmaZ;   //!
-   TBranch        *b_beamspot_dxdz_error;   //!
-   TBranch        *b_beamspot_dydz_error;   //!
-   TBranch        *b_beamspot_sigmaZError;   //!
-   TBranch        *b_beamspot_beamWidthX;   //!
-   TBranch        *b_beamspot_beamWidthY;   //!
-   TBranch        *b_beamspot_beamWidthX_error;   //!
-   TBranch        *b_beamspot_beamWidthY_error;   //!
-   TBranch        *b_nPrimaryVertex;   //!
-   TBranch        *b_primaryVertex_isFake;   //!
-   TBranch        *b_primaryVertex_x;   //!
-   TBranch        *b_primaryVertex_y;   //!
-   TBranch        *b_primaryVertex_z;   //!
-   TBranch        *b_primaryVertex_t;   //!
-   TBranch        *b_primaryVertex_covXX;   //!
-   TBranch        *b_primaryVertex_covXY;   //!
-   TBranch        *b_primaryVertex_covXZ;   //!
-   TBranch        *b_primaryVertex_covYY;   //!
-   TBranch        *b_primaryVertex_covYZ;   //!
-   TBranch        *b_primaryVertex_covZZ;   //!
-   TBranch        *b_primaryVertex_x_error;   //!
-   TBranch        *b_primaryVertex_y_error;   //!
-   TBranch        *b_primaryVertex_z_error;   //!
-   TBranch        *b_primaryVertex_t_error;   //!
-   TBranch        *b_primaryVertex_ntracks;   //!
-   TBranch        *b_primaryVertex_ndof;   //!
-   TBranch        *b_primaryVertex_chi2;   //!
-   TBranch        *b_primaryVertex_normalizedChi2;   //!
    TBranch        *b_gen_nBs;   //!
    TBranch        *b_gen_Bs_pt;   //!
    TBranch        *b_gen_Bs_energy;   //!
@@ -363,10 +331,10 @@ public :
    TBranch        *b_scFull5x5_sigmaIetaIeta;   //!
    TBranch        *b_scFull5x5_sigmaIetaIphi;   //!
    TBranch        *b_scFull5x5_sigmaIphiIphi;   //!
-   TBranch        *b_nhcalRechit;   //!
-   TBranch        *b_hcalRechitIEta;   //!
-   TBranch        *b_hcalRechitIPhi;   //!
-   TBranch        *b_hcalRechitEnergy;   //!
+   TBranch        *b_scNHcalRecHitInDIEta5IPhi5;   //!
+   TBranch        *b_scEFromHcalRecHitInDIEta5IPhi5;   //!
+   TBranch        *b_scNHcalRecHitInDIEta2IPhi2;   //!
+   TBranch        *b_scEFromHcalRecHitInDIEta2IPhi2;   //!
    TBranch        *b_scPFChIso1;   //!
    TBranch        *b_scPFChIso2;   //!
    TBranch        *b_scPFChIso3;   //!
@@ -435,6 +403,58 @@ public :
    TBranch        *b_generalTracks_outer_py;   //!
    TBranch        *b_generalTracks_outer_pz;   //!
    TBranch        *b_generalTracks_charge;   //!
+   TBranch        *b_nGenBs;   //!
+   TBranch        *b_genBs_nDaus;   //!
+   TBranch        *b_genBs_pt;   //!
+   TBranch        *b_genBs_eta;   //!
+   TBranch        *b_genBs_phi;   //!
+   TBranch        *b_genBs_mass;   //!
+   TBranch        *b_nGenBsJpsi;   //!
+   TBranch        *b_genBsJpsi_pt;   //!
+   TBranch        *b_genBsJpsi_eta;   //!
+   TBranch        *b_genBsJpsi_phi;   //!
+   TBranch        *b_genBsJpsi_mass;   //!
+   TBranch        *b_nGenBsMuP;   //!
+   TBranch        *b_genBsMuP_pt;   //!
+   TBranch        *b_genBsMuP_eta;   //!
+   TBranch        *b_genBsMuP_phi;   //!
+   TBranch        *b_genBsMuP_mass;   //!
+   TBranch        *b_nGenBsMuM;   //!
+   TBranch        *b_genBsMuM_pt;   //!
+   TBranch        *b_genBsMuM_eta;   //!
+   TBranch        *b_genBsMuM_phi;   //!
+   TBranch        *b_genBsMuM_mass;   //!
+   TBranch        *b_nGenBsPho;   //!
+   TBranch        *b_genBsPho_pt;   //!
+   TBranch        *b_genBsPho_eta;   //!
+   TBranch        *b_genBsPho_phi;   //!
+   TBranch        *b_genBsPho_mass;   //!
+   TBranch        *b_nGenBsDaus;   //!
+   TBranch        *b_genBsDaus_pt;   //!
+   TBranch        *b_genBsDaus_eta;   //!
+   TBranch        *b_genBsDaus_phi;   //!
+   TBranch        *b_genBsDaus_mass;   //!
+   TBranch        *b_genBsDaus_pdgid;   //!
+   TBranch        *b_nPrimaryVertex;   //!
+   TBranch        *b_primaryVertex_isFake;   //!
+   TBranch        *b_primaryVertex_x;   //!
+   TBranch        *b_primaryVertex_y;   //!
+   TBranch        *b_primaryVertex_z;   //!
+   TBranch        *b_primaryVertex_t;   //!
+   TBranch        *b_primaryVertex_covXX;   //!
+   TBranch        *b_primaryVertex_covXY;   //!
+   TBranch        *b_primaryVertex_covXZ;   //!
+   TBranch        *b_primaryVertex_covYY;   //!
+   TBranch        *b_primaryVertex_covYZ;   //!
+   TBranch        *b_primaryVertex_covZZ;   //!
+   TBranch        *b_primaryVertex_x_error;   //!
+   TBranch        *b_primaryVertex_y_error;   //!
+   TBranch        *b_primaryVertex_z_error;   //!
+   TBranch        *b_primaryVertex_t_error;   //!
+   TBranch        *b_primaryVertex_ntracks;   //!
+   TBranch        *b_primaryVertex_ndof;   //!
+   TBranch        *b_primaryVertex_chi2;   //!
+   TBranch        *b_primaryVertex_normalizedChi2;   //!
 
    SCMVANtuple(TTree *tree=0);
    virtual ~SCMVANtuple();
@@ -460,6 +480,7 @@ SCMVANtuple::SCMVANtuple(TTree *tree) : fChain(0)
    else {
    Init(tree);
    }
+
 }
 
 SCMVANtuple::~SCMVANtuple()
@@ -498,25 +519,6 @@ void SCMVANtuple::Init(TTree *tree)
    // (once per file to be processed).
 
    // Set object pointer
-   primaryVertex_isFake = 0;
-   primaryVertex_x = 0;
-   primaryVertex_y = 0;
-   primaryVertex_z = 0;
-   primaryVertex_t = 0;
-   primaryVertex_covXX = 0;
-   primaryVertex_covXY = 0;
-   primaryVertex_covXZ = 0;
-   primaryVertex_covYY = 0;
-   primaryVertex_covYZ = 0;
-   primaryVertex_covZZ = 0;
-   primaryVertex_x_error = 0;
-   primaryVertex_y_error = 0;
-   primaryVertex_z_error = 0;
-   primaryVertex_t_error = 0;
-   primaryVertex_ntracks = 0;
-   primaryVertex_ndof = 0;
-   primaryVertex_chi2 = 0;
-   primaryVertex_normalizedChi2 = 0;
    gen_Bs_pt = 0;
    gen_Bs_energy = 0;
    gen_Bs_eta = 0;
@@ -595,9 +597,10 @@ void SCMVANtuple::Init(TTree *tree)
    scFull5x5_sigmaIetaIeta = 0;
    scFull5x5_sigmaIetaIphi = 0;
    scFull5x5_sigmaIphiIphi = 0;
-   hcalRechitIEta = 0;
-   hcalRechitIPhi = 0;
-   hcalRechitEnergy = 0;
+   scNHcalRecHitInDIEta5IPhi5 = 0;
+   scEFromHcalRecHitInDIEta5IPhi5 = 0;
+   scNHcalRecHitInDIEta2IPhi2 = 0;
+   scEFromHcalRecHitInDIEta2IPhi2 = 0;
    scPFChIso1 = 0;
    scPFChIso2 = 0;
    scPFChIso3 = 0;
@@ -623,48 +626,6 @@ void SCMVANtuple::Init(TTree *tree)
    fChain->SetBranchAddress("event", &event, &b_event);
    fChain->SetBranchAddress("lumis", &lumis, &b_lumis);
    fChain->SetBranchAddress("isData", &isData, &b_isData);
-   fChain->SetBranchAddress("beamspot_x", &beamspot_x, &b_beamspot_x);
-   fChain->SetBranchAddress("beamspot_y", &beamspot_y, &b_beamspot_y);
-   fChain->SetBranchAddress("beamspot_z", &beamspot_z, &b_beamspot_z);
-   fChain->SetBranchAddress("beamspot_x_error", &beamspot_x_error, &b_beamspot_x_error);
-   fChain->SetBranchAddress("beamspot_y_error", &beamspot_y_error, &b_beamspot_y_error);
-   fChain->SetBranchAddress("beamspot_z_error", &beamspot_z_error, &b_beamspot_z_error);
-   fChain->SetBranchAddress("beamspot_covXX", &beamspot_covXX, &b_beamspot_covXX);
-   fChain->SetBranchAddress("beamspot_covXY", &beamspot_covXY, &b_beamspot_covXY);
-   fChain->SetBranchAddress("beamspot_covXZ", &beamspot_covXZ, &b_beamspot_covXZ);
-   fChain->SetBranchAddress("beamspot_covYY", &beamspot_covYY, &b_beamspot_covYY);
-   fChain->SetBranchAddress("beamspot_covYZ", &beamspot_covYZ, &b_beamspot_covYZ);
-   fChain->SetBranchAddress("beamspot_covZZ", &beamspot_covZZ, &b_beamspot_covZZ);
-   fChain->SetBranchAddress("beamspot_dxdz", &beamspot_dxdz, &b_beamspot_dxdz);
-   fChain->SetBranchAddress("beamspot_dydz", &beamspot_dydz, &b_beamspot_dydz);
-   fChain->SetBranchAddress("beamspot_sigmaZ", &beamspot_sigmaZ, &b_beamspot_sigmaZ);
-   fChain->SetBranchAddress("beamspot_dxdz_error", &beamspot_dxdz_error, &b_beamspot_dxdz_error);
-   fChain->SetBranchAddress("beamspot_dydz_error", &beamspot_dydz_error, &b_beamspot_dydz_error);
-   fChain->SetBranchAddress("beamspot_sigmaZError", &beamspot_sigmaZError, &b_beamspot_sigmaZError);
-   fChain->SetBranchAddress("beamspot_beamWidthX", &beamspot_beamWidthX, &b_beamspot_beamWidthX);
-   fChain->SetBranchAddress("beamspot_beamWidthY", &beamspot_beamWidthY, &b_beamspot_beamWidthY);
-   fChain->SetBranchAddress("beamspot_beamWidthX_error", &beamspot_beamWidthX_error, &b_beamspot_beamWidthX_error);
-   fChain->SetBranchAddress("beamspot_beamWidthY_error", &beamspot_beamWidthY_error, &b_beamspot_beamWidthY_error);
-   fChain->SetBranchAddress("nPrimaryVertex", &nPrimaryVertex, &b_nPrimaryVertex);
-   fChain->SetBranchAddress("primaryVertex_isFake", &primaryVertex_isFake, &b_primaryVertex_isFake);
-   fChain->SetBranchAddress("primaryVertex_x", &primaryVertex_x, &b_primaryVertex_x);
-   fChain->SetBranchAddress("primaryVertex_y", &primaryVertex_y, &b_primaryVertex_y);
-   fChain->SetBranchAddress("primaryVertex_z", &primaryVertex_z, &b_primaryVertex_z);
-   fChain->SetBranchAddress("primaryVertex_t", &primaryVertex_t, &b_primaryVertex_t);
-   fChain->SetBranchAddress("primaryVertex_covXX", &primaryVertex_covXX, &b_primaryVertex_covXX);
-   fChain->SetBranchAddress("primaryVertex_covXY", &primaryVertex_covXY, &b_primaryVertex_covXY);
-   fChain->SetBranchAddress("primaryVertex_covXZ", &primaryVertex_covXZ, &b_primaryVertex_covXZ);
-   fChain->SetBranchAddress("primaryVertex_covYY", &primaryVertex_covYY, &b_primaryVertex_covYY);
-   fChain->SetBranchAddress("primaryVertex_covYZ", &primaryVertex_covYZ, &b_primaryVertex_covYZ);
-   fChain->SetBranchAddress("primaryVertex_covZZ", &primaryVertex_covZZ, &b_primaryVertex_covZZ);
-   fChain->SetBranchAddress("primaryVertex_x_error", &primaryVertex_x_error, &b_primaryVertex_x_error);
-   fChain->SetBranchAddress("primaryVertex_y_error", &primaryVertex_y_error, &b_primaryVertex_y_error);
-   fChain->SetBranchAddress("primaryVertex_z_error", &primaryVertex_z_error, &b_primaryVertex_z_error);
-   fChain->SetBranchAddress("primaryVertex_t_error", &primaryVertex_t_error, &b_primaryVertex_t_error);
-   fChain->SetBranchAddress("primaryVertex_ntracks", &primaryVertex_ntracks, &b_primaryVertex_ntracks);
-   fChain->SetBranchAddress("primaryVertex_ndof", &primaryVertex_ndof, &b_primaryVertex_ndof);
-   fChain->SetBranchAddress("primaryVertex_chi2", &primaryVertex_chi2, &b_primaryVertex_chi2);
-   fChain->SetBranchAddress("primaryVertex_normalizedChi2", &primaryVertex_normalizedChi2, &b_primaryVertex_normalizedChi2);
    fChain->SetBranchAddress("gen_nBs", &gen_nBs, &b_gen_nBs);
    fChain->SetBranchAddress("gen_Bs_pt", &gen_Bs_pt, &b_gen_Bs_pt);
    fChain->SetBranchAddress("gen_Bs_energy", &gen_Bs_energy, &b_gen_Bs_energy);
@@ -749,10 +710,10 @@ void SCMVANtuple::Init(TTree *tree)
    fChain->SetBranchAddress("scFull5x5_sigmaIetaIeta", &scFull5x5_sigmaIetaIeta, &b_scFull5x5_sigmaIetaIeta);
    fChain->SetBranchAddress("scFull5x5_sigmaIetaIphi", &scFull5x5_sigmaIetaIphi, &b_scFull5x5_sigmaIetaIphi);
    fChain->SetBranchAddress("scFull5x5_sigmaIphiIphi", &scFull5x5_sigmaIphiIphi, &b_scFull5x5_sigmaIphiIphi);
-   fChain->SetBranchAddress("nhcalRechit", &nhcalRechit, &b_nhcalRechit);
-   fChain->SetBranchAddress("hcalRechitIEta", &hcalRechitIEta, &b_hcalRechitIEta);
-   fChain->SetBranchAddress("hcalRechitIPhi", &hcalRechitIPhi, &b_hcalRechitIPhi);
-   fChain->SetBranchAddress("hcalRechitEnergy", &hcalRechitEnergy, &b_hcalRechitEnergy);
+   fChain->SetBranchAddress("scNHcalRecHitInDIEta5IPhi5", &scNHcalRecHitInDIEta5IPhi5, &b_scNHcalRecHitInDIEta5IPhi5);
+   fChain->SetBranchAddress("scEFromHcalRecHitInDIEta5IPhi5", &scEFromHcalRecHitInDIEta5IPhi5, &b_scEFromHcalRecHitInDIEta5IPhi5);
+   fChain->SetBranchAddress("scNHcalRecHitInDIEta2IPhi2", &scNHcalRecHitInDIEta2IPhi2, &b_scNHcalRecHitInDIEta2IPhi2);
+   fChain->SetBranchAddress("scEFromHcalRecHitInDIEta2IPhi2", &scEFromHcalRecHitInDIEta2IPhi2, &b_scEFromHcalRecHitInDIEta2IPhi2);
    fChain->SetBranchAddress("scPFChIso1", &scPFChIso1, &b_scPFChIso1);
    fChain->SetBranchAddress("scPFChIso2", &scPFChIso2, &b_scPFChIso2);
    fChain->SetBranchAddress("scPFChIso3", &scPFChIso3, &b_scPFChIso3);
@@ -821,6 +782,58 @@ void SCMVANtuple::Init(TTree *tree)
    fChain->SetBranchAddress("generalTracks_outer_py", generalTracks_outer_py, &b_generalTracks_outer_py);
    fChain->SetBranchAddress("generalTracks_outer_pz", generalTracks_outer_pz, &b_generalTracks_outer_pz);
    fChain->SetBranchAddress("generalTracks_charge", generalTracks_charge, &b_generalTracks_charge);
+   fChain->SetBranchAddress("nGenBs", &nGenBs, &b_nGenBs);
+   fChain->SetBranchAddress("genBs_nDaus", genBs_nDaus, &b_genBs_nDaus);
+   fChain->SetBranchAddress("genBs_pt", genBs_pt, &b_genBs_pt);
+   fChain->SetBranchAddress("genBs_eta", genBs_eta, &b_genBs_eta);
+   fChain->SetBranchAddress("genBs_phi", genBs_phi, &b_genBs_phi);
+   fChain->SetBranchAddress("genBs_mass", genBs_mass, &b_genBs_mass);
+   fChain->SetBranchAddress("nGenBsJpsi", &nGenBsJpsi, &b_nGenBsJpsi);
+   fChain->SetBranchAddress("genBsJpsi_pt", genBsJpsi_pt, &b_genBsJpsi_pt);
+   fChain->SetBranchAddress("genBsJpsi_eta", genBsJpsi_eta, &b_genBsJpsi_eta);
+   fChain->SetBranchAddress("genBsJpsi_phi", genBsJpsi_phi, &b_genBsJpsi_phi);
+   fChain->SetBranchAddress("genBsJpsi_mass", genBsJpsi_mass, &b_genBsJpsi_mass);
+   fChain->SetBranchAddress("nGenBsMuP", &nGenBsMuP, &b_nGenBsMuP);
+   fChain->SetBranchAddress("genBsMuP_pt", &genBsMuP_pt, &b_genBsMuP_pt);
+   fChain->SetBranchAddress("genBsMuP_eta", &genBsMuP_eta, &b_genBsMuP_eta);
+   fChain->SetBranchAddress("genBsMuP_phi", &genBsMuP_phi, &b_genBsMuP_phi);
+   fChain->SetBranchAddress("genBsMuP_mass", &genBsMuP_mass, &b_genBsMuP_mass);
+   fChain->SetBranchAddress("nGenBsMuM", &nGenBsMuM, &b_nGenBsMuM);
+   fChain->SetBranchAddress("genBsMuM_pt", &genBsMuM_pt, &b_genBsMuM_pt);
+   fChain->SetBranchAddress("genBsMuM_eta", &genBsMuM_eta, &b_genBsMuM_eta);
+   fChain->SetBranchAddress("genBsMuM_phi", &genBsMuM_phi, &b_genBsMuM_phi);
+   fChain->SetBranchAddress("genBsMuM_mass", &genBsMuM_mass, &b_genBsMuM_mass);
+   fChain->SetBranchAddress("nGenBsPho", &nGenBsPho, &b_nGenBsPho);
+   fChain->SetBranchAddress("genBsPho_pt", genBsPho_pt, &b_genBsPho_pt);
+   fChain->SetBranchAddress("genBsPho_eta", genBsPho_eta, &b_genBsPho_eta);
+   fChain->SetBranchAddress("genBsPho_phi", genBsPho_phi, &b_genBsPho_phi);
+   fChain->SetBranchAddress("genBsPho_mass", genBsPho_mass, &b_genBsPho_mass);
+   fChain->SetBranchAddress("nGenBsDaus", &nGenBsDaus, &b_nGenBsDaus);
+   fChain->SetBranchAddress("genBsDaus_pt", genBsDaus_pt, &b_genBsDaus_pt);
+   fChain->SetBranchAddress("genBsDaus_eta", genBsDaus_eta, &b_genBsDaus_eta);
+   fChain->SetBranchAddress("genBsDaus_phi", genBsDaus_phi, &b_genBsDaus_phi);
+   fChain->SetBranchAddress("genBsDaus_mass", genBsDaus_mass, &b_genBsDaus_mass);
+   fChain->SetBranchAddress("genBsDaus_pdgid", genBsDaus_pdgid, &b_genBsDaus_pdgid);
+   fChain->SetBranchAddress("nPrimaryVertex", &nPrimaryVertex, &b_nPrimaryVertex);
+   fChain->SetBranchAddress("primaryVertex_isFake", primaryVertex_isFake, &b_primaryVertex_isFake);
+   fChain->SetBranchAddress("primaryVertex_x", primaryVertex_x, &b_primaryVertex_x);
+   fChain->SetBranchAddress("primaryVertex_y", primaryVertex_y, &b_primaryVertex_y);
+   fChain->SetBranchAddress("primaryVertex_z", primaryVertex_z, &b_primaryVertex_z);
+   fChain->SetBranchAddress("primaryVertex_t", primaryVertex_t, &b_primaryVertex_t);
+   fChain->SetBranchAddress("primaryVertex_covXX", primaryVertex_covXX, &b_primaryVertex_covXX);
+   fChain->SetBranchAddress("primaryVertex_covXY", primaryVertex_covXY, &b_primaryVertex_covXY);
+   fChain->SetBranchAddress("primaryVertex_covXZ", primaryVertex_covXZ, &b_primaryVertex_covXZ);
+   fChain->SetBranchAddress("primaryVertex_covYY", primaryVertex_covYY, &b_primaryVertex_covYY);
+   fChain->SetBranchAddress("primaryVertex_covYZ", primaryVertex_covYZ, &b_primaryVertex_covYZ);
+   fChain->SetBranchAddress("primaryVertex_covZZ", primaryVertex_covZZ, &b_primaryVertex_covZZ);
+   fChain->SetBranchAddress("primaryVertex_x_error", primaryVertex_x_error, &b_primaryVertex_x_error);
+   fChain->SetBranchAddress("primaryVertex_y_error", primaryVertex_y_error, &b_primaryVertex_y_error);
+   fChain->SetBranchAddress("primaryVertex_z_error", primaryVertex_z_error, &b_primaryVertex_z_error);
+   fChain->SetBranchAddress("primaryVertex_t_error", primaryVertex_t_error, &b_primaryVertex_t_error);
+   fChain->SetBranchAddress("primaryVertex_ntracks", primaryVertex_ntracks, &b_primaryVertex_ntracks);
+   fChain->SetBranchAddress("primaryVertex_ndof", primaryVertex_ndof, &b_primaryVertex_ndof);
+   fChain->SetBranchAddress("primaryVertex_chi2", primaryVertex_chi2, &b_primaryVertex_chi2);
+   fChain->SetBranchAddress("primaryVertex_normalizedChi2", primaryVertex_normalizedChi2, &b_primaryVertex_normalizedChi2);
    Notify();
 }
 

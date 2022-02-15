@@ -21,14 +21,14 @@ declare -a SourceFiles=(\
 )
 
 declare -a tagArr=(\
-"mc_sig_bs2mmg" \
-"mc_bkg_flatpi0" \
-"mc_bkg_qcd15To7000" \
-"mc_bkg_qcd20To30EMEnriched" \
-"mc_bkg_qcd30To50EMEnriched" \
-"mc_bkg_qcd30To50" \
-"mc_bkg_qcd50To80" \
-"data_2018D" \
+"eCap_mc_sig_bs2mmg" \
+"eCap_mc_bkg_flatpi0" \
+"eCap_mc_bkg_qcd15To7000" \
+"eCap_mc_bkg_qcd20To30EMEnriched" \
+"eCap_mc_bkg_qcd30To50EMEnriched" \
+"eCap_mc_bkg_qcd30To50" \
+"eCap_mc_bkg_qcd50To80" \
+"eCap_data_2018D" \
 )
 
 declare -a AnalysisOption=(\
@@ -63,7 +63,7 @@ for i in "${!tagArr[@]}"; do
     CFG_TEMPLATE=${CfgTemplate[$i]}
 #    set +x
     set -x
-    echo ./makeCondorJobForAnalysis.py \
+    ./makeCondorJobForAnalysis.py \
         $EXECUTABLE \
         $src \
         $CFG_TEMPLATE \

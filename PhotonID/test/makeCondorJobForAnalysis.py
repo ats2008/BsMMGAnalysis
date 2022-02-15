@@ -103,10 +103,6 @@ error = $Fp(filename)run.$(Cluster).stderr\n\
 log = $Fp(filename)run.$(Cluster).log\n\
 +JobFlavour = \"espresso\"\n\
 "
-condorScriptName='job'+tag+'.sub'
-condorScript=open(condorScriptName,'w')
-condorScript.write(condorScriptString)
-
 
 runScriptTxt="\
 #!/bin/bash\n\
@@ -138,9 +134,14 @@ else\n\
 fi\n\
 "
 
-head='Jobs'+tag
+head='Condor/Jobs'+tag
 if not os.path.exists(head ):
     os.system('mkdir '+head)
+
+condorScriptName=head+'/job'+tag+'.sub'
+condorScript=open(condorScriptName,'w')
+condorScript.write(condorScriptString)
+
 
 n=int(len(sourceFileList)/FILES_PER_JOB) + 1
 if n < NJOBS:

@@ -3,8 +3,8 @@ OutputFile=ntuple_@@TAG_@@IDX.root
 OutputPrefix=
 MaxEvents=@@MAXEVENTS
 IsMC=0
-SCAbsEtaMin=-1e2
-SCAbsEtaMax=1.4
+SCAbsEtaMin=1.4
+SCAbsEtaMax=2.5
 InputTreeName=Ntuples/EventTree
 ReportEvery=50
 #PARAMS_END

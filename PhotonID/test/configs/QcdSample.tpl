@@ -8,8 +8,8 @@ GenParticlePDGID=111
 GenParticleIsStable=0
 GenParticlePtMin=4.0
 DoGenMatching=1
-SCAbsEtaMin=-1e2
-SCAbsEtaMax=1.4
+SCAbsEtaMin=1.4
+SCAbsEtaMax=2.5
 InputTreeName=Ntuples/EventTree
 ReportEvery=50
 #PARAMS_END

@@ -353,7 +353,7 @@ void MVATrainer::trainAndTest()
     if (Use["DNN_CPU"] or Use["DNN_GPU"]) {  
 
      TString layoutString ("Layout=TANH|128,TANH|128,TANH|128,LINEAR");
-     if(Use["DNN_CPU"] {
+     if(Use["DNN_CPU"]) {
         if(mvaMethordOptions["DNN_CPU"]=="auto")
         {
                mvaMethordOptions["DNN_CPU"]="Layout=TANH|128,TANH|128,TANH|128,LINEAR";
@@ -362,7 +362,7 @@ void MVATrainer::trainAndTest()
         layoutString=mvaMethordOptions["DNN_CPU"].c_str();
      }
 
-     if(Use["DNN_GPU"] {
+     if(Use["DNN_GPU"]) {
         if(mvaMethordOptions["DNN_GPU"]=="auto")
         {
                mvaMethordOptions["DNN_GPU"]="Layout=TANH|128,TANH|128,TANH|128,LINEAR";

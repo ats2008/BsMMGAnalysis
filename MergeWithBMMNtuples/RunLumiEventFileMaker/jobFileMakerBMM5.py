@@ -26,6 +26,7 @@ if len(sys.argv) > 4:
 if len(sys.argv) > 5:
     tag=sys.argv[5]
 
+
 print("Source  : ",FileSource)
 print("Destn : ",destination)
 print("Files Per Job : ",FILES_PER_JOB)
@@ -107,6 +108,7 @@ if not os.path.exists(head):
 condorScriptName=head+'/subCondorBMM5'+tag+'.sub'
 condorScript=open(condorScriptName,'w')
 condorScript.write(condorScriptString)
+
 
 n = int( len(sourceFileList)/FILES_PER_JOB ) + 1
 print("Making ",n," Jobs ")
